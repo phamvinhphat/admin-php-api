@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Comment', function (Blueprint $table) {
-            $table->uuid('ID');
+            $table->uuid('id');
             $table->string('contents');
             $table->uuid('parent_n')->nullable();
-            $table->primary('ID');
-            $table->foreign('parent_n')->references('ID')->on('Comment');
+            $table->primary('id');
+            $table->foreign('parent_n')->references('id')->on('Comment');
             $table->uuid('album_id')->nullable(false);
-            $table->foreign('album_id')->references('ID')->on('Album')->onDelete('cascade');
+            $table->foreign('album_id')->references('id')->on('Album')->onDelete('cascade');
             $table->uuid('post_id')->nullable(false);
-            $table->foreign('post_id')->references('ID')->on('Post')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('Post')->onDelete('cascade');
             $table->timestamps();
         });
     }

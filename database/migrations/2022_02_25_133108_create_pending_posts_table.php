@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('PendingPost', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+            $table->uuid('id')->primary();
             $table->double('longitude');
             $table->double('latitude');
             $table->string('contents');
@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('address');
             $table->string('furniture_status');
             $table->uuid('album_id')->nullable(false);
-            $table->foreign('album_id')->references('ID')->on('Album')->onDelete('cascade');
+            $table->foreign('album_id')->references('id')->on('Album')->onDelete('cascade');
             $table->uuid('create_by')->nullable(false);
-            $table->foreign('create_by')->references('ID')->on('Account')->onDelete('cascade');
+            $table->foreign('create_by')->references('id')->on('Account')->onDelete('cascade');
             $table->timestamps();
         });
     }

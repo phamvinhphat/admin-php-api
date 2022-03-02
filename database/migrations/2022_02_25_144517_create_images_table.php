@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Image', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+            $table->uuid('id')->primary();
             $table->string('url');
             $table->string('caption');
             $table->boolean('is_hidden')->default(false);
             $table->uuid('album_id')->nullable(false);
-            $table->foreign('album_id')->references('ID')->on('Album')->onDelete('cascade');
+            $table->foreign('album_id')->references('id')->on('Album')->onDelete('cascade');
             $table->timestamps();
         });
     }

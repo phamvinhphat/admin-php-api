@@ -18,6 +18,21 @@ class Account extends Model
      */
     protected $primaryKey = 'ID';
 
+    protected $fillable = [
+        'username',
+        'email',
+        'password',
+        'first_name',
+        'last_name',
+        'dob',
+        'is_card',
+        'phone_number',
+    ];
+
+    protected $hidden = [
+        'password'
+    ];
+
     /**
      * The table associated with the model.
      *
@@ -26,7 +41,7 @@ class Account extends Model
     protected $table = 'Account';
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'username' => 'string',
         'password'=> 'string',
         'first_name'=> 'string',

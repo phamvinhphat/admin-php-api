@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Status', function (Blueprint $table) {
-            $table->uuid('ID');
+            $table->uuid('id');
             $table->string('name');
             $table->uuid('parent_n')->nullable();
-            $table->primary('ID');
-            $table->foreign('parent_n')->references('ID')->on('Status');
+            $table->primary('id');
+            $table->foreign('parent_n')->references('id')->on('Status');
             $table->timestamps();
         });
     }

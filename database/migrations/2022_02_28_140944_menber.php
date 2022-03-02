@@ -17,11 +17,11 @@ return new class extends Migration {
             $table->uuid('thead_id')->unsigned();
             $table->boolean('is_blocked')->default(false);
             $table->foreign('account_id')
-                ->references('ID')
+                ->references('id')
                 ->on('Account')
                 ->onDelete('cascade');
             $table->foreign('thead_id')
-                ->references('ID')
+                ->references('id')
                 ->on('Conversation')
                 ->onDelete('cascade');
             $table->timestamps();

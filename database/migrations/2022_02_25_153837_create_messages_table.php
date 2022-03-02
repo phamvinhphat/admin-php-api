@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Message', function (Blueprint $table) {
-            $table->uuid('ID');
+            $table->uuid('id');
             $table->string('msg');
             $table->uuid('reply_to');
-            $table->primary('ID');
-            $table->foreign('reply_to')->references('ID')->on('Message');
+            $table->primary('id');
+            $table->foreign('reply_to')->references('id')->on('Message');
             $table->uuid('sender_id')->nullable(false);
-            $table->foreign('sender_id')->references('ID')->on('Account')->onDelete('cascade');
+            $table->foreign('sender_id')->references('id')->on('Account')->onDelete('cascade');
             $table->uuid('conversation_id')->nullable(false);
-            $table->foreign('conversation_id')->references('ID')->on('Conversation')->onDelete('cascade');
+            $table->foreign('conversation_id')->references('id')->on('Conversation')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Account', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+            $table->uuid('id')->primary();
             $table->string('username');
             $table->string('password');
             $table->string('first_name');
             $table->string('last_name');
-            $table->date('Dob');
+            $table->date('dob');
             $table->string('id_card')->unique();
             $table->string('avatar');
             $table->string('gender');
@@ -27,8 +27,12 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->boolean('is_verify')->default(false);
             $table->uuid('privilege_id')->nullable(false);
-            $table->foreign('privilege_id')->references('ID')->on('Privilege')->onDelete('cascade');
+            $table->foreign('privilege_id')->references('id')->on('Privilege')->onDelete('cascade');
             $table->string('modified');
+            $table->string('api_token', 80)->after('password')
+                ->unique()
+                ->nullable()
+                ->default(null);
             $table->timestamps();
         });
     }

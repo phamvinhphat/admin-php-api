@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Workflow', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+            $table->uuid('id')->primary();
             $table->uuid('status_id')->nullable(false);
-            $table->foreign('status_id')->references('ID')->on('Status')->onDelete('cascade');
+            $table->foreign('status_id')->references('id')->on('Status')->onDelete('cascade');
             $table->uuid('created_by')->nullable(false);
-            $table->foreign('created_by')->references('ID')->on('Account')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('Account')->onDelete('cascade');
             $table->uuid('pending_post_id')->nullable(false);
-            $table->foreign('pending_post_id')->references('ID')->on('PendingPost')->onDelete('cascade');
+            $table->foreign('pending_post_id')->references('id')->on('PendingPost')->onDelete('cascade');
             $table->timestamps();
         });
     }

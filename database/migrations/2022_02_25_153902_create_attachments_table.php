@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('Attachment', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+            $table->uuid('id')->primary();
             $table->string('url');
             $table->uuid('caption');
             $table->uuid('message_id')->nullable(false);
-            $table->foreign('message_id')->references('ID')->on('Message')->onDelete('cascade');
+            $table->foreign('message_id')->references('id')->on('Message')->onDelete('cascade');
             $table->timestamps();
         });
     }
