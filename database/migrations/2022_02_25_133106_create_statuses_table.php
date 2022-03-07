@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('parent_n')->nullable();
             $table->primary('id');
             $table->foreign('parent_n')->references('id')->on('Status');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

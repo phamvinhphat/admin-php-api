@@ -9,14 +9,14 @@ class Album extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * The primary key associated with the table.
      *
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     /**
      * The table associated with the model.
@@ -29,7 +29,7 @@ class Album extends Model
     ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'contents' => 'string',
         'parent_n' => 'string',
         'album_id' => 'string',

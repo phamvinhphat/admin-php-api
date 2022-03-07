@@ -9,7 +9,7 @@ class PendingPost extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
 //    protected $fillable = [
 //        'contents',
@@ -18,7 +18,7 @@ class PendingPost extends Model
 //    ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'longitude' => 'double',
         'latitude' => 'double',
         'contents' => 'string',
@@ -31,7 +31,7 @@ class PendingPost extends Model
     ];
 
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $table = 'PendingPost';
 

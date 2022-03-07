@@ -9,14 +9,14 @@ class Account extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * The primary key associated with the table.
      *
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'username',
@@ -42,7 +42,7 @@ class Account extends Model
 
     protected $casts = [
         'id' => 'string',
-        'username' => 'string',
+        'username ' => 'string',
         'password'=> 'string',
         'first_name'=> 'string',
         'last_name' => 'string',

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('parent_n')->references('id')->on('Privilege');
             $table->uuid('created_by');
             $table->uuid('modified');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

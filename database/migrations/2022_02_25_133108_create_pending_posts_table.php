@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreign('album_id')->references('id')->on('Album')->onDelete('cascade');
             $table->uuid('create_by')->nullable(false);
             $table->foreign('create_by')->references('id')->on('Account')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

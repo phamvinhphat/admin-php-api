@@ -11,13 +11,13 @@ class Post extends Model
 
     public $timestamps = false;
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $table = 'Post';
 
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'longitude' => 'double',
         'latitude' => 'double',
         'contents' => 'string',

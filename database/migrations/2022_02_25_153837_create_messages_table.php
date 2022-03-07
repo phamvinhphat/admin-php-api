@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('sender_id')->references('id')->on('Account')->onDelete('cascade');
             $table->uuid('conversation_id')->nullable(false);
             $table->foreign('conversation_id')->references('id')->on('Conversation')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

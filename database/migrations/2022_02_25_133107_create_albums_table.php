@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('is_hidden')->default(false);
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

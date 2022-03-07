@@ -9,10 +9,10 @@ class Attachment extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $casts = [
-        'ID'=>'string',
+        'id'=>'string',
         'uri'=>'string',
         'caption'=>'string',
         'message_id' => 'string'

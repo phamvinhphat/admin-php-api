@@ -9,16 +9,16 @@ class Message extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'message'
     ];
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $casts = [
-        'ID'=>'string',
+        'id'=>'string',
         'message'=>'string',
         'reply_to' => 'string',
         'conversation_id' => 'string',

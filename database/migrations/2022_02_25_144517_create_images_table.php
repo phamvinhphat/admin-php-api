@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_hidden')->default(false);
             $table->uuid('album_id')->nullable(false);
             $table->foreign('album_id')->references('id')->on('Album')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

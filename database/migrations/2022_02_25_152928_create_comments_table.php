@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('album_id')->references('id')->on('Album')->onDelete('cascade');
             $table->uuid('post_id')->nullable(false);
             $table->foreign('post_id')->references('id')->on('Post')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

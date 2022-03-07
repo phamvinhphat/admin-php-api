@@ -9,18 +9,18 @@ class Privilege extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
 //    protected $fillable = [
 //        'name'
 //    ];
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $table = 'Privilege';
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'name' => 'string',
         'parent_n' => 'string',
     ];

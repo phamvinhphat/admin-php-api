@@ -24,7 +24,7 @@ return new class extends Migration {
                 ->references('id')
                 ->on('Conversation')
                 ->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

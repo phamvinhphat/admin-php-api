@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('Conversation', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

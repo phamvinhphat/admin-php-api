@@ -9,13 +9,13 @@ class Conversation extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $casts = [
-            'ID' => 'string',
+            'id' => 'string',
         ];
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $table = 'Conversation';
 

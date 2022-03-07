@@ -10,16 +10,16 @@ class Status extends Model
     use HasFactory;
 
 
-    public $timestamps = true;
+    public $timestamps = false;
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name'
     ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'name' => 'string',
         'parent_n' => 'string',
     ];

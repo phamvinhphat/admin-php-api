@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('created_by')->references('id')->on('Account')->onDelete('cascade');
             $table->uuid('pending_post_id')->nullable(false);
             $table->foreign('pending_post_id')->references('id')->on('PendingPost')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

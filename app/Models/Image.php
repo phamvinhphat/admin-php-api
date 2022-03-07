@@ -9,7 +9,7 @@ class Image extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'url',
@@ -17,7 +17,7 @@ class Image extends Model
     ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'url' => 'string',
         'caption' => 'string',
         'is_hidden' => 'boolean',

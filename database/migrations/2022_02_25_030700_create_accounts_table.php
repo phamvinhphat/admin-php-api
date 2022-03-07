@@ -21,19 +21,19 @@ return new class extends Migration
             $table->string('last_name');
             $table->date('dob');
             $table->string('id_card')->unique();
-            $table->string('avatar');
+            $table->string('avatar')->nullable();;
             $table->string('gender');
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
             $table->boolean('is_verify')->default(false);
             $table->uuid('privilege_id')->nullable(false);
             $table->foreign('privilege_id')->references('id')->on('Privilege')->onDelete('cascade');
-            $table->string('modified');
+            $table->uuid('modified');
             $table->string('api_token', 80)->after('password')
                 ->unique()
                 ->nullable()
                 ->default(null);
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

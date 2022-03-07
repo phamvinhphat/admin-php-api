@@ -9,11 +9,11 @@ class Workflow extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'status_id' => 'string',
         'pending_post_id' => 'string',
         'create_by' => 'string'

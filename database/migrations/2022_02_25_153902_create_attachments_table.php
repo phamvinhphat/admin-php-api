@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('caption');
             $table->uuid('message_id')->nullable(false);
             $table->foreign('message_id')->references('id')->on('Message')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 

@@ -9,17 +9,17 @@ class Comment extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
-        'ID'=>'string',
+        'id'=>'string',
         'contents' => 'string',
         'parent_n' => 'string',
         'album_id' => 'string',
         'post_id' => 'string',
     ];
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $table = 'Comment';
 
