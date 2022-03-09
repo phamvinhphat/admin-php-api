@@ -1,13 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Account;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public $successStatus = 200;
     protected $account;
 
     public function __construct(Account $account)
@@ -17,24 +20,21 @@ class AuthController extends Controller
     /**
      * Create Account
      * @OA\Post (
-     *     path="/api/Account/register",
+     *     path="/register",
      *     tags={"Account"},
      *     @OA\RequestBody(
+     *     required=true,
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
      *                      type="object",
-     *                    @OA\Property(
+     *                      @OA\Property(
      *                          property="username",
      *                          type="string"
      *                      ),
-     *                     @OA\Property(
+     *                      @OA\Property(
      *                          property="password",
-     *                          type="string"
-     *                      ),
-     *                     @OA\Property(
-     *                          property="email",
      *                          type="string"
      *                      ),
      *                      @OA\Property(
@@ -50,23 +50,42 @@ class AuthController extends Controller
      *                          type="date"
      *                      ),
      *                      @OA\Property(
-     *                          property="is_card",
+     *                          property="id_card",
+     *                          type="string"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="avatar",
+     *                          type="string"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="gender",
+     *                          type="string"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="email",
      *                          type="string"
      *                      ),
      *                      @OA\Property(
      *                          property="phone_number",
      *                          type="string"
      *                      ),
+     *                      @OA\Property(
+     *                          property="privilege_id",
+     *                          type="uuid"
+     *                      ),
      *                 ),
      *                 example={
-     *                     "property":"phatbeo",
-     *                     "email":"fakeemail@gmail.com"
-     *                     "password": "phatbeo"
-     *                     "first_name": "phat"
-     *                     "last_name": "beo"
-     *                     "dob": "dob"
-     *                     "is_card": "0722000003962"
-     *                     "phone_number": "phatbeo"
+     *                     "username":"fake username",
+     *                     "password":"fake password",
+     *                     "first_name":"phat",
+     *                     "last_name":"beo",
+     *                     "dob":"2000-09-13",
+     *                     "id_card":"0711113963",
+     *                     "avatar":"https://cdn.pixabay.com/photo/2022/02/19/15/05/dark-7022879_960_720.jpg",
+     *                     "gender":"Male",
+     *                     "email":"fakeGmail@gmail.com",
+     *                     "phone_number":"0999999999",
+     *                     "privilege_id":"766be67a-6520-4968-85ea-e9e07daf4e53",
      *                }
      *             )
      *         )
@@ -75,9 +94,18 @@ class AuthController extends Controller
      *          response=200,
      *          description="success",
      *          @OA\JsonContent(
-     *              @OA\Property(property="id", type="number", example=1),
-     *              @OA\Property(property="title", type="string", example="title"),
-     *              @OA\Property(property="content", type="string", example="content"),
+     *              @OA\Property(property="id", type="uuid", example="766be67a-6520-4968-85ea-e9e07daf4e53"),
+     *              @OA\Property(property="username", type="string", example="username"),
+     *              @OA\Property(property="password", type="string", example="password"),
+     *              @OA\Property(property="first_name", type="string", example="password"),
+     *              @OA\Property(property="last_name", type="string", example="password"),
+     *              @OA\Property(property="dob", type="date", example="2000-09-13"),
+     *              @OA\Property(property="id_card", type="string", example="075555523658"),
+     *              @OA\Property(property="avatar", type="string", example="avatar"),
+     *              @OA\Property(property="gender", type="string", example="Male"),
+     *              @OA\Property(property="email", type="string", example="fakeNew@gmail.com"),
+     *              @OA\Property(property="phone_number", type="string", example="phone_number"),
+     *              @OA\Property(property="privilege_id", type="uuid", example="privilege_id"),
      *              @OA\Property(property="updated_at", type="string", example="2021-12-11T09:25:53.000000Z"),
      *              @OA\Property(property="created_at", type="string", example="2021-12-11T09:25:53.000000Z"),
      *          )
@@ -91,60 +119,84 @@ class AuthController extends Controller
      *      )
      * )
      */
-
-    function register(Request $request)
+    public function register(Request $request)
     {
-        $request->validate([
-            'username' => 'unique|required|max:255',
-            'email' => 'unique:users|email|required',
-            'password' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'dob' => 'required',
-            'id_card' => 'required',
-            'phone_number' => 'required',
-        ]);
-
-        $account = new Account([
-           'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'dob' => $request->dob,
-            'id_card' => $request->id_cart,
-            'phone_number' => $request->phone_number,
-        ]);
-
-        $account->save();
-        return response()->json(['message'=>'User has been register'],200);
+        $account = $this->account->register($request->all());
+        return response()->json($account);
+    }
 
 
-//        $input = $request->only('name', 'email', 'password', 'first_name', 'last_name', 'dob', 'is_card', 'phone_number');
-//        $validator = Validator::make($input, $rules);
-//
-//        if ($validator->fails()) {
-//            return response()->json(['success' => false, 'error' => $validator->messages()]);
-//        }
-//        $username = $request->username;
-//        $email = $request->email;
-//        $password = $request->password;
-//        $first_name = $request->first_name;
-//        $last_name = $request->last_name;
-//        $dob = $request->dob;
-//        $is_card = $request->is_card;
-//        $phone_number = $request->phone_number;
-//
-//
-//        $user = \App\Models\Account::create([
-//            'name' => $username,
-//            'email' => $email,
-//            'password' => Hash::make($password),
-//            'first_name' => $first_name,
-//            'last_name' => $last_name,
-//            'dob' => $dob,
-//            'is_card' => $is_card,
-//            'phone_number' => $phone_number,
-//        ]);
+    /**
+     * Get List account
+     * @OA\Get (
+     *     path="/api/account/getViewUser",
+     *     tags={"Account"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="rows",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="uuid",
+     *                     ),
+     *                     @OA\Property(
+     *                         property="username",
+     *                         type="string",
+     *                         example="example username"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="first_name",
+     *                         type="string",
+     *                         example="example first_name"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="last_name",
+     *                         type="string",
+     *                         example="example last_name"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="gender",
+     *                         type="string",
+     *                         example="example gender"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="email",
+     *                         type="string",
+     *                         example="example email"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="phone_number",
+     *                         type="string",
+     *                         example="example phone_number"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="privilege_id",
+     *                         type="uuid",
+     *                         example="example privilege_id"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function getViewUser(){
+        $users = $this->account->getsUser();
+        return response()->json(["data"=>$users]);
     }
 }

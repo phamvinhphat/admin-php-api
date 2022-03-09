@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TodoController;
 use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +18,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(["prefix"=>"auth"],function (){
+Route::group(["prefix"=>"account"],function(){
     Route::post("/register",[AuthController::class,'register']);
+    Route::get("/getViewUser",[AuthController::class,'getViewUser']);
 });
-
-
+//
+//Route::post('/register', 'App\Http\Controllers\AuthController@register');
+//Route::post('login', 'API\UserController@login');
+//Route::post('register', 'AuthController@register');

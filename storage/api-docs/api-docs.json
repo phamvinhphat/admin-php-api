@@ -1,0 +1,242 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Your Application API document",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/register": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Create Account",
+                "operationId": "0903f2e0df1a8857bee538fc055417f0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "properties": {
+                                            "username": {
+                                                "type": "string"
+                                            },
+                                            "password": {
+                                                "type": "string"
+                                            },
+                                            "first_name": {
+                                                "type": "string"
+                                            },
+                                            "last_name": {
+                                                "type": "string"
+                                            },
+                                            "dob": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "id_card": {
+                                                "type": "string"
+                                            },
+                                            "avatar": {
+                                                "type": "string"
+                                            },
+                                            "gender": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "phone_number": {
+                                                "type": "string"
+                                            },
+                                            "privilege_id": {
+                                                "type": "uuid"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "username": "fake username",
+                                    "password": "fake password",
+                                    "first_name": "phat",
+                                    "last_name": "beo",
+                                    "dob": "2000-09-13",
+                                    "id_card": "0711113963",
+                                    "avatar": "https://cdn.pixabay.com/photo/2022/02/19/15/05/dark-7022879_960_720.jpg",
+                                    "gender": "Male",
+                                    "email": "fakeGmail@gmail.com",
+                                    "phone_number": "0999999999",
+                                    "privilege_id": "766be67a-6520-4968-85ea-e9e07daf4e53"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "uuid",
+                                            "example": "766be67a-6520-4968-85ea-e9e07daf4e53"
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "example": "username"
+                                        },
+                                        "password": {
+                                            "type": "string",
+                                            "example": "password"
+                                        },
+                                        "first_name": {
+                                            "type": "string",
+                                            "example": "password"
+                                        },
+                                        "last_name": {
+                                            "type": "string",
+                                            "example": "password"
+                                        },
+                                        "dob": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2000-09-13"
+                                        },
+                                        "id_card": {
+                                            "type": "string",
+                                            "example": "075555523658"
+                                        },
+                                        "avatar": {
+                                            "type": "string",
+                                            "example": "avatar"
+                                        },
+                                        "gender": {
+                                            "type": "string",
+                                            "example": "Male"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "fakeNew@gmail.com"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "example": "phone_number"
+                                        },
+                                        "privilege_id": {
+                                            "type": "uuid",
+                                            "example": "privilege_id"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2021-12-11T09:25:53.000000Z"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2021-12-11T09:25:53.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "fail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/account/getViewUser": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get List account",
+                "operationId": "12cd277a1c378f3b4154055a9003bd62",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "rows": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "uuid"
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "example username"
+                                                    },
+                                                    "first_name": {
+                                                        "type": "string",
+                                                        "example": "example first_name"
+                                                    },
+                                                    "last_name": {
+                                                        "type": "string",
+                                                        "example": "example last_name"
+                                                    },
+                                                    "gender": {
+                                                        "type": "string",
+                                                        "example": "example gender"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "example email"
+                                                    },
+                                                    "phone_number": {
+                                                        "type": "string",
+                                                        "example": "example phone_number"
+                                                    },
+                                                    "privilege_id": {
+                                                        "type": "uuid",
+                                                        "example": "example privilege_id"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2021-12-11T09:25:53.000000Z"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2021-12-11T09:25:53.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

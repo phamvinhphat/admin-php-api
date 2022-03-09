@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Dyrynda\Database\Casts\EfficientUuid;
+use Illuminate\Support\Facades\Hash;
+
 class Account extends Model
 {
     use HasFactory;
@@ -83,4 +85,24 @@ class Account extends Model
     public function pendingPost(){
         return $this->hasMany(PendingPost::class,'created_by');
     }
+
+    public function register(array $attributes){
+        $account = new self();
+        $account->username = $attributes["username"];
+        $account->email = $attributes["email"];
+        $account->password = Hash::make($attributes["password"]);
+        $account->first_name = $attributes["first_name"];
+        $account->last_name = $attributes["last_name"];
+        $account->dob = $attributes["dob"];
+        $account->id_card = $attributes["id_cart"];
+        $account->phone_number = $attributes["phone_number"];
+        $account->save();
+        return $account;
+    }
+
+    public function getsUser(){
+        $users = $this::all();
+        return $users;
+    }
+
 }

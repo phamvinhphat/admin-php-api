@@ -28,7 +28,7 @@ return new class extends Migration
             $table->boolean('is_verify')->default(false);
             $table->uuid('privilege_id')->nullable(false);
             $table->foreign('privilege_id')->references('id')->on('Privilege')->onDelete('cascade');
-            $table->uuid('modified');
+            $table->uuid('modified')->nullable();
             $table->string('api_token', 80)->after('password')
                 ->unique()
                 ->nullable()
