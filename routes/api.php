@@ -18,10 +18,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::group(["prefix"=>"account"],function(){
-    Route::post("/register",[AuthController::class,'register']);
-    Route::get("/getViewUser",[AuthController::class,'getViewUser']);
+    Route::post("/registerssss",[AuthController::class,"register"]);
+    Route::get("/getViewUsersssssssxx",[AuthController::class,"getViewUser"]);
 });
+
+Route::group(["prefix"=>"todo"],function(){
+    Route::get("/get/{id}",[TodoController::class,"get"]);
+    Route::get("/gets",[TodoController::class,"gets"]);
+    Route::post("/store",[TodoController::class,"store"]);
+    Route::put("/update/{id}",[TodoController::class,"update"]);
+    Route::delete("/delete/{id}",[TodoController::class,"delete"]);
+});
+
+
 //
 //Route::post('/register', 'App\Http\Controllers\AuthController@register');
 //Route::post('login', 'API\UserController@login');
