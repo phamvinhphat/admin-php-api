@@ -23,11 +23,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Account
-Route::get('/account/getViewUser',[AccountController::class,'getViewUser']);
-Route::get('/account/getUserById/{userID}',[AccountController::class,'getUserById']);
+Route::group(["prefix"=>"account"],function(){
+    Route::get('/getViewUser',[AccountController::class,'getViewUser']);
+    Route::get('/getUserById/{userID}',[AccountController::class,'getUserById']);
+});
 
 //role
-Route::get('/role/getAllRole',[RoleController::class,'getAllRole']);
+Route::group(["prefix"=>"role"],function(){
+    Route::get('/getAllRole',[RoleController::class,'getAllRole']);
+});
 
 // permission
-Route::get('permission/getAllPermission',[PermissionController::class,'getAllPermission']);
+Route::group(["prefix"=>"permission"],function(){
+    Route::get('/getViewPermission',[PermissionController::class,'getAllPermission']);
+});

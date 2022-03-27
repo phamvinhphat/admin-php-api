@@ -22,10 +22,16 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(IUserRepository::class, UserRepository::class);
-        $this->app->bind(IPostIRepository::class, PostRepository::class);
-        $this->app->bind(IRoleRepository::class, RoleRepository::class);
-        $this->app->bind(IPermissionRepository::class,PermissionRepository::class);
+            $toBind = [
+                IUserRepository::class => UserRepository::class,
+                IPostIRepository::class => PostRepository::class,
+                IRoleRepository::class => RoleRepository::class,
+                IPermissionRepository::class => PermissionRepository::class
+            ];
+
+            foreach ($toBind as $interface => $implementation){
+                $this->app->bind($interface, $implementation);
+            }
     }
 
     /**
