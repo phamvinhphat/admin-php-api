@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Workflow', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+        Schema::create('workflow', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->uuid('status_id')->nullable(false);
-            $table->foreign('status_id')->references('ID')->on('Status')->onDelete('cascade');
-            $table->uuid('created_by')->nullable(false);
-            $table->foreign('created_by')->references('ID')->on('Account')->onDelete('cascade');
-            $table->uuid('pending_post_id')->nullable(false);
-            $table->foreign('pending_post_id')->references('ID')->on('PendingPost')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreign('status_id')->references('id')->on('status')->onDelete('cascade');
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable(false);
+            $table->foreign('created_by_id')->references('id')->on('account')->onDelete('cascade');
+            $table->uuid('document_id')->nullable(false);
+            $table->foreign('document_id')->references('id')->on('document')->onDelete('cascade');
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Workflow');
+        Schema::dropIfExists('workflow');
     }
 };

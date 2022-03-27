@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Album extends Model
+class album extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * The primary key associated with the table.
      *
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     /**
      * The table associated with the model.
@@ -29,7 +29,7 @@ class Album extends Model
     ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'contents' => 'string',
         'parent_n' => 'string',
         'album_id' => 'string',
@@ -37,24 +37,19 @@ class Album extends Model
     ];
 
 
-    protected $table = 'Album';
+    protected $table = 'album';
 
     public function comment()
     {
-        return $this->hasMany(Comment::class,'album_id');
+        return $this->hasMany(comment::class,'album_id');
     }
 
     public function post(){
-        return $this->hasMany(Post::class,'album_id');
+        return $this->hasMany(post::class,'album_id');
     }
 
     public function image(){
-        return $this->hasMany(Image::class,'album_id');
-    }
-
-    public function pendingPost()
-    {
-        return $this->hasMany(PendingPost::class,'album_id');
+        return $this->hasMany(image::class,'album_id');
     }
 
 }

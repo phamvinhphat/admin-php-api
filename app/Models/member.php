@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Member extends Model
+class member extends Model
 {
     use HasFactory;
 
@@ -23,10 +23,10 @@ class Member extends Model
       'is_blocked' => false
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $primaryKey = array('account_id','thead_id');
 
-    protected $table = 'Member';
+    protected $table = 'member';
 
 }

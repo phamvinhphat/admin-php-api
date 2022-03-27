@@ -5,30 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class status extends Model
 {
     use HasFactory;
 
 
-    public $timestamps = true;
+    public $timestamps = false;
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name'
     ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'name' => 'string',
         'parent_n' => 'string',
     ];
 
-    protected $table = 'Status';
+    protected $table = 'status';
 
     public function status()
     {
-        return $this->hasMany(Status::class, 'paren_n');
+        return $this->hasMany(status::class, 'paren_n');
     }
 
     public function workflow(){

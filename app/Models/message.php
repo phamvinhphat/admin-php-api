@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class message extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'message'
     ];
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     protected $casts = [
-        'ID'=>'string',
+        'id'=>'string',
         'message'=>'string',
         'reply_to' => 'string',
         'conversation_id' => 'string',
@@ -26,14 +26,14 @@ class Message extends Model
 
     ];
 
-    protected $table = 'Message';
+    protected $table = 'message';
 
     public function message(){
-        return $this->hasMany(Message::class, 'sender_id');
+        return $this->hasMany(message::class, 'sender_id');
     }
 
     public function attachment(){
-        return $this->hasMany(Attachment::class, 'message_id');
+        return $this->hasMany(attachment::class, 'message_id');
     }
 
 

@@ -5,26 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class comment extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
-        'ID'=>'string',
+        'id'=>'string',
         'contents' => 'string',
         'parent_n' => 'string',
         'album_id' => 'string',
         'post_id' => 'string',
     ];
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
-    protected $table = 'Comment';
+    protected $table = 'comment';
 
     public function comment(){
-        return $this->hasMany(Comment::class, 'parent_n');
+        return $this->hasMany(comment::class, 'parent_n');
     }
 
 
