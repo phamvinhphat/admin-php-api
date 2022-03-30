@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('is_verify')->default(false);
             $table->string('saved_posts')->nullable();
             $table->string('recently_viewed_posts')->nullable();
+            $table->boolean('is_admin');
             $table->uuid('role_id')->nullable();
             $table->foreign('role_id')->references('id')->on('role')->onDelete('cascade');
             $table->uuid('modified_by_id')->nullable();

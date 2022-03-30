@@ -59,6 +59,7 @@ class account extends Model
         'recently_viewed_posts'=> 'string',
         'phone_number' => 'string',
         'privilege_id'=> 'string',
+        'is_admin' => 'boolean',
         'is_verity' =>'boolean',
     ];
 

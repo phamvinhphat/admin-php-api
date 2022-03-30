@@ -40,24 +40,29 @@ class UserRepository implements IUserRepository
      */
     public function getUserById($id)
     {
-        if(is_null($id)){
+        $check = DB::table('account')->find($id);
+        if(is_null($check)){
             return \response()->json(['error' => 'not found'],404);
+        } else {
+            return $check;
         }
-        return DB::table('account')->find($id);
     }
 
     /**
      * update role have user
-     * @param $userId
-     * @param array $collection
-     * @return JsonResponse|int
+     * @param $id
+     * @param string $roleID
+     * @return int
      */
-    public function updateRoleById($userId, array $collection)
+    public function updateRoleById($id, string $roleID)
     {
-        if (is_null($userId)) {
-            return response()->json(['error' => 'not found'], 404);
-        }
-        return DB::table('account')->where($userId)->update($collection);
+       return DB::table('account')
+            ->where("account.id", '=', $id)
+            ->update(['account.role_id'=> $roleID]);
+//        $product = DB::table('account')->find($id);;
+//        $product->update($request);
+//        return $product;
+//        return DB::table('account')->where($id)->update($newDetails);
     }
 
     /**
@@ -74,5 +79,29 @@ class UserRepository implements IUserRepository
     public function getRoleByIdUser($id)
     {
         // TODO: Implement getRoleByIdUser() method.
+    }
+
+    public function checkRole($id)
+    {
+        $isAdmin = DB::table('account')->where('is_admin',true)->find($id);
+
+        if(!is_null($isAdmin)){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function changeIsRole($id, bool $isAdmin)
+    {
+        if($this->checkRole($id)) {
+            return DB::table('account')
+                ->where("account.id", '=', $id)
+                ->update(['account.is_admin' => $isAdmin]);
+        } else {
+            return \response()->json(['error' => 'Authentication'],400);
+        }
+
     }
 }

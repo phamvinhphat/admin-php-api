@@ -10,6 +10,8 @@ use App\Repository\IRoleRepository;
 use App\Repository\RoleRepository;
 use App\Repository\IPermissionRepository;
 use App\Repository\PermissionRepository;
+use App\Repository\PermissionRoleRepository;
+use App\Repository\IPermissionRoleRepository;
 use Illuminate\Support\ServiceProvider;
 use function Psy\bin;
 
@@ -26,7 +28,8 @@ class RepositoryServiceProvider extends ServiceProvider
                 IUserRepository::class => UserRepository::class,
                 IPostIRepository::class => PostRepository::class,
                 IRoleRepository::class => RoleRepository::class,
-                IPermissionRepository::class => PermissionRepository::class
+                IPermissionRepository::class => PermissionRepository::class,
+                IPermissionRoleRepository::class => PermissionRoleRepository::class
             ];
 
             foreach ($toBind as $interface => $implementation){

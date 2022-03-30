@@ -9,9 +9,18 @@ class rolePermissions extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'role_id' => 'string',
+        'permission_id' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $casts= [
         'role_id' => 'string',
         'permission_id' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public $timestamps = false;

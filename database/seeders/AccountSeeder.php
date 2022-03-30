@@ -27,6 +27,7 @@ class AccountSeeder extends Seeder
                 'email'=>'pvphat12c6ntt@gmail',
                 'phone_number'=>'0937175474',
                 'is_verify'=>true,
+                'is_admin'=>true,
                 'role_id' => 'd681bad7-0591-4f74-bbd9-8a70c8fa34aa',
                 'modified_by_id' =>'59bf2cc1-4e00-4604-94dc-a9fb16247984',
                 'created_at' => date_create(),
