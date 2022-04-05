@@ -5,7 +5,9 @@ namespace App\Repository;
 
 interface IUserRepository
 {
-    public function register(array $orderDetails);
+    public function login(array $infoUser);
+    public function signUp(array $infUser);
+    public function logout();
     public function getAllUser();
     public function getRoleByIdUser($id);
     public function getUserById($id);

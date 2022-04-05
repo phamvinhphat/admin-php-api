@@ -15,20 +15,20 @@ return new class extends Migration
     {
         Schema::create('account', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('password');
             $table->string('first_name');
             $table->string('last_name');
-            $table->date('dob');
-            $table->string('id_card');
-            $table->string('avatar')->nullable();;
-            $table->string('gender');
+            $table->date('dob')->nullable();
+            $table->string('id_card')->unique();
+            $table->string('avatar')->nullable();
+            $table->string('gender')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
             $table->boolean('is_verify')->default(false);
             $table->string('saved_posts')->nullable();
             $table->string('recently_viewed_posts')->nullable();
-            $table->boolean('is_admin');
+            $table->boolean('is_admin')->default(false);
             $table->uuid('role_id')->nullable();
             $table->foreign('role_id')->references('id')->on('role')->onDelete('cascade');
             $table->uuid('modified_by_id')->nullable();

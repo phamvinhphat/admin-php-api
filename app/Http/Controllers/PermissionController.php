@@ -35,7 +35,7 @@ class PermissionController extends Controller
             "updated_at"=> $current_date_time,
         );
         return response()->json([
-           'data'=>$this->iPermissionRepository->createPermission($data)
+           'data' => $this->iPermissionRepository->createPermission($data)
         ], ResponseAlias::HTTP_CREATED);
     }
 
@@ -69,5 +69,4 @@ class PermissionController extends Controller
             'data' => $this->iPermissionRepository->findPermissionByTitle($title)
         ]);
     }
-
 }

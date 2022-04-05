@@ -28,8 +28,6 @@ class PermissionRoleRepository implements IPermissionRoleRepository
         return DB::table('role_permissions')->get();
     }
 
-
-
     public function updateGrantPermission($idRole, $idPermission, array $data)
     {
         if($this->isGrantPermissionById($idRole,$idPermission)){
@@ -72,7 +70,6 @@ class PermissionRoleRepository implements IPermissionRoleRepository
         } else {
             return false;
         }
-
     }
 
     public function finGrantPermissionByIdRole($idRole)

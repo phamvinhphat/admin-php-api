@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolePermissionController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,6 +21,13 @@ use App\Http\Controllers\RolePermissionController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+//Authentication
+Route::group(['middleware' => 'api', 'prefix' => 'auth'],function ($route) {
+    Route::post('login',[AccountController::class,'login']);
+    Route::post('register',[AccountController::class,'register']);
+    Route::post('logout',[AccountController::class,'logout']);
 });
 
 // Account

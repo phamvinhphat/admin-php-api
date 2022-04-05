@@ -6,6 +6,9 @@ use App\Models\account;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use function response;
 
 
 class UserRepository implements IUserRepository
@@ -20,18 +23,6 @@ class UserRepository implements IUserRepository
         return account::all();
     }
 
-
-    /**
-     * create new user
-     * @param array $orderDetails
-     * @return int
-     * @throws ModelNotFoundException
-     */
-    public function register(array $orderDetails)
-    {
-        return 0;
-    }
-
     /**
      * find user by id
      * @param string $id
@@ -41,8 +32,8 @@ class UserRepository implements IUserRepository
     public function getUserById($id)
     {
         $check = DB::table('account')->find($id);
-        if(is_null($check)){
-            return \response()->json(['error' => 'not found'],404);
+        if (is_null($check)) {
+            return response()->json(['error' => 'not found'], 404);
         } else {
             return $check;
         }
@@ -56,9 +47,9 @@ class UserRepository implements IUserRepository
      */
     public function updateRoleById($id, string $roleID)
     {
-       return DB::table('account')
+        return DB::table('account')
             ->where("account.id", '=', $id)
-            ->update(['account.role_id'=> $roleID]);
+            ->update(['account.role_id' => $roleID]);
 //        $product = DB::table('account')->find($id);;
 //        $product->update($request);
 //        return $product;
@@ -81,11 +72,22 @@ class UserRepository implements IUserRepository
         // TODO: Implement getRoleByIdUser() method.
     }
 
+    public function changeIsRole($id, bool $isAdmin)
+    {
+        if ($this->checkRole($id)) {
+            return DB::table('account')
+                ->where("account.id", '=', $id)
+                ->update(['account.is_admin' => $isAdmin]);
+        } else {
+            return response()->json(['error' => 'Authentication'], 400);
+        }
+    }
+
     public function checkRole($id)
     {
-        $isAdmin = DB::table('account')->where('is_admin',true)->find($id);
+        $isAdmin = DB::table('account')->where('is_admin', true)->find($id);
 
-        if(!is_null($isAdmin)){
+        if (!is_null($isAdmin)) {
             return true;
         } else {
             return false;
@@ -93,15 +95,67 @@ class UserRepository implements IUserRepository
 
     }
 
-    public function changeIsRole($id, bool $isAdmin)
+    /**
+     * @param $infoUser
+     * @return JsonResponse
+     */
+
+    public function login($infoUser)
     {
-        if($this->checkRole($id)) {
-            return DB::table('account')
-                ->where("account.id", '=', $id)
-                ->update(['account.is_admin' => $isAdmin]);
-        } else {
-            return \response()->json(['error' => 'Authentication'],400);
+        $validator = Validator::make($infoUser, [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
+        if (! $token = auth()->attempt($infoUser))
+        {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+            return $this->respondWithToken($token);
+    }
+
+    /**
+     * Get the token array structure.
+     * @param  $token
+     * @return JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => "Bearer $token",
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
+
+
+    /**
+     * @param array $infUser
+     * @return JsonResponse | bool
+     */
+    public function signUp(array $infUser)
+    {
+        $validator = Validator::make($infUser, [
+            'email' => 'required|email|unique:account',
+            'password' => 'bail|required|min:8',
+            'username' => 'bail|required|alpha|min:4|max:12|unique:account',
+            'first_name' => 'bail|required',
+            'last_name'  => 'bail|required',
+            'id_card' => 'bail|required|min:12|max:12|unique:account',
+            'phone_number' => 'bail|required|min:10|max:10|unique:account',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+        return DB::table('account')->insert($infUser);
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return ['message' => 'User successfully signed out'];
     }
 }

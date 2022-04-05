@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Dyrynda\Database\Casts\EfficientUuid;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class account extends Model
+class account extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     public $timestamps = false;
-
     /**
      * The primary key associated with the table.
      *
@@ -24,13 +25,10 @@ class account extends Model
         'username',
         'email',
         'password',
-        'first_name',
-        'last_name',
-        'dob',
-        'is_card',
-        'phone_number',
-        'saved_posts',
-        'recently_viewed_posts'
+//        'first_name',
+//        'last_name',
+//        'is_card',
+//        'phone_number',
     ];
 
     protected $hidden = [
@@ -91,5 +89,22 @@ class account extends Model
         return $this->hasMany(pending_post::class,'created_by');
     }
 
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier() {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims() {
+        return [];
+    }
 
 }
