@@ -19,7 +19,7 @@ class RoleSeeder extends Seeder
         DB::table('role')->insert([
             [
                 'id' => 'd681bad7-0591-4f74-bbd9-8a70c8fa34aa',
-                'role_title' => 'Admin',
+                'name' => 'Admin',
                 'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'created_at' => date_create(),
@@ -27,7 +27,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'id' => '766be67a-6520-4968-85ea-e9e07daf4e53',
-                'role_title' => 'User',
+                'name' => 'User',
                 'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'created_at' => date_create(),

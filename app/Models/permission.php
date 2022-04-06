@@ -17,7 +17,7 @@ class permission extends Model
 
     protected $casts = [
         'id' => 'string',
-        'permission_title' => 'string',
+        'name' => 'string',
     ];
 
     public function roles()

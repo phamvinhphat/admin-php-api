@@ -29,7 +29,8 @@ class RepositoryServiceProvider extends ServiceProvider
                 IPostIRepository::class => PostRepository::class,
                 IRoleRepository::class => RoleRepository::class,
                 IPermissionRepository::class => PermissionRepository::class,
-                IPermissionRoleRepository::class => PermissionRoleRepository::class
+                IPermissionRoleRepository::class => PermissionRoleRepository::class,
+            //    IUserRepository::class => PermissionRepository::class,
             ];
 
             foreach ($toBind as $interface => $implementation){

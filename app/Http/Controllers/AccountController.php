@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AccountController extends Controller
 {
@@ -27,9 +28,8 @@ class AccountController extends Controller
      */
     public function getViewUser()
     {
-        return response()->json([
-            'data' => $this->IUserRepository->getAllUser()
-        ]);
+        return $this->IUserRepository->getAllUser();
+
     }
 
     /**
@@ -40,10 +40,23 @@ class AccountController extends Controller
     {
         $orderId = $request->route('id');
         $orderDetails = $request->get('role_id');
-        return response()->json([
-            $this->IUserRepository->updateRoleById($orderId, $orderDetails) => 'update role success'
-        ], 200);
+
+        return $this->IUserRepository->updateRoleById($orderId, $orderDetails);
     }
+
+    /**
+     * find user by id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function findUserById(Request $request)
+    {
+        $idUser = $request->route('id');
+        return response()->json([
+            "Result" => $this->IUserRepository->findUserById($idUser)
+        ]);
+    }
+
 
     /**
      * @param Request $request
@@ -53,8 +66,8 @@ class AccountController extends Controller
     {
         $orderId = $request->route('id');
         return response()->json([
-            $this->IUserRepository->checkRole($orderId)
-        ]);
+            "isAdmin: "=> $this->IUserRepository->checkRole($orderId)
+        ],ResponseAlias::HTTP_ACCEPTED);
     }
 
     /**
@@ -65,20 +78,15 @@ class AccountController extends Controller
     {
         $orderId = $request->route('id');
         $orderDetails = $request->get('is_admin');
-        return response()->json([
-            $this->IUserRepository->changeIsRole($orderId, $orderDetails) => 'change success'
-        ], 200);
+        return $this->IUserRepository->changeIsRole($orderId, $orderDetails);
     }
 
     /**
-     * @param $id
      * @return JsonResponse
      */
-    public function getUserById($id)
+    public function getMyInfo()
     {
-        return response()->json([
-            'data' => $this->IUserRepository->getUserById($id)
-        ]);
+        return  $this->IUserRepository->getMyInfo();
     }
 
     /**
@@ -87,20 +95,25 @@ class AccountController extends Controller
      */
     public function updateUser(Request $request)
     {
-        $orderId = $request->route('id');
-        $orderDetails = $request->only([
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'dob',
-            'is_card',
-            'phone_number',
-        ]);
+        $email = $request->get('email');
+        $username = $request->get('username');
+        $firstName = $request->get('firstName');
+        $lastName = $request->get('lastName');
+        $idCard = $request->get('idCard');
+        $phoneNumber = $request->get('phoneNumber');
+        $currentDateTime = Carbon::now();
 
-        return response()->json([
-            'data' => $this->IUserRepository->updateRoleById($orderId, $orderDetails)
-        ]);
+        $data = array (
+            "email" => $email,
+            "username" => $username,
+            "first_name" => $firstName,
+            "last_name" => $lastName,
+            "id_card" => $idCard,
+            "phone_number" => $phoneNumber,
+            "updated_at" => $currentDateTime,
+        );
+
+        return $this->IUserRepository->updateUser($data);
     }
 
     /**
@@ -112,9 +125,7 @@ class AccountController extends Controller
     public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
-            return response()->json([
-                'data' => $this->IUserRepository->login($credentials)
-            ]);
+        return $this->IUserRepository->login($credentials);
     }
 
 
@@ -148,9 +159,7 @@ class AccountController extends Controller
             "updated_at" => $currentDateTime,
         );
 
-        return response()->json([
-           'result' => $this->IUserRepository->signUp($data)
-        ]);
+        return  $this->IUserRepository->signUp($data);
     }
 
     /**
@@ -158,9 +167,6 @@ class AccountController extends Controller
      */
     public function logout()
     {
-        return response()->json([
-            $this->IUserRepository->logout()
-        ]);
+        return $this->IUserRepository->logout();
     }
-
 }

@@ -24,19 +24,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //Authentication
-Route::group(['middleware' => 'api', 'prefix' => 'auth'],function ($route) {
+Route::group(['middleware' => ['api','cors'], 'prefix' => 'auth'],function ($route) {
     Route::post('login',[AccountController::class,'login']);
     Route::post('register',[AccountController::class,'register']);
     Route::post('logout',[AccountController::class,'logout']);
 });
 
 // Account
-Route::group(["prefix"=>"account"],function(){
+Route::group(['middleware' => ['api','cors'], "prefix"=>"account"],function(){
     Route::get('/getViewUser',[AccountController::class,'getViewUser']);
-    Route::get('/getUser/{userID}',[AccountController::class,'getUserById']);
-    Route::patch('/updateAccount/{id}',[AccountController::class,'updateRoleById']);
+    Route::get('/getMyInfo',[AccountController::class,'getMyInfo']);
+    Route::patch('/updateAccount',[AccountController::class,'updateUser']);
     Route::get('/checkRole/{id}',[AccountController::class,'checkRole']);
     Route::patch('/changeIsAdmin/{id}',[AccountController::class,'changeIsAdmin']);
+    Route::get('/findUserById/{id}',[AccountController::class,'findUserById']);
 });
 
 //role
@@ -51,7 +52,8 @@ Route::group(["prefix"=>"permission"],function(){
     Route::get('/getPermission/{id}',[PermissionController::class,'findPermissionById']);
     Route::patch('/updatePermission/{id}',[PermissionController::class,'updatePermissionById']);
     Route::delete('/deletePermission/{id}',[PermissionController::class,'deletePermissionById']);
-    Route::get('/getPermissionByTitle/{permission_title}',[PermissionController::class,'findPermissionByTitle']);
+    Route::get('/getPermissionByName',[PermissionController::class,'findPermissionByName']);
+    Route::get('/getPermissionById/{id}',[PermissionController::class,'finPermissionById']);
 });
 
 // grant permission

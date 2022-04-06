@@ -5,9 +5,10 @@ namespace App\Repository;
 use App\Models\account;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use function response;
 
 
@@ -20,22 +21,32 @@ class UserRepository implements IUserRepository
      */
     public function getAllUser()
     {
-        return account::all();
+        if($this->checkRole(Auth::id()) == true)
+        {
+            return response()->json([
+                "Result" => account::all()
+            ],ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json([
+                'error' => 'You are not admin'],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
 
     /**
      * find user by id
-     * @param string $id
      * @return JsonResponse
      * @throws ModelNotFoundException
      */
-    public function getUserById($id)
+    public function getMyInfo()
     {
-        $check = DB::table('account')->find($id);
-        if (is_null($check)) {
-            return response()->json(['error' => 'not found'], 404);
+        $check = $this->findUserById(Auth::id());
+        $getUser = DB::table('account')->find(Auth::id());
+        if ($check == false) {
+            return response()->json(['Error' => 'Not Found'], ResponseAlias::HTTP_BAD_REQUEST);
         } else {
-            return $check;
+            return response()->json(["Result" => $getUser], ResponseAlias::HTTP_OK);
         }
     }
 
@@ -43,63 +54,131 @@ class UserRepository implements IUserRepository
      * update role have user
      * @param $id
      * @param string $roleID
-     * @return int
+     * @return JsonResponse
      */
     public function updateRoleById($id, string $roleID)
     {
-        return DB::table('account')
+        $updateRole = DB::table('account')
             ->where("account.id", '=', $id)
             ->update(['account.role_id' => $roleID]);
-//        $product = DB::table('account')->find($id);;
-//        $product->update($request);
-//        return $product;
-//        return DB::table('account')->where($id)->update($newDetails);
+
+        $isCheckAdmin = $this->checkRole(Auth::id());
+
+        if($isCheckAdmin == true)
+        {
+            return response()->json([
+                "Result" => $updateRole
+            ],ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json(['error' => 'You are not admin'],ResponseAlias::HTTP_FORBIDDEN);
+        }
     }
 
     /**
      * update info user
-     * @param $userId
      * @param array $newDetails
-     * @return int
+     * @return JsonResponse
      */
-    public function updateUser($userId, array $newDetails)
+    public function updateUser(array $newDetails)
     {
-        return DB::table('account')->where($userId)->update($newDetails);
+         $validator = Validator::make($newDetails, [
+             'email' => 'required|email|unique:account',
+             'username' => 'bail|required|alpha|min:4|max:12|unique:account',
+             'first_name' => 'bail|required',
+             'last_name'  => 'bail|required',
+             'id_card' => 'bail|required|min:12|max:12|unique:account',
+             'phone_number' => 'bail|required|min:10|max:10|unique:account',
+         ]);
+        if ($validator->fails()) {
+            return response()->json(
+                ['error'=>$validator->errors()],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
+        }
+
+        if($this->findUserById(Auth::id()) == true)
+        {
+            $updateUser = DB::table('account')->where('id', Auth::id())->update($newDetails);
+            return response()->json([
+               'Change Success' => $updateUser
+            ],ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json(['Error' => 'Not Found'],ResponseAlias::HTTP_BAD_REQUEST);
+        }
     }
 
+    /**
+     * @param $id
+     * @return void
+     */
     public function getRoleByIdUser($id)
     {
         // TODO: Implement getRoleByIdUser() method.
     }
 
-    public function changeIsRole($id, bool $isAdmin)
+    /**
+     * find user by id
+     * @param $id
+     * @return bool
+     */
+    public function findUserById($id)
     {
-        if ($this->checkRole($id)) {
-            return DB::table('account')
-                ->where("account.id", '=', $id)
-                ->update(['account.is_admin' => $isAdmin]);
+        $isCheckRole = DB::table('account')->find($id);
+        if(!is_null($isCheckRole))
+        {
+            return true;
         } else {
-            return response()->json(['error' => 'Authentication'], 400);
+            return false;
         }
     }
 
+    /**
+     * change role(bool) by id
+     * @param $id
+     * @param bool $isAdmin
+     * @return JsonResponse|int
+     */
+    public function changeIsRole($id, bool $isAdmin)
+    {
+        $isCheckRole = $this->checkRole(Auth::id());
+
+        $changeInfo = DB::table('account')
+            ->where("account.id", '=', $id)
+            ->update(['account.is_admin' => $isAdmin]);
+
+        if ($isCheckRole == true) {
+            return response()->json(
+                ['Change Success' => $changeInfo],
+                ResponseAlias::HTTP_OK
+            );
+        } else {
+            return \response()->json(
+                ['error' => 'You are not admin'],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
+    }
+
+    /**
+     * check role by id
+     * @param $id
+     * @return bool
+     */
     public function checkRole($id)
     {
         $isAdmin = DB::table('account')->where('is_admin', true)->find($id);
-
         if (!is_null($isAdmin)) {
             return true;
         } else {
             return false;
         }
-
     }
 
     /**
+     * login
      * @param $infoUser
      * @return JsonResponse
      */
-
     public function login($infoUser)
     {
         $validator = Validator::make($infoUser, [
@@ -108,12 +187,18 @@ class UserRepository implements IUserRepository
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(
+                $validator->errors(),
+                ResponseAlias::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         if (! $token = auth()->attempt($infoUser))
         {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(
+                ['error' => 'Unauthorized'],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
         }
             return $this->respondWithToken($token);
     }
@@ -127,14 +212,14 @@ class UserRepository implements IUserRepository
     {
         return response()->json([
             'access_token' => "Bearer $token",
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+            'expires_in' => auth()->factory()->getTTL() * 6000
+        ], ResponseAlias::HTTP_OK);
     }
 
-
     /**
+     * register
      * @param array $infUser
-     * @return JsonResponse | bool
+     * @return JsonResponse
      */
     public function signUp(array $infUser)
     {
@@ -148,14 +233,30 @@ class UserRepository implements IUserRepository
             'phone_number' => 'bail|required|min:10|max:10|unique:account',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(
+                ['error'=>$validator->errors()],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
         }
-        return DB::table('account')->insert($infUser);
+
+        $createUser = DB::table('account')->insert($infUser);
+
+        return response()->json(
+            ["Result" => $createUser],
+            ResponseAlias::HTTP_CREATED
+        );
     }
 
+    /**
+     * logout
+     * @return JsonResponse
+     */
     public function logout()
     {
         auth()->logout();
-        return ['message' => 'User successfully signed out'];
+        return response()->json(
+            ['message' => 'User successfully signed out'],
+            ResponseAlias::HTTP_OK
+        );
     }
 }

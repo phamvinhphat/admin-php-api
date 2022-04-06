@@ -72,6 +72,10 @@ return [
             'driver' => 'eloquent',
             'model' =>  App\Models\account::class,
         ],
+        'permission' => [
+            'driver' => 'eloquent',
+            'model' =>  App\Models\permission::class,
+        ],
     ],
 
     /*

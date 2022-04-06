@@ -21,7 +21,7 @@ class role extends Model
 
     protected $casts = [
         'id' => 'string',
-        'role_title' => 'string',
+        'role' => 'string',
     ];
 
     public function account()

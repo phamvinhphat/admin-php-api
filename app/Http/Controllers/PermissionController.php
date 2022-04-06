@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\account;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repository\IPermissionRepository;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -16,57 +19,91 @@ class PermissionController extends Controller
     public function __construct( IPermissionRepository $iPermissionRepository)
     {
         $this->iPermissionRepository = $iPermissionRepository;
+        $this->middleware('auth:api');
     }
 
+    /**
+     * get all permission
+     * @return JsonResponse
+     */
     public function getAllPermission(){
-        return response()->json([
-           'data' => $this->iPermissionRepository->getAllPermission()
-        ]);
+        return $this->iPermissionRepository->getAllPermission();
     }
 
+    /**
+     * Create a permission
+     * @param Request $request
+     * @return mixed
+     */
     public function createPermission(Request $request){
         $current_date_time = Carbon::now();
         $id = Uuid::uuid4()->toString();
-        $title = $request->input('permission_title');
+        $title = $request->input('name');
+
         $data = array(
             "id" => $id,
-            "permission_title"=>$title,
+            "name" => $title,
+            "modified_by_id" => Auth::id(),
+            "created_by_id" => Auth::id(),
             "created_at" => $current_date_time,
             "updated_at"=> $current_date_time,
         );
-        return response()->json([
-           'data' => $this->iPermissionRepository->createPermission($data)
-        ], ResponseAlias::HTTP_CREATED);
+
+        return $this->iPermissionRepository->createPermission($data);
     }
 
-    public function findPermissionById($id)
+    /**
+     * Find permission by id
+     * @param Request $request
+     * @return mixed
+     */
+    public function findPermissionById(Request $request)
     {
-        return response()->json([
-            'data' => $this->iPermissionRepository->findPermissionById($id)
-        ],200);
+        $idPermission = $request->route('id');
+        return $this->iPermissionRepository->findPermissionById($idPermission);
     }
 
+    /**
+     * update permission by id
+     * @param Request $request
+     * @return mixed
+     */
     public function updatePermissionById(Request $request)
     {
-        $orderId = $request->route('id');
-        $orderDetails = $request->get('permission_title');
-        return response()->json([
-            'data' => $this->iPermissionRepository->updatePermission($orderId, $orderDetails)
-        ]);
+        $id = $request->route('id');
+        $name = $request->get('name');
+
+        $data = array(
+            "name" => $name,
+            "modified_by_id" => Auth::id(),
+        );
+
+        return $this->iPermissionRepository->updatePermission($id, $data);
     }
 
-    public function deletePermissionById(Request $request){
-        $orderId = $request->route('id');
-        return response()->json([
-            $this->iPermissionRepository->deletePermission($orderId)
-        ], ResponseAlias::HTTP_ACCEPTED);
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deletePermissionById(Request $request) {
+        $id = $request->route('id');
+        return $this->iPermissionRepository->deletePermission($id);
     }
 
-    // BUG
-    public function findPermissionByTitle(Request $request){
-        $title = $request->route('permission_title');
-        return response()->json([
-            'data' => $this->iPermissionRepository->findPermissionByTitle($title)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function findPermissionByName(Request $request){
+        $name = $request->get('name');
+        return  $this->iPermissionRepository->findPermissionByName($name);
+    }
+
+
+    public function finPermissionById(Request $request)
+    {
+        $id = $request->route('id');
+        return \response()->json([ $this->iPermissionRepository->isPermissionById($id)
         ]);
     }
 }
