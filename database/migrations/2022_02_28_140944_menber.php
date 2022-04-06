@@ -12,19 +12,19 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('Member', function (Blueprint $table) {
+        Schema::create('member', function (Blueprint $table) {
             $table->uuid('account_id')->unsigned();
             $table->uuid('thead_id')->unsigned();
             $table->boolean('is_blocked')->default(false);
             $table->foreign('account_id')
-                ->references('ID')
-                ->on('Account')
+                ->references('id')
+                ->on('account')
                 ->onDelete('cascade');
             $table->foreign('thead_id')
-                ->references('ID')
-                ->on('Conversation')
+                ->references('id')
+                ->on('conversation')
                 ->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -36,5 +36,6 @@ return new class extends Migration {
     public function down()
     {
         //
+        Schema::dropIfExists('member');
     }
 };

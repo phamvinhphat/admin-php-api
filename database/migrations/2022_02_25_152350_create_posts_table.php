@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Post', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
+        Schema::create('post', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('contents');
             $table->double('longitude');
             $table->double('latitude');
@@ -22,11 +22,13 @@ return new class extends Migration
             $table->string('floor_area');
             $table->string('address');
             $table->string('furniture_status');
-            $table->uuid('created_by')->nullable(false);
-            $table->foreign('created_by')->references('ID')->on('Account')->onDelete('cascade');
+            $table->integer('views')->default(0);
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable();
+            $table->foreign('created_by_id')->references('id')->on('account')->onDelete('cascade');
             $table->uuid('album_id')->nullable(false);
-            $table->foreign('album_id')->references('ID')->on('Album')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreign('album_id')->references('id')->on('album')->onDelete('cascade');
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -37,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Post');
+        Schema::dropIfExists('post');
     }
 };

@@ -13,23 +13,27 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Account', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
-            $table->string('username');
+        Schema::create('account', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('username')->unique();
             $table->string('password');
             $table->string('first_name');
             $table->string('last_name');
-            $table->date('Dob');
+            $table->date('dob')->nullable();
             $table->string('id_card')->unique();
-            $table->string('avatar');
-            $table->string('gender');
+            $table->string('avatar')->nullable();
+            $table->string('gender')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
             $table->boolean('is_verify')->default(false);
-            $table->uuid('privilege_id')->nullable(false);
-            $table->foreign('privilege_id')->references('ID')->on('Privilege')->onDelete('cascade');
-            $table->string('modified');
-            $table->timestamps();
+            $table->string('saved_posts')->nullable();
+            $table->string('recently_viewed_posts')->nullable();
+            $table->boolean('is_admin')->default(false);
+            $table->uuid('role_id')->nullable();
+            $table->foreign('role_id')->references('id')->on('role')->onDelete('cascade');
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -41,6 +45,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Account');
+        Schema::dropIfExists('account');
     }
 };

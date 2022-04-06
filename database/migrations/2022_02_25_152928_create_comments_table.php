@@ -13,17 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Comment', function (Blueprint $table) {
-            $table->uuid('ID');
+        Schema::create('comment', function (Blueprint $table) {
+            $table->uuid('id');
             $table->string('contents');
             $table->uuid('parent_n')->nullable();
-            $table->primary('ID');
-            $table->foreign('parent_n')->references('ID')->on('Comment');
+            $table->primary('id');
+            $table->foreign('parent_n')->references('id')->on('comment');
             $table->uuid('album_id')->nullable(false);
-            $table->foreign('album_id')->references('ID')->on('Album')->onDelete('cascade');
+            $table->foreign('album_id')->references('id')->on('album')->onDelete('cascade');
             $table->uuid('post_id')->nullable(false);
-            $table->foreign('post_id')->references('ID')->on('Post')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreign('post_id')->references('id')->on('post')->onDelete('cascade');
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Comment');
+        Schema::dropIfExists('comment');
     }
 };

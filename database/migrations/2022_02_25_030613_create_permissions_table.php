@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Privilege', function (Blueprint $table) {
-            $table->uuid('ID');
+        Schema::create('permission', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('name');
-            $table->uuid('parent_n')->nullable();
-            $table->primary('ID');
-            $table->foreign('parent_n')->references('ID')->on('Privilege');
-            $table->uuid('created_by');
-            $table->uuid('modified');
-            $table->timestamps();
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Privilege');
+        Schema::dropIfExists('permission');
     }
 };

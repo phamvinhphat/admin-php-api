@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Status', function (Blueprint $table) {
-            $table->uuid('ID');
+        Schema::create('status', function (Blueprint $table) {
+            $table->uuid('id');
             $table->string('name');
             $table->uuid('parent_n')->nullable();
-            $table->primary('ID');
-            $table->foreign('parent_n')->references('ID')->on('Status');
-            $table->timestamps();
+            $table->primary('id');
+            $table->foreign('parent_n')->references('id')->on('status');
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Status');
+        Schema::dropIfExists('status');
     }
 };

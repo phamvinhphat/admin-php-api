@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('image', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('url');
-            $table->string('caption');
-            $table->boolean('is_hidden')->default(false);
-            $table->uuid('album_id')->nullable(false);
-            $table->foreign('album_id')->references('id')->on('album')->onDelete('cascade');
+        Schema::create('role_permissions', function (Blueprint $table) {
+            $table->uuid('role_id')->unsigned();
+            $table->uuid('permission_id')->unsigned();
+            $table->foreign('role_id')
+                ->references('id')
+                ->on('role')
+                ->onDelete('cascade');
+            $table->foreign('permission_id')
+                ->references('id')
+                ->on('permission')
+                ->onDelete('cascade');
             $table->uuid('modified_by_id')->nullable();
             $table->uuid('created_by_id')->nullable();
             $table->timestamps().date_default_timezone_get();
@@ -33,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('image');
+        Schema::dropIfExists('role_permissions');
     }
 };

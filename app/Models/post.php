@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class post extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
-    protected $table = 'Post';
+    protected $table = 'post';
 
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'longitude' => 'double',
         'latitude' => 'double',
         'contents' => 'string',
@@ -25,6 +25,7 @@ class Post extends Model
         'floor_area' => 'real',
         'address' => 'string',
         'furniture_status' => 'string',
+        'views'=>'integer',
         'album_id' => 'string',
         'create_by' => 'string',
     ];
@@ -37,7 +38,7 @@ class Post extends Model
 
     public function Comment()
     {
-        return $this->hasMany(Comment::class, 'post_id');
+        return $this->hasMany(comment::class, 'post_id');
     }
 
 

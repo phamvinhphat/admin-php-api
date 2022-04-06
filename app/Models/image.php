@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class image extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'url',
@@ -17,7 +17,7 @@ class Image extends Model
     ];
 
     protected $casts = [
-        'ID' => 'string',
+        'id' => 'string',
         'url' => 'string',
         'caption' => 'string',
         'is_hidden' => 'boolean',
@@ -33,13 +33,13 @@ class Image extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'Image';
+    protected $table = 'image';
 
 }

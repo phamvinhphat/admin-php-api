@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Conversation', function (Blueprint $table) {
-            $table->uuid('ID')->primary();
-            $table->timestamps();
+        Schema::create('conversation', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('modified_by_id')->nullable();
+            $table->uuid('created_by_id')->nullable();
+            $table->timestamps().date_default_timezone_get();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Conversation');
+        Schema::dropIfExists('conversation');
     }
 };

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Attachment extends Model
+class attachment extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $casts = [
-        'ID'=>'string',
+        'id'=>'string',
         'uri'=>'string',
         'caption'=>'string',
         'message_id' => 'string'
@@ -23,12 +23,12 @@ class Attachment extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'Attachment';
+    protected $table = 'attachment';
 }
