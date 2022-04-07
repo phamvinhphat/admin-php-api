@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use function response;
@@ -42,16 +43,16 @@ class UserRepository implements IUserRepository
     public function getMyInfo()
     {
         $check = $this->findUserById(Auth::id());
-        $getUser = DB::table('account')->find(Auth::id());
+
         if ($check == false) {
             return response()->json(['Error' => 'Not Found'], ResponseAlias::HTTP_BAD_REQUEST);
         } else {
-            return response()->json(["Result" => $getUser], ResponseAlias::HTTP_OK);
+            return response()->json(["Result" => DB::table('account')->find(Auth::id())], ResponseAlias::HTTP_OK);
         }
     }
 
     /**
-     * update role have user
+     * update role have user$getUser
      * @param $id
      * @param string $roleID
      * @return JsonResponse
@@ -119,7 +120,7 @@ class UserRepository implements IUserRepository
     /**
      * find user by id
      * @param $id
-     * @return bool
+     * @return boollogin JWT repository laravel
      */
     public function findUserById($id)
     {
@@ -152,7 +153,7 @@ class UserRepository implements IUserRepository
                 ResponseAlias::HTTP_OK
             );
         } else {
-            return \response()->json(
+            return response()->json(
                 ['error' => 'You are not admin'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
