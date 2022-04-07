@@ -7,6 +7,7 @@ interface IUserRepository
 {
     public function login(array $infoUser);
     public function signUp(array $infUser);
+    public function refresh();
     public function logout();
     public function findUserById($id);
     public function getAllUser();

@@ -38,6 +38,7 @@ Route::group(['middleware' => ['api','cors'], "prefix"=>"account"],function(){
     Route::get('/checkRole/{id}',[AccountController::class,'checkRole']);
     Route::patch('/changeIsAdmin/{id}',[AccountController::class,'changeIsAdmin']);
     Route::get('/findUserById/{id}',[AccountController::class,'findUserById']);
+    Route::get('/refresh',[AccountController::class,'refresh']);
 });
 
 //role

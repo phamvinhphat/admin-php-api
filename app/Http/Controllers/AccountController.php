@@ -24,7 +24,73 @@ class AccountController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * Get List account
+     * @OA\Get (
+     *     path="/api/account/getViewUser",
+     *     tags={"Account"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 property="rows",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="uuid",
+     *                     ),
+     *                     @OA\Property(
+     *                         property="username",
+     *                         type="string",
+     *                         example="example username"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="first_name",
+     *                         type="string",
+     *                         example="example first_name"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="last_name",
+     *                         type="string",
+     *                         example="example last_name"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="gender",
+     *                         type="string",
+     *                         example="example gender"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="email",
+     *                         type="string",
+     *                         example="example email"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="phone_number",
+     *                         type="string",
+     *                         example="example phone_number"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="privilege_id",
+     *                         type="uuid",
+     *                         example="example privilege_id"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function getViewUser()
     {
@@ -136,7 +202,7 @@ class AccountController extends Controller
                 ResponseAlias::HTTP_BAD_REQUEST);
         }
 
-        return $this->IUserRepository->login($email, $password);
+        return $this->IUserRepository->login($credentials);
     }
 
 
@@ -180,4 +246,13 @@ class AccountController extends Controller
     {
         return $this->IUserRepository->logout();
     }
+
+    /**
+     * @return mixed
+     */
+    public function refresh()
+    {
+        return $this->IUserRepository->refresh();
+    }
+
 }
