@@ -26,7 +26,7 @@ class AccountController extends Controller
     /**
      * Get List account
      * @OA\Get (
-     *     path="/api/account/getViewUser",
+     *     path="/account/getViewUser",
      *     tags={"Account"},
      *     @OA\Response(
      *         response=200,
