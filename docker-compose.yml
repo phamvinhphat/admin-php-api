@@ -1,7 +1,8 @@
 # For more information: https://laravel.com/docs/sail
-version: '3'
+version: '3.8'
 services:
     laravel.test:
+        container_name: '4rent-laravel'
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -25,6 +26,7 @@ services:
             - redis
             - pgsql
     redis:
+        container_name: '4rent-cache'
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
@@ -37,6 +39,7 @@ services:
             retries: 3
             timeout: 5s
     pgsql:
+        container_name: '4rent-database'
         image: 'postgres:13'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
@@ -56,6 +59,7 @@ services:
 networks:
     sail:
         driver: bridge
+        name: '4rent-networks'
 volumes:
     sail-redis:
         driver: local
