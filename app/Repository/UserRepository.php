@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use function response;
@@ -259,5 +258,14 @@ class UserRepository implements IUserRepository
             ['message' => 'User successfully signed out'],
             ResponseAlias::HTTP_OK
         );
+    }
+
+    /**
+     * refresh JWT
+     * @return JsonResponse
+     */
+    public function refresh()
+    {
+        return  $this->respondWithToken(auth()->refresh());
     }
 }

@@ -1,0 +1,96 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel Documentation",
+        "description": "L5 Swagger OpenApi description",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/api/account/getViewUser": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get List account",
+                "operationId": "2b63204879d4c526d19091449409f700",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "rows": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "uuid"
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "example username"
+                                                    },
+                                                    "first_name": {
+                                                        "type": "string",
+                                                        "example": "example first_name"
+                                                    },
+                                                    "last_name": {
+                                                        "type": "string",
+                                                        "example": "example last_name"
+                                                    },
+                                                    "gender": {
+                                                        "type": "string",
+                                                        "example": "example gender"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "example email"
+                                                    },
+                                                    "phone_number": {
+                                                        "type": "string",
+                                                        "example": "example phone_number"
+                                                    },
+                                                    "privilege_id": {
+                                                        "type": "uuid",
+                                                        "example": "example privilege_id"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2021-12-11T09:25:53.000000Z"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2021-12-11T09:25:53.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Projects",
+            "description": "API Endpoints of Projects"
+        }
+    ]
+}
