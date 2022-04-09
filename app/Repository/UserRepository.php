@@ -24,11 +24,11 @@ class UserRepository implements IUserRepository
         if($this->checkRole(Auth::id()) == true)
         {
             return response()->json([
-                "Result" => account::all()
+                "result" => account::all()
             ],ResponseAlias::HTTP_OK);
         } else {
             return response()->json([
-                'error' => 'You are not admin'],
+                "message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -44,9 +44,9 @@ class UserRepository implements IUserRepository
         $check = $this->findUserById(Auth::id());
 
         if ($check == false) {
-            return response()->json(['Error' => 'Not Found'], ResponseAlias::HTTP_BAD_REQUEST);
+            return response()->json(["message" => "Not Found"], ResponseAlias::HTTP_BAD_REQUEST);
         } else {
-            return response()->json(["Result" => DB::table('account')->find(Auth::id())], ResponseAlias::HTTP_OK);
+            return response()->json(["result" => DB::table('account')->find(Auth::id())], ResponseAlias::HTTP_OK);
         }
     }
 
@@ -67,10 +67,10 @@ class UserRepository implements IUserRepository
         if($isCheckAdmin == true)
         {
             return response()->json([
-                "Result" => $updateRole
+                "result" => $updateRole
             ],ResponseAlias::HTTP_OK);
         } else {
-            return response()->json(['error' => 'You are not admin'],ResponseAlias::HTTP_FORBIDDEN);
+            return response()->json(["message" => "You are not admin"],ResponseAlias::HTTP_FORBIDDEN);
         }
     }
 
@@ -91,7 +91,7 @@ class UserRepository implements IUserRepository
          ]);
         if ($validator->fails()) {
             return response()->json(
-                ['error'=>$validator->errors()],
+                ["message"=>$validator->errors()],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -100,10 +100,10 @@ class UserRepository implements IUserRepository
         {
             $updateUser = DB::table('account')->where('id', Auth::id())->update($newDetails);
             return response()->json([
-               'Change Success' => $updateUser
+               "result" => $updateUser
             ],ResponseAlias::HTTP_OK);
         } else {
-            return response()->json(['Error' => 'Not Found'],ResponseAlias::HTTP_BAD_REQUEST);
+            return response()->json(["message" => "Not Found"],ResponseAlias::HTTP_BAD_REQUEST);
         }
     }
 
@@ -119,7 +119,7 @@ class UserRepository implements IUserRepository
     /**
      * find user by id
      * @param $id
-     * @return boollogin JWT repository laravel
+     * @return bool JWT repository laravel
      */
     public function findUserById($id)
     {
@@ -148,12 +148,12 @@ class UserRepository implements IUserRepository
 
         if ($isCheckRole == true) {
             return response()->json(
-                ['Change Success' => $changeInfo],
+                ["result" => $changeInfo],
                 ResponseAlias::HTTP_OK
             );
         } else {
             return response()->json(
-                ['error' => 'You are not admin'],
+                ["message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -196,7 +196,7 @@ class UserRepository implements IUserRepository
         if (! $token = auth()->attempt($infoUser))
         {
             return response()->json(
-                ['error' => 'Unauthorized'],
+                ["message" => "Unauthorized"],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -211,8 +211,8 @@ class UserRepository implements IUserRepository
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => "Bearer $token",
-            'expires_in' => auth()->factory()->getTTL() * 6000
+            "accessToken" => "Bearer $token",
+            "expiresIn" => auth()->factory()->getTTL() * 6000
         ], ResponseAlias::HTTP_OK);
     }
 
@@ -234,7 +234,7 @@ class UserRepository implements IUserRepository
         ]);
         if ($validator->fails()) {
             return response()->json(
-                ['error'=>$validator->errors()],
+                ["message"=>$validator->errors()],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -242,7 +242,7 @@ class UserRepository implements IUserRepository
         $createUser = DB::table('account')->insert($infUser);
 
         return response()->json(
-            ["Result" => $createUser],
+            ["result" => $createUser],
             ResponseAlias::HTTP_CREATED
         );
     }
@@ -255,7 +255,7 @@ class UserRepository implements IUserRepository
     {
         auth()->logout();
         return response()->json(
-            ['message' => 'User successfully signed out'],
+            ["message" => "User successfully signed out"],
             ResponseAlias::HTTP_OK
         );
     }

@@ -23,75 +23,6 @@ class AccountController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-    /**
-     * Get List account
-     * @OA\Get (
-     *     path="/account/getViewUser",
-     *     tags={"Account"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="success",
-     *         @OA\JsonContent(
-     *             @OA\Property(
-     *                 type="array",
-     *                 property="rows",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(
-     *                         property="id",
-     *                         type="uuid",
-     *                     ),
-     *                     @OA\Property(
-     *                         property="username",
-     *                         type="string",
-     *                         example="example username"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="first_name",
-     *                         type="string",
-     *                         example="example first_name"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="last_name",
-     *                         type="string",
-     *                         example="example last_name"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="gender",
-     *                         type="string",
-     *                         example="example gender"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="email",
-     *                         type="string",
-     *                         example="example email"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="phone_number",
-     *                         type="string",
-     *                         example="example phone_number"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="privilege_id",
-     *                         type="uuid",
-     *                         example="example privilege_id"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="updated_at",
-     *                         type="string",
-     *                         example="2021-12-11T09:25:53.000000Z"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="created_at",
-     *                         type="string",
-     *                         example="2021-12-11T09:25:53.000000Z"
-     *                     )
-     *                 )
-     *             )
-     *         )
-     *     )
-     * )
-     */
     public function getViewUser()
     {
         return $this->IUserRepository->getAllUser();
@@ -143,7 +74,7 @@ class AccountController extends Controller
     public function changeIsAdmin(Request $request)
     {
         $orderId = $request->route('id');
-        $orderDetails = $request->get('is_admin');
+        $orderDetails = $request->get('isAdmin');
         return $this->IUserRepository->changeIsRole($orderId, $orderDetails);
     }
 
@@ -167,7 +98,7 @@ class AccountController extends Controller
         $lastName = $request->get('lastName');
         $idCard = $request->get('idCard');
         $phoneNumber = $request->get('phoneNumber');
-        $currentDateTime = Carbon::now();
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array (
             "email" => $email,
@@ -199,7 +130,7 @@ class AccountController extends Controller
 
         if (!$account || !Hash::check($password, $account->password)) {
             return response()->json(['success' => false, 'message' => 'Login Fail, please check email and password'],
-                ResponseAlias::HTTP_BAD_REQUEST);
+                ResponseAlias::HTTP_OK);
         }
 
         return $this->IUserRepository->login($credentials);
@@ -217,11 +148,11 @@ class AccountController extends Controller
         $email = $request->get('email');
         $password = Hash::make($request->get('password'));
         $username = $request->get('username');
-        $firstName = $request->get('firstName');
-        $lastName = $request->get('lastName');
-        $idCard = $request->get('idCard');
-        $phoneNumber = $request->get('phoneNumber');
-        $currentDateTime = Carbon::now();
+        $firstName = $request->get('first_name');
+        $lastName = $request->get('last_name');
+        $idCard = $request->get('id_card');
+        $phoneNumber = $request->get('phone_number');
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array (
             "id" => $id,
@@ -236,7 +167,7 @@ class AccountController extends Controller
             "updated_at" => $currentDateTime,
         );
 
-        return  $this->IUserRepository->signUp($data);
+        return  $this->IUserRepository->signUp($request->all());
     }
 
     /**

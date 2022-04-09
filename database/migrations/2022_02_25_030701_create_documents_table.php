@@ -17,9 +17,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('document_code');
             $table->json('data');
-            $table->boolean('is_workflow')->nullable(false);
-            $table->boolean('is_auth')->nullable(false);
-            $table->boolean('is_register')->nullable(false);
+            $table->boolean('is_workflow')->default(false);
+            $table->boolean('is_auth')->default(false);
+            $table->boolean('is_register')->default(false);
             $table->uuid('modified_by_id')->nullable();
             $table->uuid('created_by_id')->nullable();
             $table->foreign('created_by_id')->references('id')->on('account')->onDelete('cascade');

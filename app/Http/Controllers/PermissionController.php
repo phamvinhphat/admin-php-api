@@ -36,7 +36,7 @@ class PermissionController extends Controller
      * @return mixed
      */
     public function createPermission(Request $request){
-        $current_date_time = Carbon::now();
+        $current_date_time = Carbon::now('Asia/Ho_Chi_Minh');
         $id = Uuid::uuid4()->toString();
         $title = $request->input('name');
 
