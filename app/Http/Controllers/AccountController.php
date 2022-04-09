@@ -167,7 +167,7 @@ class AccountController extends Controller
             "updated_at" => $currentDateTime,
         );
 
-        return  $this->IUserRepository->signUp($request->all());
+        return  $this->IUserRepository->signUp($data);
     }
 
     /**
