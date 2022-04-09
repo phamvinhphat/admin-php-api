@@ -74,7 +74,7 @@ class AccountController extends Controller
     public function changeIsAdmin(Request $request)
     {
         $orderId = $request->route('id');
-        $orderDetails = $request->get('isAdmin');
+        $orderDetails = $request->get('is_admin');
         return $this->IUserRepository->changeIsRole($orderId, $orderDetails);
     }
 
@@ -94,10 +94,10 @@ class AccountController extends Controller
     {
         $email = $request->get('email');
         $username = $request->get('username');
-        $firstName = $request->get('firstName');
-        $lastName = $request->get('lastName');
-        $idCard = $request->get('idCard');
-        $phoneNumber = $request->get('phoneNumber');
+        $firstName = $request->get('first_name');
+        $lastName = $request->get('last_name');
+        $idCard = $request->get('id_card');
+        $phoneNumber = $request->get('phone_number');
         $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array (

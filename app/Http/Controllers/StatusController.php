@@ -23,7 +23,7 @@ class StatusController extends Controller
     {
         $id =  Uuid::uuid4()->toString();
         $name = $request->get('name');
-        $parentN = $request->get('parentN');
+        $parentN = $request->get('parent_n');
         $current_date_time = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array(
@@ -59,7 +59,7 @@ class StatusController extends Controller
     {
         $id = $request->route('id');
         $name = $request->get('name');
-        $parentN = $request->get('parentN');
+        $parentN = $request->get('parent_n');
 
         $data = array(
             'name' => $name,

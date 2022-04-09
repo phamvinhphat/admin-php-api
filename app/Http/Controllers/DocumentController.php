@@ -20,7 +20,7 @@ class DocumentController extends Controller
 
     public function createDocument(Request $request){
         $id = Uuid::uuid4()->toString();
-        $docCode = $request->get('documentCode');
+        $docCode = $request->get('document_code');
         $data = json_encode($request->get('data'));
 
         $DB = array(
@@ -68,7 +68,7 @@ class DocumentController extends Controller
     public function updateDocByID(Request $request)
     {
         $id = $request->route('id');
-        $docCode = $request->get('documentCode');
+        $docCode = $request->get('document_code');
         $data = json_encode($request->get('data'));
 
         $DB = array(
@@ -79,6 +79,13 @@ class DocumentController extends Controller
         );
 
         return $this->iDocumentRepository->updateDocumentById($id, $DB);
+    }
+
+    public function findStatusByIdDoc(Request $request)
+    {
+        $id = $request->route('id');
+
+        return $this->iDocumentRepository->findStatusByIdDocument($id);
     }
 
 }

@@ -2,6 +2,9 @@
 
 namespace App\Repository;
 
+
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -9,11 +12,92 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class WorkflowRepository implements IWorkflowRepository
 {
 
+    private IUserRepository $iUserRepository;
+    private IStatusRepository $iStatusRepository;
+    private IDocumentRepository $iDocumentRepository;
+
+    public function __construct(
+        IUserRepository $iUserRepository,
+        IStatusRepository $iStatusRepository,
+        IDocumentRepository $iDocumentRepository)
+    {
+        $this->iUserRepository = $iUserRepository;
+        $this->iStatusRepository = $iStatusRepository;
+        $this->iDocumentRepository = $iDocumentRepository;
+    }
+
+    /**
+     * Check id status and id document
+     * @param $idStatus
+     * @param $idDoc
+     * @return bool
+     */
+    public function checkIdStatusAndDoc($idStatus, $idDoc)
+    {
+        $isDoc = $this->iDocumentRepository->checkIdDocument($idDoc);
+        $isStatus = $this->iStatusRepository->checkIdStatus($idStatus);
+
+        if($isStatus == true && $isDoc == true)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * check id
+     * @param $id
+     * @return bool
+     */
+    public function checkIdWorkflow($id)
+    {
+        $isWorkflow = DB::table('workflow')->find($id);
+        if(!is_null($isWorkflow)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return JsonResponse
+     */
     public function createWorkflow(array $data)
     {
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            $validator = Validator::make($data, [
+                'status_id' => 'required|uuid',
+                'document_id' => 'required|uuid|unique:workflow'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(
+                    ["message" => $validator->errors()],
+                    ResponseAlias::HTTP_UNAUTHORIZED
+                );
+            }
+            return response()->json([
+                "result" => DB::table('workflow')->insert($data)
+            ], ResponseAlias::HTTP_CREATED);
+        } else {
+            return response()->json(
+                ["message" => "You are not admin"],
+                ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * @param $id
+     * @param array $data
+     * @return JsonResponse
+     */
+    public function updateWorkflow($id, array $data)
+    {
         $validator = Validator::make($data, [
-            'status_id' => 'required|uuid|find:status',
-            'document_id' => 'required|uuid|find:document'
+            'status_id' => 'required|uuid',
+            'document_id' => 'required|uuid',
         ]);
         if ($validator->fails()) {
             return response()->json(
@@ -22,28 +106,90 @@ class WorkflowRepository implements IWorkflowRepository
             );
         }
 
-        return response()->json([
-            "result" => DB::table('workflow')->insert($data)
-        ], ResponseAlias::HTTP_CREATED);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            if($this->checkIdWorkflow($id) == true)
+            {
+                return response()->json([
+                    "result" => DB::table('workflow')->where('id', $id)->update($data)
+                ], ResponseAlias::HTTP_OK);
+            } else {
+                return response()->json([
+                   "error" => "Not Found"
+                ], ResponseAlias::HTTP_BAD_REQUEST);
+            }
+        } else {
+            return response()->json(
+                ["message" => "You are not admin"],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
+        }
     }
 
-    public function updateWorkflow($id, array $data)
-    {
-        // TODO: Implement updateWorkflow() method.
-    }
-
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
     public function deleteWorkflow($id)
     {
-        // TODO: Implement deleteWorkflow() method.
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true)
+        {
+            if($this->checkIdWorkflow($id) == true)
+            {
+                return response()->json([ "result" => DB::table('workflow')->delete($id)
+                ], ResponseAlias::HTTP_OK);
+            } else {
+                return response()->json(
+                    ["error"=>"Not Found"],
+                    ResponseAlias::HTTP_BAD_REQUEST
+                );
+            }
+        } else {
+            return response()->json([
+                "message" => "You are not admin",
+            ],ResponseAlias::HTTP_UNAUTHORIZED);
+        }
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getAllWorkflow()
     {
-        // TODO: Implement getAllWorkflow() method.
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+          return response()->json([
+              "result" => DB::table('workflow')->get()
+          ],ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json(
+                ["message" => "You are not admin"],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
+        }
     }
 
     public function findWorkflowById($id)
     {
-        // TODO: Implement findWorkflowById() method.
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            $data = DB::table('workflow')->find($id);
+            if(!is_null($data)) {
+                return response()->json([
+                    "result" => $data
+                ]);
+            } else {
+                return response()->json([
+                    ["message" => "Not Found"],
+                    ResponseAlias::HTTP_UNAUTHORIZED
+                ]);
+            }
+        } else {
+            return response()->json(
+                ["message" => "You are not admin"],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
+        }
     }
 }
