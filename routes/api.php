@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\WorkflowController;
 use App\Http\Controllers\RolePermissionController;
 
 /*
@@ -87,4 +88,14 @@ Route::group(["prefix"=>"document"],function (){
    Route::get('/findDocByIdUser/{id}',[DocumentController::class,'findDocByIdUser']);
    Route::get('/findDocByMyId',[DocumentController::class,'findDocByMyId']);
    Route::patch('/updateDocument/{id}',[DocumentController::class,'updateDocByID']);
+   Route::get('/findStatusByDoc/{id}',[DocumentController::class,'findStatusByIdDoc']);
+});
+
+//workflow
+Route::group(["prefix"=>"workflow"],function (){
+    Route::post('/createWorkflow',[WorkflowController::class,'createdWorkflow']);
+    Route::get('/getAllWorkflow',[WorkflowController::class,'getAllWorkflow']);
+    Route::get('/findWorkflowById/{id}',[WorkflowController::class,'findWorkflowById']);
+    Route::delete('/deleteWorkflow/{id}',[WorkflowController::class,'deleteWorkflow']);
+    Route::patch('/updateWorkflow/{id}',[WorkflowController::class,'updateWorkflow']);
 });

@@ -11,4 +11,5 @@ interface IDocumentRepository
     public function findDocumentByIdUser($id);
     public function checkIdDocument($id);
     public function updateDocumentById($id, array $data);
+    public function findStatusByIdDocument($id);
 }

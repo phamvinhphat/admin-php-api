@@ -3,6 +3,7 @@
 namespace App\Repository;
 use App\Repository\IDocumentRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -23,22 +24,30 @@ class DocumentRepository implements IDocumentRepository
      */
     public function createDocument($data)
     {
-        $validator = Validator::make($data, [
-            'document_code' => 'required',
-            'data' =>  'required|json',
-        ]);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            $validator = Validator::make($data, [
+                'document_code' => 'required',
+                'data' => 'required|json',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(
-                ["message"=>$validator->errors()],
-                ResponseAlias::HTTP_UNAUTHORIZED
+            if ($validator->fails()) {
+                return response()->json(
+                    ["message" => $validator->errors()],
+                    ResponseAlias::HTTP_UNAUTHORIZED
+                );
+            }
+
+            return response()->json([
+                "result" => DB::table('document')
+                    ->insert($data)
+            ], ResponseAlias::HTTP_CREATED);
+        } else {
+            return response()->json([
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
             );
         }
-
-        return response()->json([
-            "result" => DB::table('document')
-                ->insert($data)
-        ], ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -47,15 +56,23 @@ class DocumentRepository implements IDocumentRepository
      */
     public function findDocumentById($id)
     {
-       $doc = DB::table('document')->where('id', $id)->first();
-       if(!is_null($doc))
-       {
-           return response()->json([
-               "result" => $doc
-           ], ResponseAlias::HTTP_OK);
-       } else {
-           return response()->json(['message', 'Not Found']);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+           $doc = DB::table('document')->where('id', $id)->first();
+           if(!is_null($doc))
+           {
+               return response()->json([
+                   "result" => $doc
+               ], ResponseAlias::HTTP_OK);
+           } else {
+               return response()->json(['message', 'Not Found'],ResponseAlias::HTTP_BAD_REQUEST);
        }
+        } else {
+            return response()->json([
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
 
     /**
@@ -64,15 +81,22 @@ class DocumentRepository implements IDocumentRepository
      */
     public function deleteDocumentById($id)
     {
-        if($this->checkIdDocument($id) == true)
-        {
-            return response()->json([
-                "result" => DB::table('document')->delete($id)
-            ], ResponseAlias::HTTP_OK);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            if ($this->checkIdDocument($id) == true) {
+                return response()->json([
+                    "result" => DB::table('document')->delete($id)
+                ], ResponseAlias::HTTP_OK);
+            } else {
+                return response()->json([
+                    "error" => "Not Found"
+                ], ResponseAlias::HTTP_BAD_REQUEST);
+            }
         } else {
             return response()->json([
-                "error" => "Not Found"
-            ], ResponseAlias::HTTP_BAD_REQUEST);
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
         }
     }
 
@@ -95,18 +119,25 @@ class DocumentRepository implements IDocumentRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
-
-        if($this->checkIdDocument($id) == true)
-        {
-            return response()->json([
-               "result" => DB::table('document')
-                   ->where('id', $id)
-                   ->update($data)
-            ]);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            if($this->checkIdDocument($id) == true)
+            {
+                return response()->json([
+                   "result" => DB::table('document')
+                       ->where('id', $id)
+                       ->update($data)
+                ],ResponseAlias::HTTP_OK);
+            } else {
+                return response()->json([
+                    "error" => "Not Found"
+                ], ResponseAlias::HTTP_BAD_REQUEST);
+            }
         } else {
             return response()->json([
-                "error" => "Not Found"
-            ]);
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
         }
     }
 
@@ -116,17 +147,24 @@ class DocumentRepository implements IDocumentRepository
      */
     public function findDocumentByIdUser($id)
     {
-        if($this->iUserRepository->findUserById($id) == true )
-        {
-            return response()->json([
-                "result" => DB::table('document')
-                    ->where('created_by_id', $id)
-                    ->get()
-            ], ResponseAlias::HTTP_OK);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            if ($this->iUserRepository->findUserById($id) == true) {
+                return response()->json([
+                    "result" => DB::table('document')
+                        ->where('created_by_id', $id)
+                        ->get()
+                ], ResponseAlias::HTTP_OK);
+            } else {
+                return response()->json([
+                    "error" => "Not Found"
+                ]);
+            }
         } else {
             return response()->json([
-                "error" => "Not Found"
-            ]);
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
         }
     }
 
@@ -147,9 +185,50 @@ class DocumentRepository implements IDocumentRepository
 
     public function getAllDocument()
     {
-        return response()->json([
-            "result" => DB::table('document')->get()
-        ], ResponseAlias::HTTP_OK);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            return response()->json([
+                "result" => DB::table('document')->get()
+            ], ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json([
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
 
+    public function findStatusByIdDocument($id)
+    {
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        if ($isAdmin == true) {
+            $resultWorkflowById = DB::table('workflow')
+                ->where('workflow.document_id', '=', $id)
+                ->value('status_id');
+            if (!is_null($resultWorkflowById)) {
+                $resultStatusById = DB::table('status')
+                    ->where('id', $resultWorkflowById)
+                    ->get();
+                if(!is_null($resultStatusById))
+                {
+                    return response()->json([
+                        "result" => $resultStatusById
+                    ], ResponseAlias::HTTP_OK );
+                } else {
+                    return response()->json(
+                        ["message" => "Status Not Found"],
+                        ResponseAlias::HTTP_BAD_REQUEST);
+                }
+            } else {
+                return response()->json(
+                    ["message" => "Workflow Not Found"],
+                    ResponseAlias::HTTP_BAD_REQUEST);
+            }
+        } else {
+            return response()->json([
+                "message" => "You are not admin"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
+    }
 }
