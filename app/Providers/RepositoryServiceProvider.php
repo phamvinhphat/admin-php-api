@@ -12,7 +12,12 @@ use App\Repository\IPermissionRepository;
 use App\Repository\PermissionRepository;
 use App\Repository\PermissionRoleRepository;
 use App\Repository\IPermissionRoleRepository;
+use App\Repository\DocumentRepository;
+use App\Repository\IDocumentRepository;
+use App\Repository\IStatusRepository;
+use App\Repository\StatusRepository;
 use Illuminate\Support\ServiceProvider;
+use PhpParser\Comment\Doc;
 use function Psy\bin;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -30,7 +35,8 @@ class RepositoryServiceProvider extends ServiceProvider
                 IRoleRepository::class => RoleRepository::class,
                 IPermissionRepository::class => PermissionRepository::class,
                 IPermissionRoleRepository::class => PermissionRoleRepository::class,
-            //    IUserRepository::class => PermissionRepository::class,
+                IStatusRepository::class => StatusRepository::class,
+                IDocumentRepository::class => DocumentRepository::class,
             ];
 
             foreach ($toBind as $interface => $implementation){

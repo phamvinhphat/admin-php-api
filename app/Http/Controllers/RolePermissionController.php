@@ -38,7 +38,7 @@ class RolePermissionController extends Controller
      */
     public function createGrantPermission(Request $request)
     {
-        $current_date_time = Carbon::now();
+        $current_date_time = Carbon::now('Asia/Ho_Chi_Minh');
         $role_id = $request->input('roleId');
         $permission_id = $request->input('permissionId');
         $data = array(
@@ -102,7 +102,7 @@ class RolePermissionController extends Controller
      */
     public function findGrantPermissionByIdRole(Request $request)
     {
-        $isRole = $request->get('role_id');
+        $isRole = $request->get('roleId');
         return $this->iPermissionRoleRepository->finGrantPermissionByIdRole($isRole);
     }
 
