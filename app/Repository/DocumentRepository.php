@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 use App\Repository\IDocumentRepository;
+use App\service\PermissionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +13,12 @@ class DocumentRepository implements IDocumentRepository
 {
 
     private IUserRepository $iUserRepository;
+    private PermissionService $permissionService;
 
-    public function __construct(IUserRepository $iUserRepository)
+    public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
         $this->iUserRepository = $iUserRepository;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -25,7 +28,8 @@ class DocumentRepository implements IDocumentRepository
     public function createDocument($data)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","create");
+        if($isAdmin == true || $isRole == true) {
             $validator = Validator::make($data, [
                 'document_code' => 'required',
                 'data' => 'required|json',
@@ -44,7 +48,7 @@ class DocumentRepository implements IDocumentRepository
             ], ResponseAlias::HTTP_CREATED);
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -57,7 +61,8 @@ class DocumentRepository implements IDocumentRepository
     public function findDocumentById($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","find");
+        if($isAdmin == true || $isRole == true) {
            $doc = DB::table('document')->where('id', $id)->first();
            if(!is_null($doc))
            {
@@ -69,7 +74,7 @@ class DocumentRepository implements IDocumentRepository
        }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -82,7 +87,8 @@ class DocumentRepository implements IDocumentRepository
     public function deleteDocumentById($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","delete");
+        if($isAdmin == true || $isRole == true) {
             if ($this->checkIdDocument($id) == true) {
                 return response()->json([
                     "result" => DB::table('document')->delete($id)
@@ -94,7 +100,7 @@ class DocumentRepository implements IDocumentRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -119,8 +125,10 @@ class DocumentRepository implements IDocumentRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
+
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","update");
+        if($isAdmin == true || $isRole == true) {
             if($this->checkIdDocument($id) == true)
             {
                 return response()->json([
@@ -135,7 +143,7 @@ class DocumentRepository implements IDocumentRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -148,7 +156,8 @@ class DocumentRepository implements IDocumentRepository
     public function findDocumentByIdUser($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","findById");
+        if($isAdmin == true || $isRole == true) {
             if ($this->iUserRepository->findUserById($id) == true) {
                 return response()->json([
                     "result" => DB::table('document')
@@ -162,7 +171,7 @@ class DocumentRepository implements IDocumentRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -186,13 +195,14 @@ class DocumentRepository implements IDocumentRepository
     public function getAllDocument()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","view");
+        if($isAdmin == true || $isRole == true) {
             return response()->json([
                 "result" => DB::table('document')->get()
             ], ResponseAlias::HTTP_OK);
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -201,7 +211,9 @@ class DocumentRepository implements IDocumentRepository
     public function findStatusByIdDocument($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","findByDocument");
+        if($isAdmin == true || $isRole == true)
+        {
             $resultWorkflowById = DB::table('workflow')
                 ->where('workflow.document_id', '=', $id)
                 ->value('status_id');
@@ -226,7 +238,7 @@ class DocumentRepository implements IDocumentRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }

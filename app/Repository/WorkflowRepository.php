@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 
+use App\service\PermissionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,15 +16,18 @@ class WorkflowRepository implements IWorkflowRepository
     private IUserRepository $iUserRepository;
     private IStatusRepository $iStatusRepository;
     private IDocumentRepository $iDocumentRepository;
+    private PermissionService $permissionService;
 
     public function __construct(
         IUserRepository $iUserRepository,
         IStatusRepository $iStatusRepository,
-        IDocumentRepository $iDocumentRepository)
+        IDocumentRepository $iDocumentRepository,
+        PermissionService $permissionService)
     {
         $this->iUserRepository = $iUserRepository;
         $this->iStatusRepository = $iStatusRepository;
         $this->iDocumentRepository = $iDocumentRepository;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -67,7 +71,8 @@ class WorkflowRepository implements IWorkflowRepository
     public function createWorkflow(array $data)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","create");
+        if ($isAdmin == true  || $isRole == true)  {
             $validator = Validator::make($data, [
                 'status_id' => 'required|uuid',
                 'document_id' => 'required|uuid|unique:workflow'
@@ -83,7 +88,7 @@ class WorkflowRepository implements IWorkflowRepository
             ], ResponseAlias::HTTP_CREATED);
         } else {
             return response()->json(
-                ["message" => "You are not admin"],
+                ["message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_UNAUTHORIZED);
         }
     }
@@ -107,7 +112,8 @@ class WorkflowRepository implements IWorkflowRepository
         }
 
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","update");
+        if ($isAdmin == true || $isRole == true) {
             if($this->checkIdWorkflow($id) == true)
             {
                 return response()->json([
@@ -120,7 +126,7 @@ class WorkflowRepository implements IWorkflowRepository
             }
         } else {
             return response()->json(
-                ["message" => "You are not admin"],
+                ["message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -133,7 +139,8 @@ class WorkflowRepository implements IWorkflowRepository
     public function deleteWorkflow($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true)
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","delete");
+        if ($isAdmin == true || $isRole == true)
         {
             if($this->checkIdWorkflow($id) == true)
             {
@@ -147,7 +154,7 @@ class WorkflowRepository implements IWorkflowRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin",
+                "message" => "You Do Not Have Access",
             ],ResponseAlias::HTTP_UNAUTHORIZED);
         }
     }
@@ -158,13 +165,14 @@ class WorkflowRepository implements IWorkflowRepository
     public function getAllWorkflow()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","view");
+        if ($isAdmin == true || $isRole == true) {
           return response()->json([
               "result" => DB::table('workflow')->get()
           ],ResponseAlias::HTTP_OK);
         } else {
             return response()->json(
-                ["message" => "You are not admin"],
+                ["message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -173,7 +181,9 @@ class WorkflowRepository implements IWorkflowRepository
     public function findWorkflowById($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","find");
+        if ($isAdmin == true || $isRole == true)
+        {
             $data = DB::table('workflow')->find($id);
             if(!is_null($data)) {
                 return response()->json([
@@ -187,7 +197,7 @@ class WorkflowRepository implements IWorkflowRepository
             }
         } else {
             return response()->json(
-                ["message" => "You are not admin"],
+                ["message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }

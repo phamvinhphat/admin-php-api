@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\account;
+use App\service\PermissionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,14 @@ use function response;
 
 class UserRepository implements IUserRepository
 {
+
+    private PermissionService $permissionService;
+
+    public function __construct(PermissionService $permissionService)
+    {
+        $this->permissionService = $permissionService;
+    }
+
     /**
      * get view user all
      * @return JsonResponse
@@ -21,14 +30,16 @@ class UserRepository implements IUserRepository
      */
     public function getAllUser()
     {
-        if($this->checkRole(Auth::id()) == true)
+
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"account","view");
+        if($this->checkRole(Auth::id()) == true || $isRole == true)
         {
             return response()->json([
                 "result" => account::all()
             ],ResponseAlias::HTTP_OK);
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -58,19 +69,18 @@ class UserRepository implements IUserRepository
      */
     public function updateRoleById($id, string $roleID)
     {
-        $updateRole = DB::table('account')
-            ->where("account.id", '=', $id)
-            ->update(['account.role_id' => $roleID]);
 
         $isCheckAdmin = $this->checkRole(Auth::id());
-
-        if($isCheckAdmin == true)
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"account","update");
+        if($isCheckAdmin == true || $isRole == true)
         {
             return response()->json([
-                "result" => $updateRole
+                "result" => DB::table('account')
+                    ->where("account.id", '=', $id)
+                    ->update(['account.role_id' => $roleID])
             ],ResponseAlias::HTTP_OK);
         } else {
-            return response()->json(["message" => "You are not admin"],ResponseAlias::HTTP_FORBIDDEN);
+            return response()->json(["message" => "You Do Not Have Access"],ResponseAlias::HTTP_FORBIDDEN);
         }
     }
 
@@ -98,9 +108,8 @@ class UserRepository implements IUserRepository
 
         if($this->findUserById(Auth::id()) == true)
         {
-            $updateUser = DB::table('account')->where('id', Auth::id())->update($newDetails);
             return response()->json([
-               "result" => $updateUser
+               "result" => DB::table('account')->where('id', Auth::id())->update($newDetails)
             ],ResponseAlias::HTTP_OK);
         } else {
             return response()->json(["message" => "Not Found"],ResponseAlias::HTTP_BAD_REQUEST);
@@ -136,24 +145,23 @@ class UserRepository implements IUserRepository
      * change role(bool) by id
      * @param $id
      * @param bool $isAdmin
-     * @return JsonResponse|int
+     * @return JsonResponse
      */
     public function changeIsRole($id, bool $isAdmin)
     {
-        $isCheckRole = $this->checkRole(Auth::id());
-
-        $changeInfo = DB::table('account')
-            ->where("account.id", '=', $id)
-            ->update(['account.is_admin' => $isAdmin]);
-
-        if ($isCheckRole == true) {
+        $isCheckAdmin = $this->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"account","updateRole");
+        if($isCheckAdmin == true || $isRole == true)
+        {
             return response()->json(
-                ["result" => $changeInfo],
+                ["result" => DB::table('account')
+                    ->where("account.id", '=', $id)
+                    ->update(['account.is_admin' => $isAdmin])],
                 ResponseAlias::HTTP_OK
             );
         } else {
             return response()->json(
-                ["message" => "You are not admin"],
+                ["message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }

@@ -127,8 +127,8 @@ class AccountController extends Controller
         $account = DB::table('account')->where('email', '=', $email)->first();
 
         if (!$account || !Hash::check($password, $account->password)) {
-            return response()->json(['success' => false, 'message' => 'Login Fail, please check email and password'],
-                ResponseAlias::HTTP_OK);
+            return response()->json(['message' => 'Login Fail, please check email and password'],
+                ResponseAlias::HTTP_BAD_REQUEST);
         }
 
         return $this->IUserRepository->login($credentials);

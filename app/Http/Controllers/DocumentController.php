@@ -6,15 +6,19 @@ use App\Repository\IDocumentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\service\PermissionService;
 use Ramsey\Uuid\Uuid;
 
 class DocumentController extends Controller
 {
     private IDocumentRepository $iDocumentRepository;
+    private PermissionService $permissionService;
 
-    public function __construct(IDocumentRepository $iDocumentRepository)
+
+    public function __construct(IDocumentRepository $iDocumentRepository, PermissionService $permissionService)
     {
         $this->iDocumentRepository = $iDocumentRepository;
+        $this->permissionService = $permissionService;
         $this->middleware('auth:api');
     }
 
@@ -87,5 +91,11 @@ class DocumentController extends Controller
 
         return $this->iDocumentRepository->findStatusByIdDocument($id);
     }
+
+    public function checkRole()
+    {
+        return $this->permissionService->checkPermission(Auth::id(), "document", "view");
+    }
+
 
 }
