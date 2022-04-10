@@ -4,7 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "558692d18abf2fba1c599cde716b33f0",
+
+    "content-hash": "050490b63808a7fbe79e453f6d95c672",
+
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2479,6 +2481,53 @@
                 }
             ],
             "time": "2021-12-04T23:24:31+00:00"
+        },
+        {
+            "name": "programic/laravel-convert-case-middleware",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/programic/laravel-convert-case-middleware.git",
+                "reference": "8668ba48f2db84dd7dca8d07cdf7dd022d47345e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/programic/laravel-convert-case-middleware/zipball/8668ba48f2db84dd7dca8d07cdf7dd022d47345e",
+                "reference": "8668ba48f2db84dd7dca8d07cdf7dd022d47345e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^5.2 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.1"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Programic\\LaravelConvertCaseMiddleware\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Programic",
+                    "email": "development@programic.com",
+                    "homepage": "https://programic.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Convert request and response keys to and from camel and snake case.",
+            "support": {
+                "issues": "https://github.com/programic/laravel-convert-case-middleware/issues",
+                "source": "https://github.com/programic/laravel-convert-case-middleware/tree/v1.0.2"
+            },
+            "time": "2022-03-11T12:25:09+00:00"
         },
         {
             "name": "psr/cache",

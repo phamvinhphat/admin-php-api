@@ -11,18 +11,18 @@
     },
     "servers": [
         {
-            "url": "http://my-default-host.com",
+            "url": "http://localhost:80/api",
             "description": "API Server"
         }
     ],
     "paths": {
-        "/api/account/getViewUser": {
+        "/account/getViewUser": {
             "get": {
                 "tags": [
                     "Account"
                 ],
                 "summary": "Get List account",
-                "operationId": "2b63204879d4c526d19091449409f700",
+                "operationId": "72d60628a8a5a5ab54ec72e2e2a36158",
                 "responses": {
                     "200": {
                         "description": "success",

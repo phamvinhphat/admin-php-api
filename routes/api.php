@@ -4,8 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\WorkflowController;
 use App\Http\Controllers\RolePermissionController;
 
 /*
@@ -64,4 +66,36 @@ Route::group(["prefix"=>"rolePermission"],function (){
     Route::get('/findGrantPermissionById',[RolePermissionController::class,'findGrantPermissionById']);
     Route::delete('/deleteGrantPermission',[RolePermissionController::class,'deleteGrantPermission']);
     Route::get('/findGrantPermission',[RolePermissionController::class,'findGrantPermissionByIdRole']);
+});
+
+// Status
+Route::group(["prefix"=>"status"],function (){
+    Route::post('/createStatus',[StatusController::class,'createdStatus']);
+    Route::get('/findStatusById/{id}',[StatusController::class,'findStatusById']);
+    Route::get('/getAllStatus', [StatusController::class, 'getAllStatus']);
+    Route::get('/checkStatus/{id}',[StatusController::class,'checkStatus']);
+    Route::delete('/deleteStatus/{id}',[StatusController::class,'deleteStatus']);
+    Route::patch('/updateStatus/{id}',[StatusController::class,'updateStatus']);
+    Route::get('/findStatusByMyId',[StatusController::class,'findStatusByMyId']);
+});
+
+// Document
+Route::group(["prefix"=>"document"],function (){
+   Route::post('/createDocument',[DocumentController::class, 'createDocument']);
+   Route::get('/getAllDocument',[DocumentController::class,'getAllDocument']);
+   Route::get('/findDocumentById/{id}',[DocumentController::class,'findDocumentById']);
+   Route::delete('/deleteDocumentById/{id}',[DocumentController::class,'deleteDocumentById']);
+   Route::get('/findDocByIdUser/{id}',[DocumentController::class,'findDocByIdUser']);
+   Route::get('/findDocByMyId',[DocumentController::class,'findDocByMyId']);
+   Route::patch('/updateDocument/{id}',[DocumentController::class,'updateDocByID']);
+   Route::get('/findStatusByDoc/{id}',[DocumentController::class,'findStatusByIdDoc']);
+});
+
+//workflow
+Route::group(["prefix"=>"workflow"],function (){
+    Route::post('/createWorkflow',[WorkflowController::class,'createdWorkflow']);
+    Route::get('/getAllWorkflow',[WorkflowController::class,'getAllWorkflow']);
+    Route::get('/findWorkflowById/{id}',[WorkflowController::class,'findWorkflowById']);
+    Route::delete('/deleteWorkflow/{id}',[WorkflowController::class,'deleteWorkflow']);
+    Route::patch('/updateWorkflow/{id}',[WorkflowController::class,'updateWorkflow']);
 });

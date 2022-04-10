@@ -92,11 +92,11 @@ class AccountController extends Controller
     {
         $email = $request->get('email');
         $username = $request->get('username');
-        $firstName = $request->get('firstName');
-        $lastName = $request->get('lastName');
-        $idCard = $request->get('idCard');
-        $phoneNumber = $request->get('phoneNumber');
-        $currentDateTime = Carbon::now();
+        $firstName = $request->get('first_name');
+        $lastName = $request->get('last_name');
+        $idCard = $request->get('id_card');
+        $phoneNumber = $request->get('phone_number');
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array (
             "email" => $email,
@@ -128,7 +128,7 @@ class AccountController extends Controller
 
         if (!$account || !Hash::check($password, $account->password)) {
             return response()->json(['success' => false, 'message' => 'Login Fail, please check email and password'],
-                ResponseAlias::HTTP_BAD_REQUEST);
+                ResponseAlias::HTTP_OK);
         }
 
         return $this->IUserRepository->login($credentials);
@@ -146,11 +146,11 @@ class AccountController extends Controller
         $email = $request->get('email');
         $password = Hash::make($request->get('password'));
         $username = $request->get('username');
-        $firstName = $request->get('firstName');
-        $lastName = $request->get('lastName');
-        $idCard = $request->get('idCard');
-        $phoneNumber = $request->get('phoneNumber');
-        $currentDateTime = Carbon::now();
+        $firstName = $request->get('first_name');
+        $lastName = $request->get('last_name');
+        $idCard = $request->get('id_card');
+        $phoneNumber = $request->get('phone_number');
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array (
             "id" => $id,

@@ -103,6 +103,7 @@
                 }
             }
         },
+
         "api/documentation": {
             "get": {
                 "description": "",

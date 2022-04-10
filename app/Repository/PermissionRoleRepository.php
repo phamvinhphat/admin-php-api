@@ -37,18 +37,18 @@ class PermissionRoleRepository implements IPermissionRoleRepository
 
         if ($validator->fails()) {
             return response()->json(
-                ['Error'=>$validator->errors()],
+                ["message"=>$validator->errors()],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
         if ($isAdmin == true) {
             return response()->json([
-                'Result' => DB::table('role_permissions')->insert($data)
+                "result" => DB::table('role_permissions')->insert($data)
             ], ResponseAlias::HTTP_CREATED);
         } else {
             return response()->json([
-                'Error' => 'You are not admin'],
+                "message" => 'You are not admin'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -69,7 +69,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
             );
         } else {
             return response()->json([
-                'error' => 'You are not admin'],
+                "message" => 'You are not admin'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -90,7 +90,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
                 ->where("role_permissions.permission_id",'=',$idPermission)
                 ->update($data);
         } else {
-            return \response()->json(['error'=>'Grant Permission Not Found'],404);
+            return response()->json(["message"=>"Grant Permission Not Found"],404);
         }
     }
 
@@ -100,20 +100,20 @@ class PermissionRoleRepository implements IPermissionRoleRepository
         if ($isAdmin == true) {
             if ($this->isGrantPermissionById($idRole, $idPermission)) {
                 return response()->json(
-                        ['Result' =>DB::table('role_permissions')
+                        ['result' =>DB::table('role_permissions')
                         ->where("role_permissions.role_id", '=', $idRole)
                         ->where("role_permissions.permission_id", '=', $idPermission)
                         ->delete()],
                 ResponseAlias::HTTP_OK);
             } else {
                 return response()->json(
-                    ['ERROR' => 'Grant Not Found'],
+                    ["message" => "Grant Not Found"],
                     ResponseAlias::HTTP_BAD_REQUEST
                 );
             }
         } else {
             return response()->json([
-                'Error' => 'You are not admin'],
+                "message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -147,18 +147,18 @@ class PermissionRoleRepository implements IPermissionRoleRepository
                 ->get();
             if (!is_null($isId)) {
                 return response()->json(
-                    ['Result' =>  $isId],
+                    ["result" =>  $isId],
                     ResponseAlias::HTTP_OK
                 );
             } else {
                 return response()->json(
-                    ["ERROR" => "Gran Permission Not Found"],
+                    ["message" => "Gran Permission Not Found"],
                     ResponseAlias::HTTP_BAD_REQUEST
                 );
             }
         } else {
             return response()->json([
-                'Error' => 'You are not admin'],
+                "message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }

@@ -32,14 +32,14 @@ class PermissionRepository implements IPermissionRepository
             $getAll = DB::table('permission')->get();
             if (!is_null($getAll)) {
                 return response()->json([
-                    'Result' => $getAll
+                    "result" => $getAll
                 ], ResponseAlias::HTTP_OK);
             } else {
-                return response()->json(["Null" => $getAll], ResponseAlias::HTTP_OK);
+                return response()->json(["message" => $getAll], ResponseAlias::HTTP_OK);
             }
         } else {
             return response()->json([
-                'error' => 'You are not admin'],
+                "message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -59,7 +59,7 @@ class PermissionRepository implements IPermissionRepository
         ]);
         if ($validator->fails()) {
             return response()->json(
-                ['Error'=>$validator->errors()],
+                ["message"=>$validator->errors()],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -67,13 +67,13 @@ class PermissionRepository implements IPermissionRepository
         if ($isAdmin == true) {
             return response()->json(
                 [
-                    "Result" => DB::table('permission')->insert($data)
+                    "result" => DB::table('permission')->insert($data)
                 ],
                 ResponseAlias::HTTP_CREATED
             );
         } else {
             return response()->json([
-                'Error' => 'You are not admin'],
+                "message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -92,16 +92,16 @@ class PermissionRepository implements IPermissionRepository
             $isId = DB::table('permission')->find($id);
             if (is_null($isId)) {
                 return response()->json(
-                    ['Error' => 'Permission Not Found'],
+                    ["message" => "Permission Not Found"],
                     ResponseAlias::HTTP_BAD_REQUEST);
             } else {
                 return response()->json([
-                    "Result" => $isId
+                    "result" => $isId
                 ], ResponseAlias::HTTP_OK);
             }
         } else {
             return response()->json([
-                'Error' => 'You are not admin'],
+                "message" => 'You are not admin'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -119,18 +119,18 @@ class PermissionRepository implements IPermissionRepository
             $isTitle = DB::Table('permission')->where('name','=',$name)->get();
             if (is_null($isTitle)) {
                 return response()->json(
-                    ['Error' => 'Permission Not Found'],
+                    ["message" => 'Permission Not Found'],
                     ResponseAlias::HTTP_BAD_REQUEST
                 );
             } else {
                 return response()->json(
-                    ['Result' => $isTitle],
+                    ["result" => $isTitle],
                     ResponseAlias::HTTP_OK
                 );
             }
         } else {
             return response()->json([
-                'Error' => 'You are not admin'],
+                "message" => 'You are not admin'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -139,7 +139,7 @@ class PermissionRepository implements IPermissionRepository
     /**
      * update permission by id
      * @param $id
-     * @param string $name
+     * @param array $data
      * @return JsonResponse
      */
     public function updatePermission($id, array $data)
@@ -152,7 +152,7 @@ class PermissionRepository implements IPermissionRepository
 
         if ($validator->fails()) {
             return response()->json(
-                ['Error'=>$validator->errors()],
+                ["message"=>$validator->errors()],
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
@@ -162,7 +162,7 @@ class PermissionRepository implements IPermissionRepository
             if ($this->isPermissionById($id) == true) {
                 return response()->json(
                     [
-                        'Result' => DB::table('permission')
+                        "result" => DB::table('permission')
                         ->where("permission.id", '=', $id)
                         ->update($data)
                     ],
@@ -170,13 +170,13 @@ class PermissionRepository implements IPermissionRepository
                 );
             } else {
                 return response()->json(
-                    ['Error' => 'Permission Not Found'],
+                    ["Error" => "Permission Not Found"],
                     ResponseAlias::HTTP_BAD_REQUEST
                 );
             }
         } else {
             return response()->json(
-                ['Error' => 'You are not admin'],
+                ["Error" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -211,18 +211,18 @@ class PermissionRepository implements IPermissionRepository
             if ($this->isPermissionById($id) == true) {
                 return response()->json(
                     [
-                        'Result' => permission::destroy($id)
+                        "result" => permission::destroy($id)
                     ],
                 );
             } else {
                 return response()->json(
-                    ['Error' => 'Permission Not Found'],
+                    ['message' => 'Permission Not Found'],
                     ResponseAlias::HTTP_BAD_REQUEST
                 );
             }
         } else {
             return response()->json(
-                ['Error' => 'You are not admin'],
+                ["message" => "You are not admin"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
