@@ -137,7 +137,7 @@ class WorkflowRepository implements IWorkflowRepository
         {
             if($this->checkIdWorkflow($id) == true)
             {
-                return response()->json([ "result" => DB::table('workflow')->delete($id)
+                return response()->json(["result" => DB::table('workflow')->delete($id)
                 ], ResponseAlias::HTTP_OK);
             } else {
                 return response()->json(

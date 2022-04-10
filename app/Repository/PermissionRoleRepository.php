@@ -64,7 +64,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
         if ($isAdmin == true) {
             return response()->json(
-                [DB::table('role_permissions')->get()],
+                ["result" => DB::table('role_permissions')->get()],
                 ResponseAlias::HTTP_OK
             );
         } else {
@@ -100,7 +100,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
         if ($isAdmin == true) {
             if ($this->isGrantPermissionById($idRole, $idPermission)) {
                 return response()->json(
-                        ['result' =>DB::table('role_permissions')
+                        ["result" =>DB::table('role_permissions')
                         ->where("role_permissions.role_id", '=', $idRole)
                         ->where("role_permissions.permission_id", '=', $idPermission)
                         ->delete()],

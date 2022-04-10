@@ -210,9 +210,9 @@ class UserRepository implements IUserRepository
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return response()->json(["result" =>[
             "accessToken" => "Bearer $token",
-            "expiresIn" => auth()->factory()->getTTL() * 6000
+            "expiresIn" => auth()->factory()->getTTL() * 6000]
         ], ResponseAlias::HTTP_OK);
     }
 
@@ -255,7 +255,7 @@ class UserRepository implements IUserRepository
     {
         auth()->logout();
         return response()->json(
-            ["message" => "User successfully signed out"],
+            ["result" => "User successfully signed out"],
             ResponseAlias::HTTP_OK
         );
     }
@@ -266,6 +266,6 @@ class UserRepository implements IUserRepository
      */
     public function refresh()
     {
-        return  $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh());
     }
 }
