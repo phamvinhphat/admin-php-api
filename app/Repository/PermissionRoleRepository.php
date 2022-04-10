@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 use App\Models\rolePermissions;
+use App\service\PermissionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -14,13 +15,13 @@ class PermissionRoleRepository implements IPermissionRoleRepository
 {
 
     private IUserRepository $iUserRepository;
+    private PermissionService $permissionService;
 
-    public function __construct(IUserRepository $iUserRepository)
+    public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
         $this->iUserRepository = $iUserRepository;
+        $this->permissionService = $permissionService;
     }
-
-    // public function checkId()
 
 
     /**
@@ -42,13 +43,14 @@ class PermissionRoleRepository implements IPermissionRoleRepository
             );
         }
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","create");
+        if($isAdmin == true || $isRole == true) {
             return response()->json([
                 "result" => DB::table('role_permissions')->insert($data)
             ], ResponseAlias::HTTP_CREATED);
         } else {
             return response()->json([
-                "message" => 'You are not admin'],
+                "message" => 'You Do Not Have Access'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -62,14 +64,15 @@ class PermissionRoleRepository implements IPermissionRoleRepository
     public function getAllGrantPermission()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","view");
+        if($isAdmin == true || $isRole == true) {
             return response()->json(
                 ["result" => DB::table('role_permissions')->get()],
                 ResponseAlias::HTTP_OK
             );
         } else {
             return response()->json([
-                "message" => 'You are not admin'],
+                "message" => 'You Do Not Have Access'],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -84,20 +87,32 @@ class PermissionRoleRepository implements IPermissionRoleRepository
      */
     public function updateGrantPermission($idRole, $idPermission, array $data)
     {
-        if($this->isGrantPermissionById($idRole,$idPermission)){
-            return DB::table('role_permissions')
-                ->where("role_permissions.role_id",'=',$idRole)
-                ->where("role_permissions.permission_id",'=',$idPermission)
-                ->update($data);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","update");
+        if($isAdmin == true || $isRole == true)
+        {
+            if($this->isGrantPermissionById($idRole,$idPermission)){
+                return DB::table('role_permissions')
+                    ->where("role_permissions.role_id",'=',$idRole)
+                    ->where("role_permissions.permission_id",'=',$idPermission)
+                    ->update($data);
+            } else {
+                return response()->json(["message"=>"Grant Permission Not Found"],404);
+            }
         } else {
-            return response()->json(["message"=>"Grant Permission Not Found"],404);
+            return response()->json([
+                "message" => 'You Do Not Have Access'],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
         }
     }
 
     public function deleteGrantPermission($idRole, $idPermission)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","delete");
+        if($isAdmin == true || $isRole == true)
+        {
             if ($this->isGrantPermissionById($idRole, $idPermission)) {
                 return response()->json(
                         ["result" =>DB::table('role_permissions')
@@ -113,7 +128,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -141,7 +156,8 @@ class PermissionRoleRepository implements IPermissionRoleRepository
     public function finGrantPermissionByIdRole($idRole)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","find");
+        if($isAdmin == true || $isRole == true) {
             $isId = DB::table('role_permissions')
                 ->where('role_id', $idRole)
                 ->get();
@@ -158,7 +174,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }

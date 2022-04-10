@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\service\PermissionService;
 use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +14,12 @@ class StatusRepository implements IStatusRepository
 {
 
     private IUserRepository $iUserRepository;
+    private PermissionService $permissionService;
 
-    public function __construct(IUserRepository $iUserRepository)
+    public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
         $this->iUserRepository = $iUserRepository;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -25,9 +28,11 @@ class StatusRepository implements IStatusRepository
      */
     public function createStatus(array $data)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
 
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"status","create");
+        if($isAdmin == true || $isRole == true)
+        {
             $validator = Validator::make($data, [
                 'name' => 'required'
             ]);
@@ -42,10 +47,9 @@ class StatusRepository implements IStatusRepository
                 ["result" => DB::table('status')->insert($data)],
                 ResponseAlias::HTTP_CREATED
             );
-
         } else {
             return response()->json([
-                "message" => "You are not admin"
+                "message" => "You Do Not Have Access"
             ],
                 ResponseAlias::HTTP_FORBIDDEN
             );
@@ -54,12 +58,14 @@ class StatusRepository implements IStatusRepository
 
     /**
      * @param $id
-     * @return JsonResponse|void
+     * @return JsonResponse
      */
     public function findStatusById($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"status","find");
+        if($isAdmin == true || $isRole == true)
+        {
             $find = DB::table('status')->find($id);
             if (!is_null($find)) {
                 return response()->json([
@@ -67,11 +73,17 @@ class StatusRepository implements IStatusRepository
                 ], ResponseAlias::HTTP_OK);
             } else {
                 return response()->json([
-                    "message" => "You are not admin"
+                    "message" => "Not Found"
                 ],
-                    ResponseAlias::HTTP_FORBIDDEN
+                    ResponseAlias::HTTP_BAD_REQUEST
                 );
             }
+        } else {
+            return response()->json([
+                "message" => "You Do Not Have Access"
+            ],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
         }
     }
 
@@ -81,13 +93,14 @@ class StatusRepository implements IStatusRepository
     public function getAllStatus()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"status","view");
+        if($isAdmin == true || $isRole == true) {
             return response()->json([
                 "result" => DB::table('status')->get()
             ]);
         } else {
             return response()->json([
-                "message" => "You are not admin"
+                "message" => "You Do Not Have Access"
             ],
                 ResponseAlias::HTTP_FORBIDDEN
             );
@@ -115,7 +128,8 @@ class StatusRepository implements IStatusRepository
     public function deleteStatusById($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"status","delete");
+        if($isAdmin == true || $isRole == true) {
             if($this->checkIdStatus($id) == true)
             {
                 return response()->json([
@@ -130,7 +144,7 @@ class StatusRepository implements IStatusRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"
+                "message" => "You Do Not Have Access"
             ],
                 ResponseAlias::HTTP_FORBIDDEN
             );
@@ -154,7 +168,9 @@ class StatusRepository implements IStatusRepository
             );
         }
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"status","update");
+        if($isAdmin == true || $isRole == true)
+        {
             if($this->checkIdStatus($id) == true)
             {
                 return response()->json([
@@ -171,7 +187,7 @@ class StatusRepository implements IStatusRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"
+                "message" => "You Do Not Have Access"
             ],
                 ResponseAlias::HTTP_FORBIDDEN
             );

@@ -47,7 +47,7 @@ class RolePermissionsSeeder extends Seeder
             ],
 
             // user
-            // permission view
+            // document view
             [
                 'role_id'=> '766be67a-6520-4968-85ea-e9e07daf4e53',
                 'permission_id' => 'a9794e38-5fea-4e0f-9260-09b5a2c37474',

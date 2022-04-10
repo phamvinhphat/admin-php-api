@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\permission;
+use App\service\PermissionService;
 use http\Env\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -15,10 +16,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class PermissionRepository implements IPermissionRepository
 {
     private IUserRepository $iUserRepository;
+    private PermissionService $permissionService;
 
-    public function __construct(IUserRepository $iUserRepository)
+    public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
         $this->iUserRepository = $iUserRepository;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -28,7 +31,9 @@ class PermissionRepository implements IPermissionRepository
     public function getAllPermission()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","view");
+        if($isAdmin == true || $isRole == true)
+        {
             $getAll = DB::table('permission')->get();
             if (!is_null($getAll)) {
                 return response()->json([
@@ -39,7 +44,7 @@ class PermissionRepository implements IPermissionRepository
             }
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -52,8 +57,6 @@ class PermissionRepository implements IPermissionRepository
      */
     public function createPermission(array $data)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-
         $validator = Validator::make($data, [
             'name' => 'bail|required',
         ]);
@@ -63,8 +66,9 @@ class PermissionRepository implements IPermissionRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
-
-        if ($isAdmin == true) {
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","create");
+        if($isAdmin == true || $isRole == true)  {
             return response()->json(
                 [
                     "result" => DB::table('permission')->insert($data)
@@ -73,7 +77,7 @@ class PermissionRepository implements IPermissionRepository
             );
         } else {
             return response()->json([
-                "message" => "You are not admin"],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -88,7 +92,9 @@ class PermissionRepository implements IPermissionRepository
     public function findPermissionById($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","find");
+        if($isAdmin == true || $isRole == true)
+        {
             $isId = DB::table('permission')->find($id);
             if (is_null($isId)) {
                 return response()->json(
@@ -101,7 +107,7 @@ class PermissionRepository implements IPermissionRepository
             }
         } else {
             return response()->json([
-                "message" => 'You are not admin'],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -115,7 +121,9 @@ class PermissionRepository implements IPermissionRepository
     public function findPermissionByName(string $name)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","findName");
+        if($isAdmin == true || $isRole == true)
+        {
             $isTitle = DB::Table('permission')->where('name','=',$name)->get();
             if (is_null($isTitle)) {
                 return response()->json(
@@ -130,7 +138,7 @@ class PermissionRepository implements IPermissionRepository
             }
         } else {
             return response()->json([
-                "message" => 'You are not admin'],
+                "message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -144,8 +152,6 @@ class PermissionRepository implements IPermissionRepository
      */
     public function updatePermission($id, array $data)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-
         $validator = Validator::make($data, [
             'name' => 'bail|required',
         ]);
@@ -157,8 +163,10 @@ class PermissionRepository implements IPermissionRepository
             );
         }
 
-
-        if ($isAdmin == true) {
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","update");
+        if($isAdmin == true || $isRole == true)
+        {
             if ($this->isPermissionById($id) == true) {
                 return response()->json(
                     [
@@ -176,7 +184,7 @@ class PermissionRepository implements IPermissionRepository
             }
         } else {
             return response()->json(
-                ["Error" => "You are not admin"],
+                ["Error" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }
@@ -206,8 +214,9 @@ class PermissionRepository implements IPermissionRepository
     public function deletePermission($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-
-        if ($isAdmin == true) {
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","delete");
+        if($isAdmin == true || $isRole == true)
+        {
             if ($this->isPermissionById($id) == true) {
                 return response()->json(
                     [
@@ -222,7 +231,7 @@ class PermissionRepository implements IPermissionRepository
             }
         } else {
             return response()->json(
-                ["message" => "You are not admin"],
+                ["message" => "You Do Not Have Access"],
                 ResponseAlias::HTTP_FORBIDDEN
             );
         }

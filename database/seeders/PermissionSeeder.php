@@ -18,7 +18,7 @@ class PermissionSeeder extends Seeder
         DB::table('permission')->insert([
             [
                 'id'=>'1905d138-70dd-4ae2-807d-fa47cd3f1c68',
-                'name' => 'Permission Delete',
+                'name' => 'document.delete',
                 'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'created_at' => date_create(),
@@ -26,7 +26,7 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id'=>'c9074b9c-7c6d-4025-a4fd-896614f19799',
-                'name' => 'Permission Edit',
+                'name' => 'document.edit',
                 'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'created_at' => date_create(),
@@ -34,7 +34,7 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id'=> 'a9794e38-5fea-4e0f-9260-09b5a2c37474',
-                'name' => 'Permission View',
+                'name' => 'document.view',
                 'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'created_at' => date_create(),
@@ -42,7 +42,7 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id'=> '31c8620f-fc71-48e7-ad8c-110137a8bc6a',
-                'name' => 'Permission Create',
+                'name' => 'document.create',
                 'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
                 'created_at' => date_create(),

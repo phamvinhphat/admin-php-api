@@ -89,6 +89,7 @@ Route::group(["prefix"=>"document"],function (){
    Route::get('/findDocByMyId',[DocumentController::class,'findDocByMyId']);
    Route::patch('/updateDocument/{id}',[DocumentController::class,'updateDocByID']);
    Route::get('/findStatusByDoc/{id}',[DocumentController::class,'findStatusByIdDoc']);
+    Route::get('/checkRole',[DocumentController::class,'checkRole']);
 });
 
 //workflow
