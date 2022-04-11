@@ -96,9 +96,9 @@ Route::group(["prefix"=>"document"],function (){
    Route::patch('/updateDocument/{id}',[DocumentController::class,'updateDocByID']);
    Route::get('/findStatusByDoc/{id}',[DocumentController::class,'findStatusByIdDoc']);
    Route::get('/checkRole',[DocumentController::class,'checkRole']);
-   Route::get('/getDocStatus',[DocumentController::class,'getDocStatus']);
-   Route::get('/getDoneDocStatus',[DocumentController::class,'getDoneDocStatus']);
-   Route::get('/getPendingDocStatus',[DocumentController::class,'getPendingDocStatus']);
+//   Route::get('/getDocStatus',[DocumentController::class,'getDocStatus']);
+//   Route::get('/getDoneDocStatus',[DocumentController::class,'getDoneDocStatus']);
+   Route::get('/getAllDocumentAndStatus',[DocumentController::class,'getAllDocumentAndStatus']);
 });
 
 //workflow
