@@ -99,7 +99,7 @@ class DocumentController extends Controller
 
     public function getDocStatus()
     {
-        return $this->iDocumentRepository->NotCheckAllDocument();
+        return $this->iDocudeleteRolementRepository->NotCheckAllDocument();
     }
 
     public function getDoneDocStatus()
