@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('saved_posts')->nullable();
             $table->string('recently_viewed_posts')->nullable();
             $table->boolean('is_admin')->default(false);
-            $table->uuid('role_id')->nullable();
+            $table->uuid('role_id')->default('766be67a-6520-4968-85ea-e9e07daf4e53');
             $table->foreign('role_id')->references('id')->on('role')->onDelete('cascade');
             $table->uuid('modified_by_id')->nullable();
             $table->uuid('created_by_id')->nullable();

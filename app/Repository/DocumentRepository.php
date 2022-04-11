@@ -243,4 +243,40 @@ class DocumentRepository implements IDocumentRepository
             );
         }
     }
+
+//    public function NotCheckAllDocument()
+//    {
+//        $getPermissionById = DB::table('status')
+//            ->select('id')
+//            ->where('name','!=','Done')
+//            ->where('name','!=','Pending')
+//            ->pluck('status.id');
+//
+//        $getStatus =  DB::table('workflow')
+//            ->whereIn('status_id', $getPermissionById)
+//            ->pluck('document_id');
+//
+//        $get =  DB::table('document')
+//            ->whereIn('id', $getStatus)
+//            ->get('documentCode','data');
+//
+//        return response()->json([
+//            "result" => $get
+//        ]);
+//    }
+
+    public function getAllDocumentAndStatus()
+    {
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","viewStatusDocument");
+        $get =  DB::table('document')
+            ->select('document.id', 'document.document_code','document.data','status.name')
+            ->join('workflow', 'document.id', '=', 'workflow.document_id')
+            ->join('status', 'status.id', '=', 'workflow.status_id')
+            ->get();
+
+        return response()->json([
+            "result" => $get
+        ]);
+    }
 }

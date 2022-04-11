@@ -1,24 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Repository\IPostIRepository;
+use App\Repository\IPostRepository;
 use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
 {
-    private IPostIRepository $IPostRepository;
+    private IPostRepository $iPostRepository;
 
-    public function __construct(IPostIRepository $IPostRepository)
+    public function __construct(IPostRepository $iPostRepository)
     {
-        $this->IPostRepository = $IPostRepository;
+        $this->iPostRepository = $iPostRepository;
+        $this->middleware('auth:api');
     }
 
 
-    public function getViewPost(): JsonResponse
+
+    /**
+     * @return array
+     */
+    public function getViewPost()
     {
-        return response()->json([
-            'data' => $this->IPostRepository->getListPost()
-        ]);
+        return $this->iPostRepository->getListPost();
     }
 
 

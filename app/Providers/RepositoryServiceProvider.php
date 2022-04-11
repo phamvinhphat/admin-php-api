@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Repository\IUserRepository;
-use App\Repository\IPostIRepository;
+use App\Repository\IPostRepository;
 use App\Repository\IWorkflowRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
@@ -33,7 +33,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
             $toBind = [
                 IUserRepository::class => UserRepository::class,
-                IPostIRepository::class => PostRepository::class,
+                IPostRepository::class => PostRepository::class,
                 IRoleRepository::class => RoleRepository::class,
                 IPermissionRepository::class => PermissionRepository::class,
                 IPermissionRoleRepository::class => PermissionRoleRepository::class,

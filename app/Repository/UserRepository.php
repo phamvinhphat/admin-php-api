@@ -88,16 +88,18 @@ class UserRepository implements IUserRepository
      * update info user
      * @param array $newDetails
      * @return JsonResponse
+     *      "dob" => $dob,
+    "gender" => $gender,
      */
     public function updateUser(array $newDetails)
     {
          $validator = Validator::make($newDetails, [
-             'email' => 'required|email|unique:account',
-             'username' => 'bail|required|alpha|min:4|max:12|unique:account',
-             'first_name' => 'bail|required',
-             'last_name'  => 'bail|required',
-             'id_card' => 'bail|required|min:12|max:12|unique:account',
-             'phone_number' => 'bail|required|min:10|max:10|unique:account',
+             'first_name' => 'required',
+             'last_name'  => 'required',
+             'dob' => 'required',
+             'gender' => 'required',
+             'id_card' => 'required|min:12|max:12|unique:account',
+             'phone_number' => 'required|min:10|max:10|unique:account',
          ]);
         if ($validator->fails()) {
             return response()->json(
@@ -274,6 +276,10 @@ class UserRepository implements IUserRepository
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        $token = auth()->refresh();
+        return response()->json(["result" => [
+            "accessToken" => "Bearer $token",
+            "expiresIn" => auth()->factory()->getTTL() * 60000]
+        ], ResponseAlias::HTTP_OK);
     }
 }
