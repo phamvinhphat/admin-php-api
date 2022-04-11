@@ -5,12 +5,10 @@ namespace App\Repository;
 use App\service\PermissionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use App\Models\role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use function GuzzleHttp\Promise\all;
 
 class RoleRepository implements IRoleRepository
 {
@@ -31,13 +29,23 @@ class RoleRepository implements IRoleRepository
      */
     public function getAllRole()
     {
-        return response()->json(["result" => DB::table('role')->get()],ResponseAlias::HTTP_OK);
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"role","create");
+        if($isAdmin == true || $isRole == true) {
+            return response()->json(["result" => DB::table('role')->get()], ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json([
+                "message" => "You Do Not Have Access"
+            ],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
 
     public function getMyRole($id)
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","create");
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"role","create");
         if($isAdmin == true || $isRole == true) {
                 $idRole = DB::table('account')->where('id', $id)->value('role_id');
                 $nameRole = DB::table('role')->where('id', $idRole)->get('name');
@@ -83,11 +91,46 @@ class RoleRepository implements IRoleRepository
 
     public function deleteRole($id)
     {
-        // TODO: Implement deleteRole() method.
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"role","delete");
+        if($isAdmin == true || $isRole == true) {
+            return response()->json([
+                "result" => DB::table('role')->delete($id)
+            ], ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json([
+                "message" => "You Do Not Have Access"
+            ],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
 
     public function updateRole($id, $data)
     {
-        // TODO: Implement updateRole() method.
+        $validator = Validator::make($data, [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(
+                ["message"=>$validator->errors()],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"role","update");
+        if($isAdmin == true || $isRole == true) {
+            return response()->json([
+                "result" => DB::table('role')->where('id', $id)->update($data)
+            ], ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json([
+                "message" => "You Do Not Have Access"
+            ],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
 }

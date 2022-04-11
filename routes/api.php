@@ -48,6 +48,10 @@ Route::group(['middleware' => ['api','cors'], "prefix"=>"account"],function(){
 Route::group(["prefix"=>"role"],function(){
     Route::get('/getAllRole',[RoleController::class,'getAllRole']);
     Route::get('/getMyRole',[RoleController::class,'getMyRole']);
+    Route::post('/createRole',[RoleController::class,'createRole']);
+    Route::delete('/deleteRole/{id}',[RoleController::class,'deleteRole']);
+    Route::patch('/updateRole/{id}',[RoleController::class,'updateRole']);
+
 });
 
 // permission
