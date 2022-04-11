@@ -168,7 +168,9 @@ class WorkflowRepository implements IWorkflowRepository
         $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","view");
         if ($isAdmin == true || $isRole == true) {
           return response()->json([
-              "result" => DB::table('workflow')->get()
+              "result" => DB::table('workflow')
+                  ->orderByDesc('created_at')
+                  ->get()
           ],ResponseAlias::HTTP_OK);
         } else {
             return response()->json(

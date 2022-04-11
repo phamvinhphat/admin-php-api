@@ -54,7 +54,16 @@ class DocumentSeeder extends Seeder
                 'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
                 'created_at' => date_create(),
                 'updated_at' => date_create(),
-            ]
+            ],
+            [
+                'id'=>'1c352c40-591f-45ca-9336-7b0721b7f319',
+                'document_code'=> 'doc147',
+                'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
+                'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                'created_at' => date_create(),
+                'updated_at' => date_create(),
+            ],
         ]);
     }
 }

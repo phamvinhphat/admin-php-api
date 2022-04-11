@@ -274,6 +274,8 @@ class DocumentRepository implements IDocumentRepository
                 ->select('document.id', 'document.document_code','document.data','status.name')
                 ->join('workflow', 'document.id', '=', 'workflow.document_id')
                 ->join('status', 'status.id', '=', 'workflow.status_id')
+                ->join('post', 'document.id', '=', 'post.document_id')
+                //->where('document.id' ,'=','post.document_id')
                 ->get();
 
             return response()->json([

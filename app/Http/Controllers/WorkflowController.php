@@ -15,6 +15,7 @@ class WorkflowController extends Controller
     public function __construct(IWorkflowRepository $iWorkflowRepository)
     {
         $this->iWorkflowRepository = $iWorkflowRepository;
+        $this->middleware('auth:api');
     }
 
     public function createdWorkflow(Request $request){
