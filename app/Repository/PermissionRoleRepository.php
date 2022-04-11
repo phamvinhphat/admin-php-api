@@ -42,6 +42,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
+
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","create");
         if($isAdmin == true || $isRole == true) {
