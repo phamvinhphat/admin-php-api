@@ -3,7 +3,7 @@
 namespace App\Repository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-interface IPostIRepository extends IRepository
+interface IPostRepository
 {
 
     /**

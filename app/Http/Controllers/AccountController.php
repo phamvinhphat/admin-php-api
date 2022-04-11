@@ -90,20 +90,20 @@ class AccountController extends Controller
      */
     public function updateUser(Request $request)
     {
-        $email = $request->get('email');
-        $username = $request->get('username');
         $firstName = $request->get('first_name');
         $lastName = $request->get('last_name');
         $idCard = $request->get('id_card');
         $phoneNumber = $request->get('phone_number');
+        $dob = $request->get('dob');
+        $gender = $request->get('gender');
         $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
 
         $data = array (
-            "email" => $email,
-            "username" => $username,
             "first_name" => $firstName,
             "last_name" => $lastName,
             "id_card" => $idCard,
+            "dob" => $dob,
+            "gender" => $gender,
             "phone_number" => $phoneNumber,
             "updated_at" => $currentDateTime,
         );

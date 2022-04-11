@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\WorkflowController;
 use App\Http\Controllers\RolePermissionController;
 
@@ -46,6 +47,7 @@ Route::group(['middleware' => ['api','cors'], "prefix"=>"account"],function(){
 //role
 Route::group(["prefix"=>"role"],function(){
     Route::get('/getAllRole',[RoleController::class,'getAllRole']);
+    Route::get('/getMyRole',[RoleController::class,'getMyRole']);
 });
 
 // permission
@@ -89,7 +91,10 @@ Route::group(["prefix"=>"document"],function (){
    Route::get('/findDocByMyId',[DocumentController::class,'findDocByMyId']);
    Route::patch('/updateDocument/{id}',[DocumentController::class,'updateDocByID']);
    Route::get('/findStatusByDoc/{id}',[DocumentController::class,'findStatusByIdDoc']);
-    Route::get('/checkRole',[DocumentController::class,'checkRole']);
+   Route::get('/checkRole',[DocumentController::class,'checkRole']);
+   Route::get('/getDocStatus',[DocumentController::class,'getDocStatus']);
+   Route::get('/getDoneDocStatus',[DocumentController::class,'getDoneDocStatus']);
+   Route::get('/getPendingDocStatus',[DocumentController::class,'getPendingDocStatus']);
 });
 
 //workflow
@@ -99,4 +104,9 @@ Route::group(["prefix"=>"workflow"],function (){
     Route::get('/findWorkflowById/{id}',[WorkflowController::class,'findWorkflowById']);
     Route::delete('/deleteWorkflow/{id}',[WorkflowController::class,'deleteWorkflow']);
     Route::patch('/updateWorkflow/{id}',[WorkflowController::class,'updateWorkflow']);
+});
+
+//post
+Route::group(["prefix"=>"post"],function (){
+    Route::get('/getAllPost',[PostController::class,'getViewPost']);
 });

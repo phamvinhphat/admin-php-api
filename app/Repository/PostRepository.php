@@ -3,29 +3,20 @@
 namespace App\Repository;
 
 use App\Models\post;
+use Illuminate\Http\JsonResponse;
 use JetBrains\PhpStorm\Pure;
 
-class PostRepository extends BaseIRepository implements IPostIRepository
+use Illuminate\Support\Facades\DB;
+class PostRepository implements IPostRepository
 {
 
-    public function model(): string
+    /**
+     * @return JsonResponse
+     */
+    public function getListPost(): JsonResponse
     {
-        return post::class;
-    }
-
-    public function __construct(post $model)
-    {
-        parent::__construct($model);
-    }
-
-    public function getListPost(): array
-    {
-        /** @var post $user */
-
-        $post = $this
-            ->newQuery()
-            ->select(
-                'id',
+        $post = DB::table('post')
+            ->get([
                 'contents',
                 'longitude',
                 'latitude',
@@ -33,18 +24,17 @@ class PostRepository extends BaseIRepository implements IPostIRepository
                 'floor_area',
                 'address',
                 'furniture_status',
-                'created_by',
+                'created_by_id',
+                'modified_by_id',
                 'album_id',
                 'created_at',
-                'updated_at')
-            ->get();
+                'updated_at']);
 
-        return $post;
+        return response()->json([
+            "result" => $post
+        ]);
 
     }
 
-    public function getModel()
-    {
-        // TODO: Implement getModel() method.
-    }
+
 }

@@ -97,5 +97,19 @@ class DocumentController extends Controller
         return $this->permissionService->checkPermission(Auth::id(), "document", "view");
     }
 
+    public function getDocStatus()
+    {
+        return $this->iDocumentRepository->NotCheckAllDocument();
+    }
+
+    public function getDoneDocStatus()
+    {
+        return $this->iDocumentRepository->checkDoneAllDocument();
+    }
+
+    public function getPendingDocStatus()
+    {
+        return $this->iDocumentRepository->checkPendingAllDocument();
+    }
 
 }
