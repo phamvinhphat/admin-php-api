@@ -1,7 +1,5 @@
-// ** React Imports
 import { SyntheticEvent, useState } from 'react';
 
-// ** MUI Imports
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -9,19 +7,12 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import MuiTab, { TabProps } from '@mui/material/Tab';
-
-// ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline';
 import InformationOutline from 'mdi-material-ui/InformationOutline';
 import LockOpenOutline from 'mdi-material-ui/LockOpenOutline';
 
-// ** Demo Tabs Imports
-import TabAccount from 'src/views/account-settings/TabAccount';
-import TabInfo from 'src/views/account-settings/TabInfo';
-import TabSecurity from 'src/views/account-settings/TabSecurity';
-
-// ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css';
+import { TabInfo, TabSecurity, TabAccount } from '@views';
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -78,15 +69,6 @@ const AccountSettings = () => {
                             </Box>
                         }
                     />
-                    <Tab
-                        value="info"
-                        label={
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <InformationOutline />
-                                <TabName>Info</TabName>
-                            </Box>
-                        }
-                    />
                 </TabList>
 
                 <TabPanel sx={{ p: 0 }} value="account">
@@ -94,9 +76,6 @@ const AccountSettings = () => {
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value="security">
                     <TabSecurity />
-                </TabPanel>
-                <TabPanel sx={{ p: 0 }} value="info">
-                    <TabInfo />
                 </TabPanel>
             </TabContext>
         </Card>

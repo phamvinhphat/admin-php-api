@@ -1,14 +1,10 @@
-// ** React Imports
 import { ReactNode } from 'react';
 
-// ** MUI Imports
 import { styled, useTheme } from '@mui/material/styles';
 import MuiSwipeableDrawer, {
     SwipeableDrawerProps,
 } from '@mui/material/SwipeableDrawer';
-
-// ** Type Import
-import { Settings } from 'src/@core/context/settingsContext';
+import { Settings } from '@core/layouts/types';
 
 interface Props {
     hidden: boolean;

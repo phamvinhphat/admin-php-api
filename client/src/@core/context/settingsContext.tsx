@@ -1,11 +1,16 @@
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useLayoutEffect } from 'react';
 
 import themeConfig from '@configs/themeConfig';
 import { Settings } from '@core/layouts/types';
+import { useCurrentUser } from '@services';
+import { IUser } from '@services/types';
+import { getLocalToken } from '@services/utils';
 
 export type SettingsContextValue = {
     settings: Settings;
     saveSettings: (updatedSettings: Settings) => void;
+    isAuthenticated?: boolean;
+    userInfo?: IUser;
 };
 
 const initialSettings: Settings = {
@@ -21,15 +26,29 @@ export const SettingsContext = createContext<SettingsContextValue>({
 });
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-    // ** State
     const [settings, setSettings] = useState<Settings>({ ...initialSettings });
+    const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
+
+    const { data } = useCurrentUser();
 
     const saveSettings = (updatedSettings: Settings) => {
         setSettings(updatedSettings);
     };
 
+    useLayoutEffect(() => {
+        const localToken = getLocalToken()?.Authorization;
+        setAuthenticated(localToken !== undefined);
+    }, []);
+
     return (
-        <SettingsContext.Provider value={{ settings, saveSettings }}>
+        <SettingsContext.Provider
+            value={{
+                settings,
+                saveSettings,
+                isAuthenticated,
+                userInfo: data?.result,
+            }}
+        >
             {children}
         </SettingsContext.Provider>
     );

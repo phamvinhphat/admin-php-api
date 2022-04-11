@@ -1,13 +1,11 @@
 // ** Icon imports
-import AccountCogOutline from 'mdi-material-ui/AccountCogOutline';
+import { SignCaution, NewspaperVariantOutline, AccountWrench } from 'mdi-material-ui';
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline';
-import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline';
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline';
 import CubeOutline from 'mdi-material-ui/CubeOutline';
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase';
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended';
 import HomeOutline from 'mdi-material-ui/HomeOutline';
-import Login from 'mdi-material-ui/Login';
 import Table from 'mdi-material-ui/Table';
 
 // ** Type import
@@ -21,30 +19,27 @@ const navigation = (): VerticalNavItemsType => {
             path: '/',
         },
         {
-            title: 'Account Settings',
-            icon: AccountCogOutline,
+            title: 'Account Setting',
+            icon: AccountWrench,
             path: '/account-settings',
         },
         {
-            sectionTitle: 'Pages',
+            sectionTitle: 'Page Settings',
         },
         {
-            title: 'Login',
-            icon: Login,
-            path: '/pages/login',
-            openInNewTab: true,
+            title: 'Roles / Permissions',
+            icon: SignCaution,
+            path: '/authorization',
         },
         {
-            title: 'Register',
+            title: 'Accounts',
             icon: AccountPlusOutline,
-            path: '/pages/register',
-            openInNewTab: true,
+            path: '/account',
         },
         {
-            title: 'Error',
-            icon: AlertCircleOutline,
-            path: '/pages/error',
-            openInNewTab: true,
+            title: 'Posts',
+            icon: NewspaperVariantOutline,
+            path: '/post',
         },
         {
             sectionTitle: 'User Interface',

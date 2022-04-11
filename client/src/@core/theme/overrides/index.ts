@@ -1,7 +1,6 @@
 // ** MUI Imports
 import { Theme } from '@mui/material/styles';
 
-// ** Overrides Imports
 import MuiAccordion from './accordion';
 import MuiAlerts from './alerts';
 import MuiAvatar from './avatars';
@@ -16,18 +15,18 @@ import MuiInput from './input';
 import MuiLink from './link';
 import MuiList from './list';
 import MuiMenu from './menu';
+import MuiPagination from './pagination';
 import MuiPaper from './paper';
-import MuiTabs from './tabs'
-import MuiTable from './table';
+import MuiPopover from './popover';
 import MuiRating from './rating';
 import MuiSelect from './select';
-import MuiPopover from './popover';
+import MuiSnackbar from './snackbar';
+import MuiSwitches from './switches';
+import MuiTable from './table';
+import MuiTabs from './tabs';
 import MuiTimeline from './timeline';
 import MuiToggleButton from './toggleButton';
 import MuiTooltip from './tooltip';
-import MuiSnackbar from './snackbar';
-import MuiSwitches from './switches';
-import MuiPagination from './pagination';
 import MuiTypography from './typography';
 
 const Overrides = (theme: Theme) => {

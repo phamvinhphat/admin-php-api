@@ -1,22 +1,17 @@
-// ** MUI Imports
+import {
+    IconButton,
+    InputAdornment,
+    TextField,
+    useMediaQuery,
+} from '@mui/material';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import { Theme } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { Magnify, Menu } from 'mdi-material-ui';
 
-// ** Icons Imports
-import Magnify from 'mdi-material-ui/Magnify';
-import Menu from 'mdi-material-ui/Menu';
-
-// ** Type Import
-import { Settings } from 'src/@core/context/settingsContext';
-
-// ** Components
-import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler';
-import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown';
-import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown';
+import ModeToggler from '@core/layouts/components/shared-components/ModeToggler';
+import NotificationDropdown from '@core/layouts/components/shared-components/NotificationDropdown';
+import UserDropdown from '@core/layouts/components/shared-components/UserDropdown';
+import { Settings } from '@core/layouts/types';
 
 interface Props {
     hidden: boolean;

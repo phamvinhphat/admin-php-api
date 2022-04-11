@@ -1,11 +1,8 @@
-// ** MUI Theme Provider
 import { ThemeOptions } from '@mui/material';
 import { deepmerge } from '@mui/utils';
 
-// ** Type Import
-import { Settings } from 'src/@core/context/settingsContext';
+import { Settings } from '@core/layouts/types';
 
-// ** Theme Override Imports
 import breakpoints from './breakpoints';
 import palette from './palette';
 import shadows from './shadows';

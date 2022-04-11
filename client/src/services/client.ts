@@ -1,13 +1,10 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-export const tokenKey = process.env.NEXT_PUBLIC_TOKEN_KEY ?? 'token_key';
-export const host = process.env.NEXT_PUBLIC_API_URL ?? 'localhost';
+import { host } from '@configs/constants';
 
-function getLocalToken() {
-    return typeof window !== 'undefined'
-        ? { Authorization: `Bearer ${window.localStorage.getItem(tokenKey)}` }
-        : undefined;
-}
+import { IResponse, IToken } from './types';
+import { getLocalToken, removeLocalToken, setLocalToken } from './utils';
 
 const instance = axios.create({
     baseURL: host,
@@ -19,10 +16,44 @@ const instance = axios.create({
     },
 });
 
-const client = {
-    instance,
-    tokenKey,
-    host,
-};
+instance.interceptors.response.use(
+    (value) => {
+        return value;
+    },
+    (value) => {
+        if (
+            value.response.status === 401 &&
+            !value.request.responseURL.includes('/account/refresh')
+        ) {
+            return instance
+                .get<IResponse<IToken>>('/account/refresh')
+                .then((response) => {
+                    if (response.data && response.status === 200) {
+                        const { result } = response.data;
+                        setLocalToken(result);
+                        return instance({
+                            ...value.config,
+                            headers: {
+                                ...value.config.headers,
+                                ...getLocalToken(),
+                            },
+                        });
+                    }
+                    removeLocalToken();
+                    return response;
+                });
+        }
+        if (value.response) {
+            const { message: msg } = value.response
+                .data as IResponse<undefined>;
+            if (msg) {
+                toast.error(msg, { position: 'top-left' });
+            }
+        }
+        return value;
+    }
+);
+
+const client = { instance };
 
 export default client;

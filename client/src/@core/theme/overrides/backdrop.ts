@@ -1,8 +1,6 @@
-// ** MUI Imports
 import { Theme } from '@mui/material/styles';
 
-// ** Util Import
-import { hexToRGBA } from 'src/@core/utils/hex-to-rgba';
+import { hexToRGBA } from '@core/utils';
 
 const Backdrop = (theme: Theme) => {
     return {

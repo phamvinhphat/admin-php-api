@@ -1,23 +1,23 @@
-// ** MUI Imports
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-// ** Demo Components Imports
-import CardAppleWatch from 'src/views/cards/CardAppleWatch';
-import CardFacebook from 'src/views/cards/CardFacebook';
-import CardHorizontalRatings from 'src/views/cards/CardHorizontalRatings';
-import CardImgTop from 'src/views/cards/CardImgTop';
-import CardInfluencer from 'src/views/cards/CardInfluencer';
-import CardLinkedIn from 'src/views/cards/CardLinkedIn';
-import CardMembership from 'src/views/cards/CardMembership';
-import CardMobile from 'src/views/cards/CardMobile';
-import CardNavigation from 'src/views/cards/CardNavigation';
-import CardSupport from 'src/views/cards/CardSupport';
-import CardUser from 'src/views/cards/CardUser'
-import CardTwitter from 'src/views/cards/CardTwitter';
-import CardVerticalRatings from 'src/views/cards/CardVerticalRatings';
-import CardWithCollapse from 'src/views/cards/CardWithCollapse';
-import CardNavigationCenter from 'src/views/cards/CardNavigationCenter';
+import {
+    CardImgTop,
+    CardUser,
+    CardMembership,
+    CardTwitter,
+    CardMobile,
+    CardSupport,
+    CardAppleWatch,
+    CardInfluencer,
+    CardHorizontalRatings,
+    CardLinkedIn,
+    CardFacebook,
+    CardNavigationCenter,
+    CardNavigation,
+    CardVerticalRatings,
+} from '@views';
+import CardWithCollapse from '@views/cards/CardWithCollapse';
 
 const CardBasic = () => {
     return (

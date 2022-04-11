@@ -5,13 +5,14 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
-// ** Demo Components Imports
-import TableBasic from 'src/views/tables/TableBasic';
-import TableCollapsible from 'src/views/tables/TableCollapsible';
-import TableCustomized from 'src/views/tables/TableCustomized';
-import TableDense from 'src/views/tables/TableDense';
-import TableSpanning from 'src/views/tables/TableSpanning';
-import TableStickyHeader from 'src/views/tables/TableStickyHeader';
+import {
+    TableBasic,
+    TableCollapsible,
+    TableCustomized,
+    TableDense,
+    TableSpanning,
+    TableStickyHeader,
+} from '@views';
 
 const MUITable = () => {
     return (

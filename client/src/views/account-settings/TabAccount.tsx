@@ -1,27 +1,32 @@
-// ** React Imports
 import { useState, ElementType, ChangeEvent, SyntheticEvent } from 'react';
 
-// ** MUI Imports
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Box from '@mui/material/Box';
-import Button, { ButtonProps } from '@mui/material/Button';
-import CardContent from '@mui/material/CardContent';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import Link from '@mui/material/Link';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+    Avatar,
+    Button,
+    ButtonProps,
+    Grid,
+    Box,
+    IconButton,
+    Alert,
+    CardContent,
+    Typography,
+    AlertTitle,
+    Link,
+    Badge,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-
-// ** Icons Imports
 import Close from 'mdi-material-ui/Close';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
-const ImgStyled = styled('img')(({ theme }) => ({
+import { useSettings } from '@core/hooks/useSettings';
+import { identityCardRegExp, PhoneNumberRegex } from '@core/utils';
+import InputField from '@layouts/components/input-field';
+import { SelectField, SelectOption } from '@layouts/components/select-field';
+import { IChangeUserInfo } from '@services/types';
+
+const AvatarStyled = styled(Avatar)(({ theme }) => ({
     width: 120,
     height: 120,
     marginRight: theme.spacing(6.25),
@@ -47,10 +52,43 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
     },
 }));
 
+const schema = yup.object().shape({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    idCard: yup.string().required().matches(identityCardRegExp, ''),
+    phoneNumber: yup.string().required().matches(PhoneNumberRegex, ''),
+    dob: yup.date().required().typeError(''),
+    gender: yup.string().required(),
+});
+
+const genders: SelectOption[] = [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+    { label: 'Other', value: 'other' },
+];
+
 const TabAccount = () => {
+    const { userInfo } = useSettings();
     // ** State
-    const [openAlert, setOpenAlert] = useState<boolean>(true);
-    const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png');
+    const [openAlert, setOpenAlert] = useState<boolean>(!userInfo?.isVerify);
+    const [imgSrc, setImgSrc] = useState<string>(userInfo?.avatar ?? '');
+
+    const {
+        control,
+        formState: { isSubmitting, isDirty },
+        handleSubmit,
+        reset,
+    } = useForm<IChangeUserInfo>({
+        defaultValues: {
+            dob: userInfo?.dob ?? new Date(),
+            gender: userInfo?.gender ?? 'male',
+            idCard: userInfo?.idCard ?? '',
+            firstName: userInfo?.firstName ?? 'John',
+            lastName: userInfo?.lastName ?? 'Doe',
+            phoneNumber: userInfo?.phoneNumber ?? '',
+        },
+        resolver: yupResolver(schema),
+    });
 
     const onChange = (file: ChangeEvent) => {
         const reader = new FileReader();
@@ -62,13 +100,34 @@ const TabAccount = () => {
         }
     };
 
+    const handleFormSubmit = async (formValues: IChangeUserInfo) => {
+        console.log(formValues);
+    };
+
     return (
         <CardContent>
-            <form>
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <Grid container spacing={7}>
                     <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <ImgStyled src={imgSrc} alt="Profile Pic" />
+                            <Badge
+                                badgeContent={
+                                    userInfo?.isVerify ? 'Verified' : ''
+                                }
+                                color={
+                                    userInfo?.isVerify ? 'primary' : undefined
+                                }
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'right',
+                                }}
+                            >
+                                <AvatarStyled
+                                    src={imgSrc}
+                                    alt={userInfo?.username}
+                                    variant="rounded"
+                                />
+                            </Badge>
                             <Box>
                                 <ButtonStyled
                                     component="label"
@@ -88,7 +147,7 @@ const TabAccount = () => {
                                     color="error"
                                     variant="outlined"
                                     onClick={() =>
-                                        setImgSrc('/images/avatars/1.png')
+                                        setImgSrc(userInfo?.avatar ?? '')
                                     }
                                 >
                                     Reset
@@ -104,62 +163,61 @@ const TabAccount = () => {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <InputField
                             fullWidth
-                            label="Username"
-                            placeholder="johnDoe"
-                            defaultValue="johnDoe"
+                            label="First Name"
+                            control={control}
+                            name="firstName"
+                            placeholder="John"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <InputField
+                            control={control}
+                            name="lastName"
                             fullWidth
-                            label="Name"
-                            placeholder="John Doe"
-                            defaultValue="John Doe"
+                            label="Last Name"
+                            placeholder="Doe"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <InputField
+                            control={control}
+                            name="email"
                             fullWidth
                             type="email"
                             label="Email"
-                            placeholder="johnDoe@example.com"
-                            defaultValue="johnDoe@example.com"
+                            placeholder="email@email.com"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Role</InputLabel>
-                            <Select label="Role" defaultValue="admin">
-                                <MenuItem value="admin">Admin</MenuItem>
-                                <MenuItem value="author">Author</MenuItem>
-                                <MenuItem value="editor">Editor</MenuItem>
-                                <MenuItem value="maintainer">
-                                    Maintainer
-                                </MenuItem>
-                                <MenuItem value="subscriber">
-                                    Subscriber
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Status</InputLabel>
-                            <Select label="Status" defaultValue="active">
-                                <MenuItem value="active">Active</MenuItem>
-                                <MenuItem value="inactive">Inactive</MenuItem>
-                                <MenuItem value="pending">Pending</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
+                        <SelectField
+                            label="Gender"
+                            name="gender"
+                            control={control}
+                            options={genders}
                             fullWidth
-                            label="Company"
-                            placeholder="ABC Pvt. Ltd."
-                            defaultValue="ABC Pvt. Ltd."
+                            sx={{ margin: 0 }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <InputField
+                            control={control}
+                            name="dob"
+                            label="Date of birth"
+                            type="date"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <InputField
+                            control={control}
+                            name="idCard"
+                            fullWidth
+                            label="Identity Card"
                         />
                     </Grid>
 
@@ -196,13 +254,19 @@ const TabAccount = () => {
                     ) : null}
 
                     <Grid item xs={12}>
-                        <Button variant="contained" sx={{ marginRight: 3.5 }}>
+                        <Button
+                            disabled={!isDirty || isSubmitting}
+                            variant="contained"
+                            type="submit"
+                            sx={{ marginRight: 3.5 }}
+                        >
                             Save Changes
                         </Button>
                         <Button
                             type="reset"
                             variant="outlined"
                             color="secondary"
+                            onClick={() => reset()}
                         >
                             Reset
                         </Button>

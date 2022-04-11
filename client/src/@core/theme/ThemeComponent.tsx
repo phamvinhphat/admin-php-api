@@ -10,21 +10,13 @@ import {
     responsiveFontSizes,
 } from '@mui/material/styles';
 
-// ** Type Imports
-import { Settings } from 'src/@core/context/settingsContext';
+import themeConfig from '@configs/themeConfig';
+import { Settings } from '@core/layouts/types';
 
-// ** Theme Config
-import themeConfig from 'src/configs/themeConfig';
-
-// ** Theme Override Imports
 import GlobalStyling from './globalStyles';
 import overrides from './overrides';
 import themeOptions from './ThemeOptions';
 import typography from './typography';
-
-// ** Theme
-
-// ** Global Styles
 
 interface Props {
     settings: Settings;

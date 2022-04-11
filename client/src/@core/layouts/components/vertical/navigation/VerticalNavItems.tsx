@@ -1,10 +1,10 @@
 // ** Types Import
-import { Settings } from 'src/@core/context/settingsContext';
 import {
     NavLink,
     NavSectionTitle,
+    Settings,
     VerticalNavItemsType,
-} from 'src/@core/layouts/types';
+} from '@core/layouts/types';
 
 // ** Custom Menu Components
 import VerticalNavLink from './VerticalNavLink';

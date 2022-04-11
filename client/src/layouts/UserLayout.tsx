@@ -1,22 +1,16 @@
 // ** React Imports
 import { ReactNode } from 'react';
 
-// ** MUI Imports
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import dynamic from 'next/dynamic';
 
-// ** Layout Imports
-// !Do not remove this Layout import
-import { useSettings } from 'src/@core/hooks/useSettings';
-import VerticalLayout from 'src/@core/layouts/VerticalLayout';
-
-// ** Navigation Imports
+import { useSettings } from '@core/hooks/useSettings';
 import VerticalNavItems from 'src/navigation/vertical';
 
-// ** Component Import
 import VerticalAppBarContent from './components/vertical/AppBarContent';
 
-// ** Hook Import
+const VerticalLayout = dynamic(() => import('@core/layouts/VerticalLayout'));
 
 interface Props {
     children: ReactNode;

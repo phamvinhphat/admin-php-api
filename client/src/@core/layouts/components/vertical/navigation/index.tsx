@@ -1,24 +1,16 @@
-// ** React Import
 import { ReactNode, useRef, useState } from 'react';
 
-// ** MUI Import
 import Box, { BoxProps } from '@mui/material/Box';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
-
-// ** Third Party Components
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-// ** Type Import
-import { Settings } from 'src/@core/context/settingsContext';
-import { VerticalNavItemsType } from 'src/@core/layouts/types';
-
-// ** Component Imports
-import { hexToRGBA } from 'src/@core/utils/hex-to-rgba';
+import VerticalNavHeader from '@core/layouts/components/vertical/navigation/VerticalNavHeader';
+import VerticalNavItems from '@core/layouts/components/vertical/navigation/VerticalNavItems';
+import { VerticalNavItemsType, Settings } from '@core/layouts/types';
+import { hexToRGBA } from '@core/utils/hex-to-rgba';
 
 import Drawer from './Drawer';
-import VerticalNavHeader from './VerticalNavHeader';
-import VerticalNavItems from './VerticalNavItems';
 
 // ** Util Import
 
@@ -74,10 +66,13 @@ const Navigation = (props: Props) => {
     const handleInfiniteScroll = (ref: HTMLElement) => {
         if (ref) {
             // @ts-ignore
+            // eslint-disable-next-line no-param-reassign,no-underscore-dangle
             ref._getBoundingClientRect = ref.getBoundingClientRect;
 
+            // eslint-disable-next-line no-param-reassign
             ref.getBoundingClientRect = () => {
                 // @ts-ignore
+                // eslint-disable-next-line no-underscore-dangle
                 const original = ref._getBoundingClientRect();
 
                 return { ...original, height: Math.floor(original.height) };
@@ -87,6 +82,7 @@ const Navigation = (props: Props) => {
 
     // ** Scroll Menu
     const scrollMenu = (container: any) => {
+        // eslint-disable-next-line no-param-reassign
         container = hidden ? container.target : container;
         if (shadowRef && container.scrollTop > 0) {
             // @ts-ignore
@@ -126,7 +122,6 @@ const Navigation = (props: Props) => {
                     overflow: 'hidden',
                 }}
             >
-                {/* @ts-ignore */}
                 <ScrollWrapper
                     containerRef={(ref: any) => handleInfiniteScroll(ref)}
                     {...(hidden
