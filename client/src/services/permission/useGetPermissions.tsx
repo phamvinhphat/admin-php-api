@@ -4,7 +4,7 @@ import { client } from '@services';
 import { IPermission, IResponse } from '@services/types';
 
 const useGetPermissions = () => {
-    return useQuery<IResponse<IPermission>, IResponse<undefined>>(
+    return useQuery<IResponse<IPermission[]>, IResponse<undefined>>(
         'getPermissions',
         async () => {
             const response = await client.instance.get(

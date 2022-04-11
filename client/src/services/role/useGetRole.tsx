@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { client } from '@services';
 
 const useGetRole = () => {
-    return useQuery('getRolebyId', async () => {
+    return useQuery('getRoleById', async () => {
         const response = await client.instance.get('role');
     });
 };

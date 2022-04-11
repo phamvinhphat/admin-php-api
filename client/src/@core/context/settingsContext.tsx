@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useLayoutEffect } from 'react';
+import { createContext, useState, ReactNode, useCallback } from 'react';
 
 import themeConfig from '@configs/themeConfig';
 import { Settings } from '@core/layouts/types';
@@ -27,7 +27,6 @@ export const SettingsContext = createContext<SettingsContextValue>({
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     const [settings, setSettings] = useState<Settings>({ ...initialSettings });
-    const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
 
     const { data } = useCurrentUser();
 
@@ -35,17 +34,14 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         setSettings(updatedSettings);
     };
 
-    useLayoutEffect(() => {
-        const localToken = getLocalToken()?.Authorization;
-        setAuthenticated(localToken !== undefined);
-    }, []);
+    const hasToken = useCallback(() => Boolean(getLocalToken()), []);
 
     return (
         <SettingsContext.Provider
             value={{
                 settings,
                 saveSettings,
-                isAuthenticated,
+                isAuthenticated: hasToken(),
                 userInfo: data?.result,
             }}
         >

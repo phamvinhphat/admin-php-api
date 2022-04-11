@@ -108,10 +108,9 @@ const LoginPage = () => {
         await toast.promise(
             mutateAsync(formValues, {
                 onSuccess: (data) => {
-                    console.log('Login data', data);
                     if (data.result) {
                         setLocalToken(data.result);
-                        router.push('/');
+                        window.location.href = '/';
                     }
                 },
             }),

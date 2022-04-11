@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import type { EmotionCache } from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import type { NextPage } from 'next';
@@ -5,7 +7,6 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Router, useRouter } from 'next/router';
 import NProgress from 'nprogress';
-import { ToastContainer } from 'react-toastify';
 
 import { isMatch, protectedRoutes } from '@configs/protectedRoutes';
 import themeConfig from '@configs/themeConfig';
@@ -23,7 +24,7 @@ import { getLocalToken } from '@services/utils';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '../../styles/globals.css';
-import { useCallback } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {

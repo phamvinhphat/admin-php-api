@@ -45,3 +45,8 @@ export interface IChangeUserInfo {
     gender: IGender | string;
     dob: Date;
 }
+
+export interface IRolePermissions {
+    roleId: string;
+    permissionId: string;
+}
