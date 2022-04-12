@@ -308,9 +308,9 @@ class UserRepository implements IUserRepository
         } else {
             $account->password = Hash::make($pass);
             $account->save();
-            return response()->json([
-                "result" => "Change Password "
-            ]);
+//            return response()->json([
+//                "result" => "Change Password"
+//            ]);
         }
     }
 

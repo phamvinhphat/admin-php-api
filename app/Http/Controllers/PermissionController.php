@@ -14,11 +14,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PermissionController extends Controller
 {
-    private IPermissionRepository $iPermissionRepository;
+    private IPermissionRepository $permissionRepository;
 
     public function __construct( IPermissionRepository $iPermissionRepository)
     {
-        $this->iPermissionRepository = $iPermissionRepository;
+        $this->permissionRepository = $iPermissionRepository;
         $this->middleware('auth:api');
     }
 
@@ -27,7 +27,7 @@ class PermissionController extends Controller
      * @return JsonResponse
      */
     public function getAllPermission(){
-        return $this->iPermissionRepository->getAllPermission();
+        return $this->permissionRepository->getAllPermission();
     }
 
     /**
@@ -49,7 +49,7 @@ class PermissionController extends Controller
             "updated_at"=> $current_date_time,
         );
 
-        return $this->iPermissionRepository->createPermission($data);
+        return $this->permissionRepository->createPermission($data);
     }
 
     /**
@@ -60,7 +60,7 @@ class PermissionController extends Controller
     public function findPermissionById(Request $request)
     {
         $idPermission = $request->route('id');
-        return $this->iPermissionRepository->findPermissionById($idPermission);
+        return $this->permissionRepository->findPermissionById($idPermission);
     }
 
     /**
@@ -78,7 +78,7 @@ class PermissionController extends Controller
             "modified_by_id" => Auth::id(),
         );
 
-        return $this->iPermissionRepository->updatePermission($id, $data);
+        return $this->permissionRepository->updatePermission($id, $data);
     }
 
     /**
@@ -87,7 +87,7 @@ class PermissionController extends Controller
      */
     public function deletePermissionById(Request $request) {
         $id = $request->route('id');
-        return $this->iPermissionRepository->deletePermission($id);
+        return $this->permissionRepository->deletePermission($id);
     }
 
     /**
@@ -96,14 +96,14 @@ class PermissionController extends Controller
      */
     public function findPermissionByName(Request $request){
         $name = $request->get('name');
-        return  $this->iPermissionRepository->findPermissionByName($name);
+        return  $this->permissionRepository->findPermissionByName($name);
     }
 
 
     public function finPermissionById(Request $request)
     {
         $id = $request->route('id');
-        return \response()->json([ $this->iPermissionRepository->isPermissionById($id)
+        return \response()->json([ $this->permissionRepository->isPermissionById($id)
         ]);
     }
 }

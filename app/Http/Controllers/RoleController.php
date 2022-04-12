@@ -12,21 +12,21 @@ use Illuminate\Support\Facades\Cache;
 
 class RoleController extends Controller
 {
-    private IRoleRepository $iRoleRepository;
+    private IRoleRepository $roleRepository;
 
     public function __construct(IRoleRepository $iRoleRepository)
     {
-        $this->iRoleRepository = $iRoleRepository;
+        $this->roleRepository = $iRoleRepository;
         $this->middleware('auth:api');
     }
 
     public function getAllRole(){
-        return $this->iRoleRepository->getAllRole();
+        return $this->roleRepository->getAllRole();
     }
 
     public function getMyRole()
     {
-        return $this->iRoleRepository->getMyRole(Auth::id());
+        return $this->roleRepository->getMyRole(Auth::id());
     }
     public function createRole(Request $request)
     {
@@ -42,12 +42,12 @@ class RoleController extends Controller
             "updated_at" => Carbon::now('Asia/Ho_Chi_Minh'),
         );
 
-        return $this->iRoleRepository->createRole($DB);
+        return $this->roleRepository->createRole($DB);
     }
     public function deleteRole(Request $request)
     {
         $id = $request->route('id');
-        return $this->iRoleRepository->deleteRole($id);
+        return $this->roleRepository->deleteRole($id);
     }
     public function updateRole(Request $request)
     {
@@ -59,6 +59,6 @@ class RoleController extends Controller
             'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
         );
 
-        return $this->iRoleRepository->updateRole($id,$DB);
+        return $this->roleRepository->updateRole($id,$DB);
     }
 }
