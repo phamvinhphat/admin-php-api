@@ -7,13 +7,7 @@ use Illuminate\Http\Request;
 use App\Repository\IRoleRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-<<<<<<< HEAD
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-=======
-use Illuminate\Support\Facades\Cache;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-
->>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
 
 
 class RoleController extends Controller
@@ -94,13 +88,7 @@ class RoleController extends Controller
         return response()->json([
             "result"=>$this->roleRepository->countListUser()
         ],ResponseAlias::HTTP_OK);
-<<<<<<< HEAD
     }
 
-=======
-
-    }
-
-
->>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
 }
+
