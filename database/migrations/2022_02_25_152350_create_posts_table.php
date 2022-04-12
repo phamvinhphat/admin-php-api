@@ -20,7 +20,6 @@ return new class extends Migration
             $table->double('latitude');
             $table->bigInteger('price');
             $table->string('floor_area');
-            $table->string('address');
             $table->string('furniture_status');
             $table->integer('views')->default(0);
             $table->uuid('document_id')->nullable(false);

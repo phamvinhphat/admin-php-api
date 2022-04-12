@@ -114,4 +114,10 @@ class DocumentController extends Controller
         return response()->json(DocumentResource::collection($data));
     }
 
+    public function returnDataDocByStatus(Request $request)
+    {
+        $id = $request->route('id');
+        return response()->json(["result"=>$this->documentRepository->returnDataByDocument($id)]);
+    }
+
 }

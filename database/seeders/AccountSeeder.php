@@ -26,7 +26,7 @@ class AccountSeeder extends Seeder
                 'dob' => '2000-09-13',
                 'id_card'=>'07000003692',
                 'gender' => 'male',
-                'email'=>'pvphat12c6ntt@gmail.com',
+                'email'=>'admin@gmail.com',
                 'phone_number'=>'0937175474',
                 'is_verify'=>true,
                 'is_admin'=>true,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Repository\IPostRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -19,11 +20,9 @@ class PostController extends Controller
     /**
      * @return array
      */
-    public function getViewPost()
+    public function createPost(Request $request)
     {
-        return $this->postRepository->getListPost();
+        $id = $request->route('id');
+        return $this->postRepository->createPost($id);
     }
-
-
-
 }
