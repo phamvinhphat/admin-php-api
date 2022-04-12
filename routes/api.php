@@ -48,6 +48,10 @@ Route::group(['middleware' => ['api','cors'], "prefix"=>"account"],function(){
 Route::group(["prefix"=>"role"],function(){
     Route::get('/getAllRole',[RoleController::class,'getAllRole']);
     Route::get('/getMyRole',[RoleController::class,'getMyRole']);
+    Route::post('/createRole',[RoleController::class,'createRole']);
+    Route::delete('/deleteRole/{id}',[RoleController::class,'deleteRole']);
+    Route::patch('/updateRole/{id}',[RoleController::class,'updateRole']);
+
 });
 
 // permission
@@ -92,13 +96,15 @@ Route::group(["prefix"=>"document"],function (){
    Route::patch('/updateDocument/{id}',[DocumentController::class,'updateDocByID']);
    Route::get('/findStatusByDoc/{id}',[DocumentController::class,'findStatusByIdDoc']);
    Route::get('/checkRole',[DocumentController::class,'checkRole']);
-   Route::get('/getDocStatus',[DocumentController::class,'getDocStatus']);
-   Route::get('/getDoneDocStatus',[DocumentController::class,'getDoneDocStatus']);
-   Route::get('/getPendingDocStatus',[DocumentController::class,'getPendingDocStatus']);
+//   Route::get('/getDocStatus',[DocumentController::class,'getDocStatus']);
+//   Route::get('/getDoneDocStatus',[DocumentController::class,'getDoneDocStatus']);
+   Route::get('/getAllDocumentAndStatus',[DocumentController::class,'getAllDocumentAndStatus']);
+   Route::get('/returnDataDocByStatus/{id}',[DocumentController::class,'returnDataDocByStatus']);
 });
 
 //workflow
 Route::group(["prefix"=>"workflow"],function (){
+    // create post in create workflow
     Route::post('/createWorkflow',[WorkflowController::class,'createdWorkflow']);
     Route::get('/getAllWorkflow',[WorkflowController::class,'getAllWorkflow']);
     Route::get('/findWorkflowById/{id}',[WorkflowController::class,'findWorkflowById']);
@@ -109,4 +115,5 @@ Route::group(["prefix"=>"workflow"],function (){
 //post
 Route::group(["prefix"=>"post"],function (){
     Route::get('/getAllPost',[PostController::class,'getViewPost']);
+    Route::post('/createPost/{id}',[PostController::class,'createPost']);
 });

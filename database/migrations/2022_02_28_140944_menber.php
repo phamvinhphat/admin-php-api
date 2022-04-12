@@ -14,13 +14,13 @@ return new class extends Migration {
     {
         Schema::create('member', function (Blueprint $table) {
             $table->uuid('account_id')->unsigned();
-            $table->uuid('thead_id')->unsigned();
+            $table->uuid('conversation_id')->unsigned();
             $table->boolean('is_blocked')->default(false);
             $table->foreign('account_id')
                 ->references('id')
                 ->on('account')
                 ->onDelete('cascade');
-            $table->foreign('thead_id')
+            $table->foreign('conversation_id')
                 ->references('id')
                 ->on('conversation')
                 ->onDelete('cascade');

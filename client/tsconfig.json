@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "paths": {
+      "apexcharts": [
+        "./node_modules/apexcharts-clevision"
+      ],
+      "apexcharts/*": [
+        "./node_modules/apexcharts-clevision/*"
+      ],
+        "@core": ["./src/@core"],
+        "@core/*": ["./src/@core/*"],
+        "@configs": ["./src/configs"],
+        "@configs/*": ["./src/configs/*"],
+        "@layouts": ["./src/layouts"],
+        "@layouts/*": ["./src/layouts/*"],
+        "@navigation": ["./src/navigation"],
+        "@navigation/*": ["./src/navigation/*"],
+        "@pages": ["./src/pages"],
+        "@pages/*": ["./src/pages/*"],
+        "@views": ["./src/views"],
+        "@views/*": ["./src/views/*"],
+        "@services/*": ["./src/services/*"],
+        "@services": ["./src/services"]
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

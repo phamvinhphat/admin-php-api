@@ -233,7 +233,7 @@ class DocumentRepository implements IDocumentRepository
                 }
             } else {
                 return response()->json(
-                    ["message" => "Workflow Not Found"],
+                    ["message" => "Workflow Not Found", $resultWorkflowById],
                     ResponseAlias::HTTP_BAD_REQUEST);
             }
         } else {
@@ -265,18 +265,27 @@ class DocumentRepository implements IDocumentRepository
 //        ]);
 //    }
 
-    public function getAllDocumentAndStatus()
+    public function getAllDocumentOfStatus()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"document","viewStatusDocument");
-        $get =  DB::table('document')
-            ->select('document.id', 'document.document_code','document.data','status.name')
-            ->join('workflow', 'document.id', '=', 'workflow.document_id')
-            ->join('status', 'status.id', '=', 'workflow.status_id')
-            ->get();
+        if($isAdmin == true || $isRole == true) {
+            $get =  DB::table('document')
+                ->select('document.*','status.name as status_name')
+                ->join('workflow', 'document.id', '=', 'workflow.document_id')
+                ->join('status', 'status.id', '=', 'workflow.status_id')
+                ->where('document.document_code','=', 'POST')
+                ->latest()->paginate(5);
+//                ->get();
 
-        return response()->json([
-            "result" => $get
-        ]);
+            return $get;
+        } else {
+            return response()->json([
+                "message" => "You Do Not Have Access"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
     }
+
+
 }

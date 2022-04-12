@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 use App\Repository\IPostRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    private IPostRepository $iPostRepository;
+    private IPostRepository $postRepository;
 
     public function __construct(IPostRepository $iPostRepository)
     {
-        $this->iPostRepository = $iPostRepository;
+        $this->postRepository = $iPostRepository;
         $this->middleware('auth:api');
     }
 
@@ -19,11 +20,9 @@ class PostController extends Controller
     /**
      * @return array
      */
-    public function getViewPost()
+    public function createPost(Request $request)
     {
-        return $this->iPostRepository->getListPost();
+        $id = $request->route('id');
+        return $this->postRepository->createPost($id);
     }
-
-
-
 }

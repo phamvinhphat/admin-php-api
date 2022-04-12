@@ -10,11 +10,12 @@ use Ramsey\Uuid\Uuid;
 
 class WorkflowController extends Controller
 {
-    private IWorkflowRepository $iWorkflowRepository;
+    private IWorkflowRepository $workflowRepository;
 
     public function __construct(IWorkflowRepository $iWorkflowRepository)
     {
-        $this->iWorkflowRepository = $iWorkflowRepository;
+        $this->workflowRepository = $iWorkflowRepository;
+        $this->middleware('auth:api');
     }
 
     public function createdWorkflow(Request $request){
@@ -23,6 +24,7 @@ class WorkflowController extends Controller
         $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
         $idStatus = $request->get('status_id');
         $idDoc = $request->get('document_id');
+
 
         $data = array(
             'id' => $id,
@@ -33,18 +35,19 @@ class WorkflowController extends Controller
             'created_at' => $currentDateTime,
             'updated_at' => $currentDateTime,
         );
-         return $this->iWorkflowRepository->createWorkflow($data);
+
+        return $this->workflowRepository->createWorkflow($data);
     }
 
     public function getAllWorkflow()
     {
-        return $this->iWorkflowRepository->getAllWorkflow();
+        return $this->workflowRepository->getAllWorkflow();
     }
 
     public function deleteWorkflow( Request $request )
     {
         $id = $request->route('id');
-        return $this->iWorkflowRepository->deleteWorkflow($id);
+        return $this->workflowRepository->deleteWorkflow($id);
     }
 
     public function updateWorkflow(Request $request)
@@ -60,14 +63,13 @@ class WorkflowController extends Controller
             'modified_by_id' => Auth::id(),
             'updated_at' => $currentDateTime,
         );
-
-        return $this->iWorkflowRepository->updateWorkflow($id, $data);
+        return $this->workflowRepository->updateWorkflow($id, $data);
     }
 
     public function findWorkflowById(Request $request)
     {
         $id = $request->route('id');
-        return $this->iWorkflowRepository->findWorkflowById($id);
+        return $this->workflowRepository->findWorkflowById($id);
     }
 
 }

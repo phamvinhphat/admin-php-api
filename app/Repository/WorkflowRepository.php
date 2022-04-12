@@ -13,21 +13,25 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class WorkflowRepository implements IWorkflowRepository
 {
 
-    private IUserRepository $iUserRepository;
-    private IStatusRepository $iStatusRepository;
-    private IDocumentRepository $iDocumentRepository;
+    private IUserRepository $userRepository;
+    private IStatusRepository $statusRepository;
+    private IDocumentRepository $documentRepository;
     private PermissionService $permissionService;
+    private IPostRepository $postRepository;
+
 
     public function __construct(
         IUserRepository $iUserRepository,
         IStatusRepository $iStatusRepository,
         IDocumentRepository $iDocumentRepository,
-        PermissionService $permissionService)
+        PermissionService $permissionService,
+        IPostRepository $postRepository)
     {
-        $this->iUserRepository = $iUserRepository;
-        $this->iStatusRepository = $iStatusRepository;
-        $this->iDocumentRepository = $iDocumentRepository;
+        $this->userRepository = $iUserRepository;
+        $this->statusRepository = $iStatusRepository;
+        $this->documentRepository = $iDocumentRepository;
         $this->permissionService = $permissionService;
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -38,8 +42,8 @@ class WorkflowRepository implements IWorkflowRepository
      */
     public function checkIdStatusAndDoc($idStatus, $idDoc)
     {
-        $isDoc = $this->iDocumentRepository->checkIdDocument($idDoc);
-        $isStatus = $this->iStatusRepository->checkIdStatus($idStatus);
+        $isDoc = $this->documentRepository->checkIdDocument($idDoc);
+        $isStatus = $this->statusRepository->checkIdStatus($idStatus);
 
         if($isStatus == true && $isDoc == true)
         {
@@ -70,12 +74,12 @@ class WorkflowRepository implements IWorkflowRepository
      */
     public function createWorkflow(array $data)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","create");
         if ($isAdmin == true  || $isRole == true)  {
             $validator = Validator::make($data, [
                 'status_id' => 'required|uuid',
-                'document_id' => 'required|uuid|unique:workflow'
+                'document_id' => 'required|uuid'
             ]);
             if ($validator->fails()) {
                 return response()->json(
@@ -83,6 +87,14 @@ class WorkflowRepository implements IWorkflowRepository
                     ResponseAlias::HTTP_UNAUTHORIZED
                 );
             }
+
+            // check vaf create post
+            $getNameStatus = DB::table('status')->where('id',$data['status_id'])->value('name');
+            if($getNameStatus == 'Public')
+            {
+                $this->postRepository->createPost($data['document_id']);
+            }
+
             return response()->json([
                 "result" => DB::table('workflow')->insert($data)
             ], ResponseAlias::HTTP_CREATED);
@@ -111,7 +123,7 @@ class WorkflowRepository implements IWorkflowRepository
             );
         }
 
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","update");
         if ($isAdmin == true || $isRole == true) {
             if($this->checkIdWorkflow($id) == true)
@@ -138,7 +150,7 @@ class WorkflowRepository implements IWorkflowRepository
      */
     public function deleteWorkflow($id)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","delete");
         if ($isAdmin == true || $isRole == true)
         {
@@ -164,11 +176,13 @@ class WorkflowRepository implements IWorkflowRepository
      */
     public function getAllWorkflow()
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","view");
         if ($isAdmin == true || $isRole == true) {
           return response()->json([
-              "result" => DB::table('workflow')->get()
+              "result" => DB::table('workflow')
+                  ->orderByDesc('created_at')
+                  ->get()
           ],ResponseAlias::HTTP_OK);
         } else {
             return response()->json(
@@ -180,7 +194,7 @@ class WorkflowRepository implements IWorkflowRepository
 
     public function findWorkflowById($id)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"workflow","find");
         if ($isAdmin == true || $isRole == true)
         {
@@ -202,4 +216,8 @@ class WorkflowRepository implements IWorkflowRepository
             );
         }
     }
+
+
+
+
 }

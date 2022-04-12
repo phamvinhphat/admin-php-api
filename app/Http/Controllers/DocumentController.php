@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resource\DocumentResource;
 use App\Repository\IDocumentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -11,13 +12,13 @@ use Ramsey\Uuid\Uuid;
 
 class DocumentController extends Controller
 {
-    private IDocumentRepository $iDocumentRepository;
+    private IDocumentRepository $documentRepository;
     private PermissionService $permissionService;
 
 
     public function __construct(IDocumentRepository $iDocumentRepository, PermissionService $permissionService)
     {
-        $this->iDocumentRepository = $iDocumentRepository;
+        $this->documentRepository = $iDocumentRepository;
         $this->permissionService = $permissionService;
         $this->middleware('auth:api');
     }
@@ -37,36 +38,36 @@ class DocumentController extends Controller
             "updated_at" => Carbon::now('Asia/Ho_Chi_Minh'),
         );
 
-        return $this->iDocumentRepository->createDocument($DB);
+        return $this->documentRepository->createDocument($DB);
     }
 
     public function getAllDocument()
     {
-        return $this->iDocumentRepository->getAllDocument();
+        return $this->documentRepository->getAllDocument();
     }
 
     public function findDocumentById(Request $request)
     {
         $id = $request->route('id');
 
-        return $this->iDocumentRepository->findDocumentById($id);
+        return $this->documentRepository->findDocumentById($id);
     }
 
     public function deleteDocumentById(Request $request)
     {
         $id = $request->route('id');
-        return $this->iDocumentRepository->deleteDocumentById($id);
+        return $this->documentRepository->deleteDocumentById($id);
     }
 
     public function findDocByIdUser(Request $request)
     {
         $id = $request->route('id');
-        return $this->iDocumentRepository->findDocumentByIdUser($id);
+        return $this->documentRepository->findDocumentByIdUser($id);
     }
 
     public function findDocByMyId()
     {
-        return $this->iDocumentRepository->findDocumentByIdUser(Auth::id());
+        return $this->documentRepository->findDocumentByIdUser(Auth::id());
     }
 
     public function updateDocByID(Request $request)
@@ -82,14 +83,14 @@ class DocumentController extends Controller
             'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
         );
 
-        return $this->iDocumentRepository->updateDocumentById($id, $DB);
+        return $this->documentRepository->updateDocumentById($id, $DB);
     }
 
     public function findStatusByIdDoc(Request $request)
     {
         $id = $request->route('id');
 
-        return $this->iDocumentRepository->findStatusByIdDocument($id);
+        return $this->documentRepository->findStatusByIdDocument($id);
     }
 
     public function checkRole()
@@ -97,19 +98,26 @@ class DocumentController extends Controller
         return $this->permissionService->checkPermission(Auth::id(), "document", "view");
     }
 
-    public function getDocStatus()
+//    public function getDocStatus()
+//    {
+//        return $this->iDocumentRepository->NotCheckAllDocument();
+//    }
+
+//    public function getDoneDocStatus()
+//    {
+//        return $this->iDocumentRepository->checkDoneAllDocument();
+//    }
+
+    public function getAllDocumentAndStatus()
     {
-        return $this->iDocumentRepository->NotCheckAllDocument();
+        $data = $this->documentRepository->getAllDocumentOfStatus();
+        return response()->json(DocumentResource::collection($data));
     }
 
-    public function getDoneDocStatus()
+    public function returnDataDocByStatus(Request $request)
     {
-        return $this->iDocumentRepository->checkDoneAllDocument();
-    }
-
-    public function getPendingDocStatus()
-    {
-        return $this->iDocumentRepository->checkPendingAllDocument();
+        $id = $request->route('id');
+        return response()->json(["result"=>$this->documentRepository->returnDataByDocument($id)]);
     }
 
 }

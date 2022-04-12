@@ -16,39 +16,33 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('post')->insert([
-            [
-                'id' => Uuid::uuid4()->toString(),
-                'contents' => 'Home',
-                'longitude' => '12536.12563',
-                'latitude' => '1475.3695',
-                'price' => '20000',
-                'floor_area' => '123458 ',
-                'address' => 'HCM',
-                'furniture_status' => 'good',
-                'views' => 2,
-                'document_id'=>'a2fff3b1-6123-4c94-9375-8423093c77e3',
-                'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id' => Uuid::uuid4()->toString(),
-                'contents' => 'TomCode',
-                'longitude' => '12536.12563',
-                'latitude' => '1475.3695',
-                'price' => '20000',
-                'floor_area' => '123458 ',
-                'address' => 'CanGio',
-                'furniture_status' => 'good',
-                'views' => 2,
-                'document_id'=>'2f0a7913-cfc1-44e0-997f-2f73be8393e2',
-                'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'modified_by_id' =>'59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-        ]);
+
+        $faker = \Faker\Factory::create();
+        $dataAlbum = DB::table('album')->select('id')->pluck('id');
+
+        $dataDoc = DB::table('document')->select('id')->pluck('id');
+
+        // foreach ($dataAlbum as $albumId) {
+        foreach ($dataDoc as $docId) {
+            DB::table('post')->insert([
+                [
+                    'id' => $faker->uuid,
+                    'contents' => $faker->text(200),
+                    'longitude' => $faker->longitude(),
+                    'latitude' =>  $faker->latitude(),
+                    'price' => $faker->numberBetween(500000, 10000000),
+                    'floor_area' => $faker->numberBetween(10, 500),
+                    'furniture_status' => $faker->randomElement(['None', 'Fairly', 'Functional', 'Good']),
+                    'views' => $faker->numberBetween(5000, 100000),
+                    'document_id' => $docId,
+                    'album_id' => null,
+                    'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                    'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                    'created_at' => date_create(),
+                    'updated_at' => date_create(),
+                ],
+            ]);
+        }
+        // }
     }
 }

@@ -11,11 +11,11 @@ use Ramsey\Uuid\Uuid;
 
 class StatusController extends Controller
 {
-    private IStatusRepository $iStatusRepository;
+    private IStatusRepository $statusRepository;
 
     public function __construct(IStatusRepository $iStatusRepository)
     {
-        $this->iStatusRepository = $iStatusRepository;
+        $this->statusRepository = $iStatusRepository;
         $this->middleware('auth:api');
     }
 
@@ -35,24 +35,24 @@ class StatusController extends Controller
             "created_at" => $current_date_time,
             "updated_at"=> $current_date_time,
         );
-        return $this->iStatusRepository->createStatus($data);
+        return $this->statusRepository->createStatus($data);
     }
 
     public function findStatusById(Request $request)
     {
         $id = $request->route('id');
-        return $this->iStatusRepository->findStatusById($id);
+        return $this->statusRepository->findStatusById($id);
     }
 
     public function getAllStatus()
     {
-        return $this->iStatusRepository->getAllStatus();
+        return $this->statusRepository->getAllStatus();
     }
 
     public function checkStatus(Request $request)
     {
         $id = $request->route('id');
-        return response()->json(["result"=>$this->iStatusRepository->checkIdStatus($id)]);
+        return response()->json(["result"=>$this->statusRepository->checkIdStatus($id)]);
     }
 
     public function updateStatus(Request $request)
@@ -66,18 +66,18 @@ class StatusController extends Controller
             'parent_n' => $parentN,
         );
 
-        return $this->iStatusRepository->updateStatusById($id, $data);
+        return $this->statusRepository->updateStatusById($id, $data);
     }
 
     public function deleteStatus(Request $request)
     {
         $id = $request->route('id');
-        return $this->iStatusRepository->deleteStatusById($id);
+        return $this->statusRepository->deleteStatusById($id);
     }
 
     public function findStatusByMyId()
     {
-        return $this->iStatusRepository->findStatusByMyId(Auth::id());
+        return $this->statusRepository->findStatusByMyId(Auth::id());
     }
 
 }

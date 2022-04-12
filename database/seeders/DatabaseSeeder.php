@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusSeeder::class);
         $this->call(DocumentSeeder::class);
         $this->call(WorkflowSeeder::class);
-        $this->call(PostSeeder::class);
+
+        //   $this->call(AlbumSeeder::class);
+       $this->call(PostSeeder::class);
+
     }
 }

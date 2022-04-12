@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Ramsey\Uuid\Uuid;
+use function MongoDB\BSON\toJSON;
 
 class DocumentSeeder extends Seeder
 {
@@ -17,44 +15,31 @@ class DocumentSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('document')->insert([
-            [
-                'id' => '0f009fb2-6dbd-4f62-a05d-0c8cd9123779',
-                'document_code'=> 'doc123',
-                'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
+        $faker = \Faker\Factory::create();
+
+        for ($i = 0; $i < 3; $i++) {
+            $data = [
+                "id" => $faker->uuid,
+                "contents" => $faker->text(200),
+                "longitude" => $faker->longitude,
+                "latitude" => $faker->latitude,
+                "price" => $faker->numberBetween(500000, 10000000),
+                "floor_area" => $faker->numberBetween(25, 100),
+                "furniture_status" => $faker->randomElement(['None', 'Fairly', 'Functional', 'Good']),
+                "views" => $faker->numberBetween(1000, 1000000) ,
+                "created_by_id" => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
+                "modified_by_id" => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae'
+            ];
+
+            DB::table('document')->insert([
+                'id' => $faker->uuid,
+                'document_code' => 'POST',
+                'data' => json_encode($data),
                 'created_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
                 'modified_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
                 'created_at' => date_create(),
                 'updated_at' => date_create(),
-            ],
-            [
-                'id'=>'c6acbb29-ec04-405c-bedd-4ac967f68aaa',
-                'document_code'=> 'doc456',
-                'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
-                'created_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
-                'modified_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            //done
-            [
-                'id'=>'a2fff3b1-6123-4c94-9375-8423093c77e3',
-                'document_code'=> 'doc789',
-                'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
-                'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=>'2f0a7913-cfc1-44e0-997f-2f73be8393e2',
-                'document_code'=> 'doc963',
-                'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
-                'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ]
-        ]);
+            ]);
+        }
     }
 }

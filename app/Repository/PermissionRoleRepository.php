@@ -14,12 +14,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class PermissionRoleRepository implements IPermissionRoleRepository
 {
 
-    private IUserRepository $iUserRepository;
+    private IUserRepository $userRepository;
     private PermissionService $permissionService;
 
     public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
-        $this->iUserRepository = $iUserRepository;
+        $this->userRepository = $iUserRepository;
         $this->permissionService = $permissionService;
     }
 
@@ -42,7 +42,8 @@ class PermissionRoleRepository implements IPermissionRoleRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","create");
         if($isAdmin == true || $isRole == true) {
             return response()->json([
@@ -63,7 +64,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
      */
     public function getAllGrantPermission()
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","view");
         if($isAdmin == true || $isRole == true) {
             return response()->json(
@@ -87,7 +88,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
      */
     public function updateGrantPermission($idRole, $idPermission, array $data)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","update");
         if($isAdmin == true || $isRole == true)
         {
@@ -109,7 +110,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
 
     public function deleteGrantPermission($idRole, $idPermission)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","delete");
         if($isAdmin == true || $isRole == true)
         {
@@ -155,7 +156,7 @@ class PermissionRoleRepository implements IPermissionRoleRepository
 
     public function finGrantPermissionByIdRole($idRole)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permissionRole","find");
         if($isAdmin == true || $isRole == true) {
             $isId = DB::table('role_permissions')
