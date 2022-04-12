@@ -139,11 +139,7 @@ class RoleRepository implements IRoleRepository
         return DB::table('role')
             ->select('account.username', 'account.email','account.first_name', 'role.name as roleName','account.created_at', 'account.updated_at')
             ->join('account','account.role_id','=','role.id')
-<<<<<<< HEAD
             ->where('role.name', '=', 'Admin')
-=======
-            ->where('role.name', '=', 'ADMIN')
->>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
             ->get();
     }
 
@@ -152,11 +148,7 @@ class RoleRepository implements IRoleRepository
         return DB::table('role')
             ->select('account.username', 'account.email','account.first_name', 'role.name as roleName','account.created_at', 'account.updated_at')
             ->join('account','account.role_id','=','role.id')
-<<<<<<< HEAD
             ->where('role.name', '=', 'User')
-=======
-            ->where('role.name', '=', 'USER')
->>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
             ->get();
     }
 
@@ -165,11 +157,7 @@ class RoleRepository implements IRoleRepository
     {
         return DB::table('role')
             ->join('account','account.role_id','=','role.id')
-<<<<<<< HEAD
             ->where('name', '=', 'Admin')
-=======
-            ->where('name', '=', 'ADMIN')
->>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
             ->count();
     }
 
@@ -177,15 +165,7 @@ class RoleRepository implements IRoleRepository
     {
         return DB::table('role')
             ->join('account','account.role_id','=','role.id')
-<<<<<<< HEAD
             ->where('name', '=', 'User')
             ->count();
     }
-
-
-=======
-            ->where('name', '=', 'USER')
-            ->count();
-    }
->>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
 }
