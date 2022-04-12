@@ -15,11 +15,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class RolePermissionController extends Controller
 {
-    private IPermissionRoleRepository $iPermissionRoleRepository;
+    private IPermissionRoleRepository $permissionRoleRepository;
 
     public function __construct(IPermissionRoleRepository $iPermissionRoleRepository)
     {
-        $this->iPermissionRoleRepository = $iPermissionRoleRepository;
+        $this->permissionRoleRepository = $iPermissionRoleRepository;
         $this->middleware('auth:api');
     }
 
@@ -28,7 +28,7 @@ class RolePermissionController extends Controller
      * @return mixed
      */
     public function getAllGrantPermission() {
-        return  $this->iPermissionRoleRepository->getAllGrantPermission();
+        return  $this->permissionRoleRepository->getAllGrantPermission();
     }
 
     /**
@@ -50,7 +50,7 @@ class RolePermissionController extends Controller
             "updated_at"=> $current_date_time,
         );
 
-        return $this->iPermissionRoleRepository->createGrantPermission($data);
+        return $this->permissionRoleRepository->createGrantPermission($data);
     }
 
     /**
@@ -62,7 +62,7 @@ class RolePermissionController extends Controller
         $isRole = $request->get('role_id');
         $isPermission = $request->get('permission_id');
         return response()->json([
-           'Notification' => $this->iPermissionRoleRepository->isGrantPermissionById($isRole,$isPermission)
+           'Notification' => $this->permissionRoleRepository->isGrantPermissionById($isRole,$isPermission)
         ], ResponseAlias::HTTP_OK);
     }
 
@@ -79,7 +79,7 @@ class RolePermissionController extends Controller
             'permission_id',
         ]);
         return response()->json([
-           'data' => $this->iPermissionRoleRepository->updateGrantPermission($roleId,$permissionId,$details)
+           'data' => $this->permissionRoleRepository->updateGrantPermission($roleId,$permissionId,$details)
         ]);
     }
 
@@ -92,7 +92,7 @@ class RolePermissionController extends Controller
     {
         $roleId = $request->get('role_id');
         $permissionId = $request->get('permission_id');
-        return $this->iPermissionRoleRepository->deleteGrantPermission($roleId, $permissionId);
+        return $this->permissionRoleRepository->deleteGrantPermission($roleId, $permissionId);
     }
 
     /**
@@ -103,7 +103,7 @@ class RolePermissionController extends Controller
     public function findGrantPermissionByIdRole(Request $request)
     {
         $isRole = $request->get('role_id');
-        return $this->iPermissionRoleRepository->finGrantPermissionByIdRole($isRole);
+        return $this->permissionRoleRepository->finGrantPermissionByIdRole($isRole);
     }
 
 }

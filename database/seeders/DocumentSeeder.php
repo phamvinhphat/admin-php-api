@@ -25,7 +25,7 @@ class DocumentSeeder extends Seeder
          "latitude:" '$faker->latitude',
          "price:" '$faker->imei',
          "floor_area:" '$faker->title',
-         "address:"'$faker->address',  }`;
+         "address:"'$faker->address'  }`;
 
         DB::table('document')->insert([
             [

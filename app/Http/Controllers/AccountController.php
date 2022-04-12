@@ -13,17 +13,17 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AccountController extends Controller
 {
-    private IUserRepository $IUserRepository;
+    private IUserRepository $userRepository;
 
     public function __construct(IUserRepository $IUserRepository)
     {
-        $this->IUserRepository = $IUserRepository;
+        $this->userRepository = $IUserRepository;
         $this->middleware('auth:api', ['except' => ['login', 'register','refresh']]);
     }
 
     public function getViewUser()
     {
-        return $this->IUserRepository->getAllUser();
+        return $this->userRepository->getAllUser();
 
     }
 
@@ -36,7 +36,7 @@ class AccountController extends Controller
         $orderId = $request->route('id');
         $orderDetails = $request->get('role_id');
 
-        return $this->IUserRepository->updateRoleById($orderId, $orderDetails);
+        return $this->userRepository->updateRoleById($orderId, $orderDetails);
     }
 
     /**
@@ -48,7 +48,7 @@ class AccountController extends Controller
     {
         $idUser = $request->route('id');
         return response()->json([
-            "Result" => $this->IUserRepository->findUserById($idUser)
+            "Result" => $this->userRepository->findUserById($idUser)
         ]);
     }
 
@@ -61,7 +61,7 @@ class AccountController extends Controller
     {
         $orderId = $request->route('id');
         return response()->json([
-            "isAdmin: "=> $this->IUserRepository->checkRole($orderId)
+            "isAdmin: "=> $this->userRepository->checkRole($orderId)
         ],ResponseAlias::HTTP_ACCEPTED);
     }
 
@@ -73,7 +73,7 @@ class AccountController extends Controller
     {
         $orderId = $request->route('id');
         $orderDetails = $request->get('is_admin');
-        return $this->IUserRepository->changeIsRole($orderId, $orderDetails);
+        return $this->userRepository->changeIsRole($orderId, $orderDetails);
     }
 
     /**
@@ -81,7 +81,7 @@ class AccountController extends Controller
      */
     public function getMyInfo()
     {
-        return  $this->IUserRepository->getMyInfo();
+        return  $this->userRepository->getMyInfo();
     }
 
     /**
@@ -108,7 +108,7 @@ class AccountController extends Controller
             "updated_at" => $currentDateTime,
         );
 
-        return $this->IUserRepository->updateUser($data);
+        return $this->userRepository->updateUser($data);
     }
 
     /**
@@ -131,7 +131,7 @@ class AccountController extends Controller
                 ResponseAlias::HTTP_BAD_REQUEST);
         }
 
-        return $this->IUserRepository->login($credentials);
+        return $this->userRepository->login($credentials);
     }
 
 
@@ -165,7 +165,7 @@ class AccountController extends Controller
             "updated_at" => $currentDateTime,
         );
 
-        return  $this->IUserRepository->signUp($data);
+        return  $this->userRepository->signUp($data);
     }
 
     /**
@@ -173,7 +173,7 @@ class AccountController extends Controller
      */
     public function logout()
     {
-        return $this->IUserRepository->logout();
+        return $this->userRepository->logout();
     }
 
     /**
@@ -181,7 +181,13 @@ class AccountController extends Controller
      */
     public function refresh()
     {
-        return $this->IUserRepository->refresh();
+        return $this->userRepository->refresh();
+    }
+
+    public function changePassword()
+    {
+
+   //     return $this->userRepository->changePassword(Auth::id())
     }
 
 }

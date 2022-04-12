@@ -6,11 +6,11 @@ use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
 {
-    private IPostRepository $iPostRepository;
+    private IPostRepository $postRepository;
 
     public function __construct(IPostRepository $iPostRepository)
     {
-        $this->iPostRepository = $iPostRepository;
+        $this->postRepository = $iPostRepository;
         $this->middleware('auth:api');
     }
 
@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function getViewPost()
     {
-        return $this->iPostRepository->getListPost();
+        return $this->postRepository->getListPost();
     }
 
 
