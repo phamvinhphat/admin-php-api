@@ -314,13 +314,5 @@ class UserRepository implements IUserRepository
         }
     }
 
-    public function listAdmin()
-    {
-        // TODO: Implement listAdmin() method.
-    }
 
-    public function listUser()
-    {
-        // TODO: Implement listUser() method.
-    }
 }
