@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PermissionRepository implements IPermissionRepository
 {
-    private IUserRepository $iUserRepository;
+    private IUserRepository $userRepository;
     private PermissionService $permissionService;
 
     public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
-        $this->iUserRepository = $iUserRepository;
+        $this->userRepository = $iUserRepository;
         $this->permissionService = $permissionService;
     }
 
@@ -30,7 +30,7 @@ class PermissionRepository implements IPermissionRepository
      */
     public function getAllPermission()
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","view");
         if($isAdmin == true || $isRole == true)
         {
@@ -66,7 +66,7 @@ class PermissionRepository implements IPermissionRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","create");
         if($isAdmin == true || $isRole == true)  {
             return response()->json(
@@ -91,7 +91,7 @@ class PermissionRepository implements IPermissionRepository
      */
     public function findPermissionById($id)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","find");
         if($isAdmin == true || $isRole == true)
         {
@@ -120,7 +120,7 @@ class PermissionRepository implements IPermissionRepository
      */
     public function findPermissionByName(string $name)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","findName");
         if($isAdmin == true || $isRole == true)
         {
@@ -163,7 +163,7 @@ class PermissionRepository implements IPermissionRepository
             );
         }
 
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","update");
         if($isAdmin == true || $isRole == true)
         {
@@ -213,7 +213,7 @@ class PermissionRepository implements IPermissionRepository
      */
     public function deletePermission($id)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"permission","delete");
         if($isAdmin == true || $isRole == true)
         {

@@ -17,10 +17,20 @@ class DocumentSeeder extends Seeder
      */
     public function run()
     {
+        $faker = \Faker\Factory::create();
+
+        $data = `{ "id": '$faker->uuid',
+         "contents": '$faker->title',
+         "longitude: " '$faker->longitude',
+         "latitude:" '$faker->latitude',
+         "price:" '$faker->imei',
+         "floor_area:" '$faker->title',
+         "address:"'$faker->address',  }`;
+
         DB::table('document')->insert([
             [
                 'id' => '0f009fb2-6dbd-4f62-a05d-0c8cd9123779',
-                'document_code'=> 'doc123',
+                'document_code'=> 'POST',
                 'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
                 'created_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
                 'modified_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
@@ -29,7 +39,7 @@ class DocumentSeeder extends Seeder
             ],
             [
                 'id'=>'c6acbb29-ec04-405c-bedd-4ac967f68aaa',
-                'document_code'=> 'doc456',
+                'document_code'=> 'POST',
                 'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
                 'created_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
                 'modified_by_id' => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
@@ -39,7 +49,7 @@ class DocumentSeeder extends Seeder
             //done
             [
                 'id'=>'a2fff3b1-6123-4c94-9375-8423093c77e3',
-                'document_code'=> 'doc789',
+                'document_code'=> 'POST',
                 'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
                 'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
                 'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
@@ -48,7 +58,7 @@ class DocumentSeeder extends Seeder
             ],
             [
                 'id'=>'2f0a7913-cfc1-44e0-997f-2f73be8393e2',
-                'document_code'=> 'doc963',
+                'document_code'=> 'POST',
                 'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
                 'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
                 'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
@@ -57,8 +67,8 @@ class DocumentSeeder extends Seeder
             ],
             [
                 'id'=>'1c352c40-591f-45ca-9336-7b0721b7f319',
-                'document_code'=> 'doc147',
-                'data'=> ' { "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
+                'document_code'=> 'POST',
+                'data'=> '{ "id": 3, "starts": "2018-01-01", "end": "2018-06-01"}',
                 'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
                 'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
                 'created_at' => date_create(),

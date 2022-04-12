@@ -20,7 +20,7 @@ class AccountController extends Controller
     public function __construct(IUserRepository $IUserRepository)
     {
         $this->IUserRepository = $IUserRepository;
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','refresh']]);
     }
 
     public function getViewUser()

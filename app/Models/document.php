@@ -18,7 +18,9 @@ class document extends Model
         'data' => 'json',
         'is_workflow' => 'boolean',
         'is_auth' => 'boolean',
-        'is_register' => 'real',
+        'is_register' => 'boolean',
+        'created_by_id'=>'string',
+        'modified_by_id'=>'string'
     ];
 
 

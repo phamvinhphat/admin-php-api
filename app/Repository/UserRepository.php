@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use function response;
@@ -281,5 +282,45 @@ class UserRepository implements IUserRepository
             "accessToken" => "Bearer $token",
             "expiresIn" => auth()->factory()->getTTL() * 60000]
         ], ResponseAlias::HTTP_OK);
+    }
+
+    public function changePassword($id, $pass)
+    {
+        $messages = [
+            'password.required' => 'Please enter your current password',
+            ];
+        $validator = Validator::make($pass, [
+            'password' => 'required',
+            ], $messages);
+        if ($validator->fails()) {
+            return response()->json(
+                ["message"=>$validator->errors()],
+                ResponseAlias::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $account = DB::table('account')->find(Auth::id());
+
+        if(!Hash::check($pass, $account->password))
+        {
+            return response()->json(
+                ['message' => 'Current password does not match'], ResponseAlias::HTTP_BAD_REQUEST);
+        } else {
+            $account->password = Hash::make($pass);
+            $account->save();
+            return response()->json([
+                "result" => "Change Password "
+            ]);
+        }
+    }
+
+    public function listAdmin()
+    {
+        // TODO: Implement listAdmin() method.
+    }
+
+    public function listUser()
+    {
+        // TODO: Implement listUser() method.
     }
 }
