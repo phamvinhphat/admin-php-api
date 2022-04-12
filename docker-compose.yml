@@ -13,10 +13,7 @@ services:
             - sail
         command: bash -c "npm install && npm run dev"
 
-        depends_on:
-            - laravel
-
-    laravel:
+    laravel.test:
         container_name: '4rent-laravel'
         build:
             context: .
@@ -83,3 +80,4 @@ volumes:
         driver: local
     sail-pgsql:
         driver: local
+
