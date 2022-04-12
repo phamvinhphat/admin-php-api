@@ -99,10 +99,12 @@ Route::group(["prefix"=>"document"],function (){
 //   Route::get('/getDocStatus',[DocumentController::class,'getDocStatus']);
 //   Route::get('/getDoneDocStatus',[DocumentController::class,'getDoneDocStatus']);
    Route::get('/getAllDocumentAndStatus',[DocumentController::class,'getAllDocumentAndStatus']);
+   Route::get('/returnDataDocByStatus/{id}',[DocumentController::class,'returnDataDocByStatus']);
 });
 
 //workflow
 Route::group(["prefix"=>"workflow"],function (){
+    // create post in create workflow
     Route::post('/createWorkflow',[WorkflowController::class,'createdWorkflow']);
     Route::get('/getAllWorkflow',[WorkflowController::class,'getAllWorkflow']);
     Route::get('/findWorkflowById/{id}',[WorkflowController::class,'findWorkflowById']);
@@ -113,4 +115,5 @@ Route::group(["prefix"=>"workflow"],function (){
 //post
 Route::group(["prefix"=>"post"],function (){
     Route::get('/getAllPost',[PostController::class,'getViewPost']);
+    Route::post('/createPost/{id}',[PostController::class,'createPost']);
 });

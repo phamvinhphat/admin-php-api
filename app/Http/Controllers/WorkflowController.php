@@ -35,7 +35,8 @@ class WorkflowController extends Controller
             'created_at' => $currentDateTime,
             'updated_at' => $currentDateTime,
         );
-         return $this->workflowRepository->createWorkflow($data);
+
+        return $this->workflowRepository->createWorkflow($data);
     }
 
     public function getAllWorkflow()

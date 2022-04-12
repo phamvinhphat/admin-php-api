@@ -233,7 +233,7 @@ class DocumentRepository implements IDocumentRepository
                 }
             } else {
                 return response()->json(
-                    ["message" => "Workflow Not Found"],
+                    ["message" => "Workflow Not Found", $resultWorkflowById],
                     ResponseAlias::HTTP_BAD_REQUEST);
             }
         } else {
@@ -274,12 +274,28 @@ class DocumentRepository implements IDocumentRepository
                 ->select('document.*','status.name as status_name')
                 ->join('workflow', 'document.id', '=', 'workflow.document_id')
                 ->join('status', 'status.id', '=', 'workflow.status_id')
-                ->join('post', 'document.id', '=', 'post.document_id')
                 ->where('document.document_code','=', 'POST')
                 ->latest()->paginate(5);
 //                ->get();
 
             return $get;
+        } else {
+            return response()->json([
+                "message" => "You Do Not Have Access"],
+                ResponseAlias::HTTP_FORBIDDEN
+            );
+        }
+    }
+
+    public function returnDataByDocument($id)
+    {
+        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","findByDocument");
+        if($isAdmin == true || $isRole == true)
+        {
+            return DB::table('document')
+                ->where('id', '=', $id)
+                ->value('data');
         } else {
             return response()->json([
                 "message" => "You Do Not Have Access"],

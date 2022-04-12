@@ -17,17 +17,21 @@ class WorkflowRepository implements IWorkflowRepository
     private IStatusRepository $statusRepository;
     private IDocumentRepository $documentRepository;
     private PermissionService $permissionService;
+    private IPostRepository $postRepository;
+
 
     public function __construct(
         IUserRepository $iUserRepository,
         IStatusRepository $iStatusRepository,
         IDocumentRepository $iDocumentRepository,
-        PermissionService $permissionService)
+        PermissionService $permissionService,
+        IPostRepository $postRepository)
     {
         $this->userRepository = $iUserRepository;
         $this->statusRepository = $iStatusRepository;
         $this->documentRepository = $iDocumentRepository;
         $this->permissionService = $permissionService;
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -75,7 +79,7 @@ class WorkflowRepository implements IWorkflowRepository
         if ($isAdmin == true  || $isRole == true)  {
             $validator = Validator::make($data, [
                 'status_id' => 'required|uuid',
-                'document_id' => 'required|uuid|unique:workflow'
+                'document_id' => 'required|uuid'
             ]);
             if ($validator->fails()) {
                 return response()->json(
@@ -83,6 +87,14 @@ class WorkflowRepository implements IWorkflowRepository
                     ResponseAlias::HTTP_UNAUTHORIZED
                 );
             }
+
+            // check vaf create post
+            $getNameStatus = DB::table('status')->where('id',$data['status_id'])->value('name');
+            if($getNameStatus == 'Public')
+            {
+                $this->postRepository->createPost($data['document_id']);
+            }
+
             return response()->json([
                 "result" => DB::table('workflow')->insert($data)
             ], ResponseAlias::HTTP_CREATED);
@@ -204,4 +216,8 @@ class WorkflowRepository implements IWorkflowRepository
             );
         }
     }
+
+
+
+
 }
