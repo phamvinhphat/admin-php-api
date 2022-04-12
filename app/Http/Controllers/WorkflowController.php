@@ -63,7 +63,6 @@ class WorkflowController extends Controller
             'modified_by_id' => Auth::id(),
             'updated_at' => $currentDateTime,
         );
-
         return $this->workflowRepository->updateWorkflow($id, $data);
     }
 
