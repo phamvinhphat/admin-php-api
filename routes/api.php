@@ -42,6 +42,7 @@ Route::group(['middleware' => ['api','cors'], "prefix"=>"account"],function(){
     Route::patch('/changeIsAdmin/{id}',[AccountController::class,'changeIsAdmin']);
     Route::get('/findUserById/{id}',[AccountController::class,'findUserById']);
     Route::get('/refresh',[AccountController::class,'refresh']);
+    //Route::patch('/changePassword',[AccountController::class,'changePassword']);
 });
 
 //role
@@ -55,7 +56,10 @@ Route::group(["prefix"=>"role"],function(){
     Route::get('/listUser',[RoleController::class,'listUser']);
     Route::get('/countListAdmin',[RoleController::class,'countListAdmin']);
     Route::get('/countListUser',[RoleController::class,'countListUser']);
+<<<<<<< HEAD
 
+=======
+>>>>>>> e53b42e4ec44c0846bf32ce5bc6312128a33b468
 });
 
 // permission

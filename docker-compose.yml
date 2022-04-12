@@ -1,9 +1,25 @@
 # For more information: https://laravel.com/docs/sail
-version: '3'
+version: '3.8'
 services:
-    laravel.test:
+    web:
+        image: node:lts
+        container_name: '4rent-web'
+        ports:
+            - "3000:3000"
+        volumes:
+            - "./client:/var/www/html"
+        working_dir: "/var/www/html"
+        networks:
+            - sail
+        command: bash -c "npm install && npm run dev"
+
+        depends_on:
+            - laravel
+
+    laravel:
+        container_name: '4rent-laravel'
         build:
-            context: ./vendor/laravel/sail/runtimes/8.1
+            context: .
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -12,6 +28,7 @@ services:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
+            - '8000:8000'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -25,6 +42,7 @@ services:
             - redis
             - pgsql
     redis:
+        container_name: '4rent-cache'
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
@@ -33,10 +51,11 @@ services:
         networks:
             - sail
         healthcheck:
-            test: ["CMD", "redis-cli", "ping"]
+            test: [ "CMD", "redis-cli", "ping" ]
             retries: 3
             timeout: 5s
     pgsql:
+        container_name: '4rent-database'
         image: 'postgres:13'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
@@ -50,13 +69,16 @@ services:
         networks:
             - sail
         healthcheck:
-            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            test: [ "CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}" ]
             retries: 3
             timeout: 5s
 networks:
     sail:
+        name: '4rent-networks'
         driver: bridge
 volumes:
+    web:
+        driver: local
     sail-redis:
         driver: local
     sail-pgsql:

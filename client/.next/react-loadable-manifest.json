@@ -1,1 +1,8 @@
-{}
+{
+  "../layouts/UserLayout.tsx -> @core/layouts/VerticalLayout": {
+    "id": "../layouts/UserLayout.tsx -> @core/layouts/VerticalLayout",
+    "files": [
+      "static/chunks/src_core_layouts_VerticalLayout_tsx.js"
+    ]
+  }
+}
