@@ -19,7 +19,7 @@ return new class extends Migration
             $table->double('longitude');
             $table->double('latitude');
             $table->bigInteger('price');
-            $table->float('floor_area');
+            $table->string('floor_area');
             $table->string('furniture_status');
             $table->bigInteger('views')->default(0);
             $table->uuid('document_id')->nullable(false);

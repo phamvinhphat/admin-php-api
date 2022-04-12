@@ -19,7 +19,6 @@ class PostSeeder extends Seeder
 
         $faker = \Faker\Factory::create();
         $dataAlbum = DB::table('album')->select('id')->pluck('id');
-
         $dataDoc = DB::table('document')->select('id')->pluck('id');
 
         // foreach ($dataAlbum as $albumId) {

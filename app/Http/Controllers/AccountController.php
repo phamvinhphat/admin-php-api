@@ -190,4 +190,13 @@ class AccountController extends Controller
    //     return $this->userRepository->changePassword(Auth::id())
     }
 
+    public function changePassword(Request $request)
+    {
+        $dataPassword = $request->get('password');
+        return response()->json(
+            ["result" => $this->userRepository->changePassword(Auth::id(), $dataPassword)]
+        );
+    }
+
+
 }

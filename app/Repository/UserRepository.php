@@ -308,19 +308,11 @@ class UserRepository implements IUserRepository
         } else {
             $account->password = Hash::make($pass);
             $account->save();
-//            return response()->json([
-//                "result" => "Change Password"
-//            ]);
+
+            return $account;
         }
     }
 
-    public function listAdmin()
-    {
-        // TODO: Implement listAdmin() method.
-    }
 
-    public function listUser()
-    {
-        // TODO: Implement listUser() method.
-    }
+
 }

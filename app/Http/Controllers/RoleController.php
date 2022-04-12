@@ -8,6 +8,8 @@ use App\Repository\IRoleRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+
 
 
 class RoleController extends Controller
@@ -61,4 +63,35 @@ class RoleController extends Controller
 
         return $this->roleRepository->updateRole($id,$DB);
     }
+
+    public function listAdmin()
+    {
+        return response()->json([
+            "result" => $this->roleRepository->listAdmin()
+        ], ResponseAlias::HTTP_OK);
+    }
+
+    public function listUser()
+    {
+        return response()->json([
+            "result" => $this->roleRepository->listUser()
+        ],ResponseAlias::HTTP_OK);
+    }
+
+    public function countListAdmin()
+    {
+        return response()->json([
+            "result"=>$this->roleRepository->countListAdmin()
+        ],ResponseAlias::HTTP_OK);
+    }
+
+    public function countListUser()
+    {
+        return response()->json([
+            "result"=>$this->roleRepository->countListUser()
+        ],ResponseAlias::HTTP_OK);
+
+    }
+
+
 }

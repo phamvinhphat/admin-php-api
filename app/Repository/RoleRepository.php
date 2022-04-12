@@ -133,4 +133,39 @@ class RoleRepository implements IRoleRepository
             );
         }
     }
+
+    public function listAdmin()
+    {
+        return DB::table('role')
+            ->select('account.username', 'account.email','account.first_name', 'role.name as roleName','account.created_at', 'account.updated_at')
+            ->join('account','account.role_id','=','role.id')
+            ->where('role.name', '=', 'ADMIN')
+            ->get();
+    }
+
+    public function listUser()
+    {
+        return DB::table('role')
+            ->select('account.username', 'account.email','account.first_name', 'role.name as roleName','account.created_at', 'account.updated_at')
+            ->join('account','account.role_id','=','role.id')
+            ->where('role.name', '=', 'USER')
+            ->get();
+    }
+
+
+    public function countListAdmin()
+    {
+        return DB::table('role')
+            ->join('account','account.role_id','=','role.id')
+            ->where('name', '=', 'ADMIN')
+            ->count();
+    }
+
+    public function countListUser()
+    {
+        return DB::table('role')
+            ->join('account','account.role_id','=','role.id')
+            ->where('name', '=', 'USER')
+            ->count();
+    }
 }

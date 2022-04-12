@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(WorkflowSeeder::class);
 
         //   $this->call(AlbumSeeder::class);
+
        $this->call(PostSeeder::class);
 
     }
