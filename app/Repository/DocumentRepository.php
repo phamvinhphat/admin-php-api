@@ -287,20 +287,5 @@ class DocumentRepository implements IDocumentRepository
         }
     }
 
-    public function returnDataByDocument($id)
-    {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","findByDocument");
-        if($isAdmin == true || $isRole == true)
-        {
-            return DB::table('document')
-                ->where('id', '=', $id)
-                ->value('data');
-        } else {
-            return response()->json([
-                "message" => "You Do Not Have Access"],
-                ResponseAlias::HTTP_FORBIDDEN
-            );
-        }
-    }
+
 }

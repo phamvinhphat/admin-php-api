@@ -54,7 +54,7 @@ class PostRepository implements IPostRepository
             );
 
             $create = DB::table('post')->insert($database);
-            return response()->json(["json" => $create]);
+            return response()->json(["result" => $create]);
         } else {
             return response()->json(
                 ["message" => "You Do Not Have Access"],
