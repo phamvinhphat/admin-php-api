@@ -56,7 +56,7 @@ const TablePermissions = ({
         if (roleId) {
             mutate({ roleId });
         }
-    }, [mutate, roleId]);
+    }, [roleId]);
 
     useEffect(() => {
         if (response) {
@@ -76,10 +76,9 @@ const TablePermissions = ({
                         onSuccess: (data) => {
                             if (data.result) {
                                 toast.success('Permission granted');
-                                setAdded((prevState) => [
-                                    ...prevState,
-                                    { roleId, permissionId },
-                                ]);
+                                setAdded((prevState) =>
+                                    prevState.concat({ roleId, permissionId })
+                                );
                                 if (onGranted)
                                     onGranted({ roleId, permissionId });
                             }
@@ -102,10 +101,10 @@ const TablePermissions = ({
                         onSuccess: (data) => {
                             if (data.result) {
                                 toast.success('Permission removed');
-                                setAdded((prevState) =>
-                                    prevState.filter(
+                                setAdded(
+                                    added.filter(
                                         (item) =>
-                                            item.permissionId ===
+                                            item.permissionId !==
                                                 permissionId &&
                                             item.roleId === roleId
                                     )

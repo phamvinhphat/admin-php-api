@@ -16,103 +16,22 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('permission')->insert([
-            [
-                'id'=>'1905d138-70dd-4ae2-807d-fa47cd3f1c68',
-                'name' => 'document.delete',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=>'c9074b9c-7c6d-4025-a4fd-896614f19799',
-                'name' => 'document.update',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> 'a9794e38-5fea-4e0f-9260-09b5a2c37474',
-                'name' => 'document.view',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> '31c8620f-fc71-48e7-ad8c-110137a8bc6a',
-                'name' => 'document.create',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'post.view',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'post.create',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'post.delete',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'post.update',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'status.view',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'status.create',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'workflow.view',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-            [
-                'id'=> Uuid::uuid4()->toString(),
-                'name' => 'workflow.create',
-                'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
-                'created_at' => date_create(),
-                'updated_at' => date_create(),
-            ],
-        ]);
+        $model = ['permission', 'role', 'account', 'document', 'status', 'album', 'workflows', 'image', 'posts', 'comment', 'conversations', 'attachment', 'message', 'member'];
+        $action = ['create', 'update', 'view', 'delete'];
+
+        foreach($model as $m) {
+            foreach($action as $a) {
+                DB::table('permission')->insert([
+                    [
+                        'id'=>\Ramsey\Uuid\Uuid::uuid4()->toString(),
+                        'name' => "$m.$a",
+                        'created_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+                        'modified_by_id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+                        'created_at' => date_create(),
+                        'updated_at' => date_create(),
+                    ],
+                ]);
+            }
+        }
     }
 }

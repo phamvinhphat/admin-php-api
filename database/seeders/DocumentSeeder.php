@@ -20,13 +20,13 @@ class DocumentSeeder extends Seeder
         for ($i = 0; $i < 3; $i++) {
             $data = [
                 "id" => $faker->uuid,
-                "contents" => $faker->title,
+                "contents" => $faker->text(200),
                 "longitude" => $faker->longitude,
                 "latitude" => $faker->latitude,
-                "price" => $faker->imei,
-                "floor_area" => $faker->title,
-                "furniture_status" => "good",
-                "views" => 2 ,
+                "price" => $faker->numberBetween(500000, 10000000),
+                "floor_area" => $faker->numberBetween(25, 100),
+                "furniture_status" => $faker->randomElement(['None', 'Fairly', 'Functional', 'Good']),
+                "views" => $faker->numberBetween(1000, 1000000) ,
                 "created_by_id" => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae',
                 "modified_by_id" => 'fe1294a0-4485-4c1c-8ef3-1a7c5dd62dae'
             ];

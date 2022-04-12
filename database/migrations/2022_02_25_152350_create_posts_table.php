@@ -19,9 +19,9 @@ return new class extends Migration
             $table->double('longitude');
             $table->double('latitude');
             $table->bigInteger('price');
-            $table->string('floor_area');
+            $table->float('floor_area');
             $table->string('furniture_status');
-            $table->integer('views')->default(0);
+            $table->bigInteger('views')->default(0);
             $table->uuid('document_id')->nullable(false);
             $table->foreign('document_id')->references('id')->on('document')->onDelete('cascade');
             $table->uuid('modified_by_id')->nullable();

@@ -1,5 +1,9 @@
 // ** Icon imports
-import { SignCaution, NewspaperVariantOutline, AccountWrench } from 'mdi-material-ui';
+import {
+    SignCaution,
+    NewspaperVariantOutline,
+    AccountWrench,
+} from 'mdi-material-ui';
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline';
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline';
 import CubeOutline from 'mdi-material-ui/CubeOutline';
@@ -9,7 +13,7 @@ import HomeOutline from 'mdi-material-ui/HomeOutline';
 import Table from 'mdi-material-ui/Table';
 
 // ** Type import
-import { VerticalNavItemsType } from 'src/@core/layouts/types';
+import { VerticalNavItemsType } from '@core/layouts/types';
 
 const navigation = (): VerticalNavItemsType => {
     return [

@@ -96,7 +96,7 @@ const Navigation = (props: Props) => {
         }
     };
 
-    const ScrollWrapper = hidden ? Box : PerfectScrollbar;
+    const ScrollWrapper = (hidden ? Box : PerfectScrollbar) as any;
 
     return (
         <Drawer {...props}>

@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Card, CardHeader, Grid, Typography } from '@mui/material';
+
+import { TablePost } from '@views';
 
 const Posts = () => {
     return (
@@ -10,6 +12,15 @@ const Posts = () => {
                 <Typography variant="body2">
                     Manage user&apos;s posts
                 </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Card>
+                    <CardHeader
+                        title="Post"
+                        titleTypographyProps={{ variant: 'h6' }}
+                    />
+                    <TablePost />
+                </Card>
             </Grid>
         </Grid>
     );

@@ -50,3 +50,50 @@ export interface IRolePermissions {
     roleId: string;
     permissionId: string;
 }
+
+export interface IDocument {
+    id: string;
+    documentCode: string;
+    data: string;
+    name: string; // status_name
+}
+
+export interface IPostCreate {
+    longitude: number;
+    latitude: number;
+    contents: string;
+    price: number;
+    floorArea: number;
+    address: string;
+    furnitureStatus: string;
+    documentId: string;
+    albumId?: string;
+}
+
+export interface IPost extends IPostCreate {
+    id: string;
+    createdBy: IUserView;
+    createdAt: Date;
+}
+
+export interface IUserView {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    idCard: string;
+    phoneNumber: string;
+    gender: IGender | string;
+    dob: Date;
+}
+
+export interface IAlbumCreate {
+    name?: string;
+    isHidden: boolean;
+}
+
+export interface IAlbum extends IAlbumCreate {
+    id: string;
+    createdBy: IUserView;
+    createdAt: Date;
+}
