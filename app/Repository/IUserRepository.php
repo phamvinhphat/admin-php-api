@@ -18,4 +18,7 @@ interface IUserRepository
     public function updateUser(array $newDetails);
     public function checkRole($id);
     public function changePassword($id, string $pass);
+    public function changePassword($id, $pass);
+    public function listAdmin();
+    public function listUser();
 }

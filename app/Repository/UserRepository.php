@@ -286,11 +286,12 @@ class UserRepository implements IUserRepository
 
     public function changePassword($id, $pass)
     {
-
-        $validator = Validator::make(['$pass'], [
+        $messages = [
+            'password.required' => 'Please enter your current password',
+            ];
+        $validator = Validator::make($pass, [
             'password' => 'required',
-        ]);
-
+            ], $messages);
         if ($validator->fails()) {
             return response()->json(
                 ["message"=>$validator->errors()],
@@ -311,6 +312,7 @@ class UserRepository implements IUserRepository
             return $account;
         }
     }
+
 
 
 }

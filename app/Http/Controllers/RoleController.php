@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
+
 class RoleController extends Controller
 {
     private IRoleRepository $roleRepository;
@@ -89,6 +90,7 @@ class RoleController extends Controller
         return response()->json([
             "result"=>$this->roleRepository->countListUser()
         ],ResponseAlias::HTTP_OK);
+
     }
 
 

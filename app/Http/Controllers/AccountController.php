@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\account;
 use App\Repository\IUserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -184,6 +182,12 @@ class AccountController extends Controller
     public function refresh()
     {
         return $this->userRepository->refresh();
+    }
+
+    public function changePassword()
+    {
+
+   //     return $this->userRepository->changePassword(Auth::id())
     }
 
     public function changePassword(Request $request)

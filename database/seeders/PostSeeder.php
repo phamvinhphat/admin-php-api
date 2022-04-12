@@ -19,30 +19,29 @@ class PostSeeder extends Seeder
 
         $faker = \Faker\Factory::create();
         $dataAlbum = DB::table('album')->select('id')->pluck('id');
+        $dataDoc = DB::table('document')->select('id')->pluck('id');
 
-        $dataDoc = DB::table('document')->value('id');
-
-        foreach ($dataAlbum as $albumId ) {
-         foreach ($dataDoc as $docId) {
-             DB::table('post')->insert([
-                 [
-                         'id' => $faker->uuid,
-                         'contents' => 'Home',
-                         'longitude' => '12536.12563',
-                         'latitude' => '1475.3695',
-                         'price' => '20000',
-                         'floor_area' => '123458 ',
-                         'furniture_status' => 'good',
-                         'views' => 2,
-                         'document_id' => $docId,
-                         'album_id' => $albumId,
-                         'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                         'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
-                         'created_at' => date_create(),
-                         'updated_at' => date_create(),
+        // foreach ($dataAlbum as $albumId) {
+        foreach ($dataDoc as $docId) {
+            DB::table('post')->insert([
+                [
+                    'id' => $faker->uuid,
+                    'contents' => $faker->text(200),
+                    'longitude' => $faker->longitude(),
+                    'latitude' =>  $faker->latitude(),
+                    'price' => $faker->numberBetween(500000, 10000000),
+                    'floor_area' => $faker->numberBetween(10, 500),
+                    'furniture_status' => $faker->randomElement(['None', 'Fairly', 'Functional', 'Good']),
+                    'views' => $faker->numberBetween(5000, 100000),
+                    'document_id' => $docId,
+                    'album_id' => null,
+                    'created_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                    'modified_by_id' => '59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                    'created_at' => date_create(),
+                    'updated_at' => date_create(),
                 ],
-             ]);
-            }
+            ]);
         }
+        // }
     }
 }
