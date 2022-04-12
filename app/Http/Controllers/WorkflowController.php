@@ -25,6 +25,7 @@ class WorkflowController extends Controller
         $idStatus = $request->get('status_id');
         $idDoc = $request->get('document_id');
 
+
         $data = array(
             'id' => $id,
             'status_id' => $idStatus,

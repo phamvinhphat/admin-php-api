@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class StatusRepository implements IStatusRepository
 {
 
-    private IUserRepository $iUserRepository;
+    private IUserRepository $userRepository;
     private PermissionService $permissionService;
 
     public function __construct(IUserRepository $iUserRepository, PermissionService $permissionService)
     {
-        $this->iUserRepository = $iUserRepository;
+        $this->userRepository = $iUserRepository;
         $this->permissionService = $permissionService;
     }
 
@@ -29,7 +29,7 @@ class StatusRepository implements IStatusRepository
     public function createStatus(array $data)
     {
 
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"status","create");
         if($isAdmin == true || $isRole == true)
         {
@@ -62,7 +62,7 @@ class StatusRepository implements IStatusRepository
      */
     public function findStatusById($id)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"status","find");
         if($isAdmin == true || $isRole == true)
         {
@@ -92,7 +92,7 @@ class StatusRepository implements IStatusRepository
      */
     public function getAllStatus()
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"status","view");
         if($isAdmin == true || $isRole == true) {
             return response()->json([
@@ -127,7 +127,7 @@ class StatusRepository implements IStatusRepository
      */
     public function deleteStatusById($id)
     {
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"status","delete");
         if($isAdmin == true || $isRole == true) {
             if($this->checkIdStatus($id) == true)
@@ -167,7 +167,7 @@ class StatusRepository implements IStatusRepository
                 ResponseAlias::HTTP_UNAUTHORIZED
             );
         }
-        $isAdmin = $this->iUserRepository->checkRole(Auth::id());
+        $isAdmin = $this->userRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"status","update");
         if($isAdmin == true || $isRole == true)
         {
