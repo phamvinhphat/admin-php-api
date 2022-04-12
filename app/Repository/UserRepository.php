@@ -286,12 +286,11 @@ class UserRepository implements IUserRepository
 
     public function changePassword($id, $pass)
     {
-        $messages = [
-            'password.required' => 'Please enter your current password',
-            ];
-        $validator = Validator::make($pass, [
+
+        $validator = Validator::make(['$pass'], [
             'password' => 'required',
-            ], $messages);
+        ]);
+
         if ($validator->fails()) {
             return response()->json(
                 ["message"=>$validator->errors()],
@@ -308,19 +307,10 @@ class UserRepository implements IUserRepository
         } else {
             $account->password = Hash::make($pass);
             $account->save();
-//            return response()->json([
-//                "result" => "Change Password"
-//            ]);
+
+            return $account;
         }
     }
 
-    public function listAdmin()
-    {
-        // TODO: Implement listAdmin() method.
-    }
 
-    public function listUser()
-    {
-        // TODO: Implement listUser() method.
-    }
 }

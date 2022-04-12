@@ -88,7 +88,7 @@ class WorkflowRepository implements IWorkflowRepository
                 );
             }
 
-            // check vaf create post
+            // check va create post
             $getNameStatus = DB::table('status')->where('id',$data['status_id'])->value('name');
             if($getNameStatus == 'Public')
             {

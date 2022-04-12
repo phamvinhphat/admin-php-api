@@ -53,6 +53,24 @@ class AccountSeeder extends Seeder
                 'created_at' => date_create(),
                 'updated_at' => date_create(),
             ],
+            [
+                'id'=>'80162a8a-9161-447e-8d12-9271c74aed9e',
+                'username' => 'user456',
+                'password'=>Hash::make('user456'),
+                'first_name' => 'gay',
+                'last_name' => 'Phav',
+                'dob' => '2000-09-13',
+                'id_card'=>'07000002282',
+                'gender' => 'male',
+                'email'=>'tomcode@gmail.com',
+                'phone_number'=>'0925875482',
+                'is_verify'=>true,
+                'is_admin'=>false,
+                'role_id' => '766be67a-6520-4968-85ea-e9e07daf4e53',
+                'modified_by_id' =>'59bf2cc1-4e00-4604-94dc-a9fb16247984',
+                'created_at' => date_create(),
+                'updated_at' => date_create(),
+            ],
     ]);
     }
 }
