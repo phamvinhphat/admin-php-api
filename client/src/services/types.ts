@@ -55,7 +55,8 @@ export interface IDocument {
     id: string;
     documentCode: string;
     data: string;
-    name: string; // status_name
+    statusName: string; // status_name
+    createdBy: IUserView[];
 }
 
 export interface IPostCreate {
@@ -85,6 +86,7 @@ export interface IUserView {
     phoneNumber: string;
     gender: IGender | string;
     dob: Date;
+    avatar?: string;
 }
 
 export interface IAlbumCreate {
@@ -96,4 +98,9 @@ export interface IAlbum extends IAlbumCreate {
     id: string;
     createdBy: IUserView;
     createdAt: Date;
+}
+
+export interface IStatus {
+    id: string;
+    name: string;
 }

@@ -15,8 +15,7 @@ class DocumentResource extends JsonResource
             'status_name' => $this->status_name,
             'data' => $this->data,
             'is_workflow' => $this->is_workflow,
-            'is_auth' => $this->is_auth,
-            'is_register' => $this->is_register,
+            'is_otp' => $this->is_otp,
             'created_by'=> UserViewResource::collection(DB::table('account')->where('id','=', $this->created_by_id)->get()),
             'modified_by'=>UserViewResource::collection(DB::table('account')->where('id','=', $this->modified_by_id)->get())
         ];
