@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Repository;
+
+use App\Http\Resource\DocumentResource;
 use App\Repository\IDocumentRepository;
 use App\service\PermissionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Comment\Doc;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class DocumentRepository implements IDocumentRepository
@@ -63,11 +66,16 @@ class DocumentRepository implements IDocumentRepository
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
         $isRole = $this->permissionService->checkPermission(Auth::id(),"document","find");
         if($isAdmin == true || $isRole == true) {
-           $doc = DB::table('document')->where('id', $id)->first();
+           $doc = DB::table('document')
+           ->select('document.*','status.name as status_name')
+           ->where('document.id', '=', $id)
+           ->join('workflow', 'document.id', '=', 'workflow.document_id')
+           ->join('status', 'status.id', '=', 'workflow.status_id')
+           ->get();
            if(!is_null($doc))
            {
                return response()->json([
-                   "result" => $doc
+                   "result" => DocumentResource::collection($doc)
                ], ResponseAlias::HTTP_OK);
            } else {
                return response()->json(['message', 'Not Found'],ResponseAlias::HTTP_BAD_REQUEST);
@@ -268,7 +276,7 @@ class DocumentRepository implements IDocumentRepository
     public function getAllDocumentOfStatus()
     {
         $isAdmin = $this->iUserRepository->checkRole(Auth::id());
-        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","viewStatusDocument");
+        $isRole = $this->permissionService->checkPermission(Auth::id(),"document","view");
         if($isAdmin == true || $isRole == true) {
             $get =  DB::table('document')
                 ->select('document.*','status.name as status_name')

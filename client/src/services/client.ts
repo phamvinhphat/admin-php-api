@@ -31,6 +31,7 @@ instance.interceptors.response.use(
                     if (response.data && response.status === 200) {
                         const { result } = response.data;
                         setLocalToken(result);
+                        window.location.reload();
                         return instance({
                             ...value.config,
                             headers: {

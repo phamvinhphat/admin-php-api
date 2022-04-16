@@ -4,7 +4,7 @@ import { client } from '@services';
 import { IDocument, IResponse } from '@services/types';
 
 const useGetPostDocument = () => {
-    return useQuery<IResponse<IDocument[]>, IResponse<undefined>>(
+    return useQuery<IDocument[], IResponse<undefined>>(
         'getDocumentPost',
         async () => {
             const response = await client.instance.get(
@@ -14,7 +14,8 @@ const useGetPostDocument = () => {
                 return response.data;
             }
             return response;
-        }
+        },
+        { refetchOnWindowFocus: true, refetchOnMount: true }
     );
 };
 

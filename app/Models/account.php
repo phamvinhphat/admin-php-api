@@ -48,7 +48,7 @@ class account extends Authenticatable implements JWTSubject, MustVerifyEmail
         'password'=> 'string',
         'first_name'=> 'string',
         'last_name' => 'string',
-        'Dob' => 'date',
+        'dob' => 'date',
         'id_card' => 'string',
         'avatar'=> 'string',
         'gender'=> 'string',
