@@ -9,4 +9,8 @@ interface IRoleRepository
     public function createRole($data);
     public function deleteRole($id);
     public function updateRole($id, $data);
+    public function listAdmin();
+    public function listUser();
+    public function countListAdmin();
+    public function countListUser();
 }
