@@ -51,6 +51,10 @@ Route::group(["prefix"=>"role"],function(){
     Route::post('/createRole',[RoleController::class,'createRole']);
     Route::delete('/deleteRole/{id}',[RoleController::class,'deleteRole']);
     Route::patch('/updateRole/{id}',[RoleController::class,'updateRole']);
+    Route::get('/listAdmin',[RoleController::class,'listAdmin']);
+    Route::get('/listUser',[RoleController::class,'listUser']);
+    Route::get('/countListAdmin',[RoleController::class,'countListAdmin']);
+    Route::get('/countListUser',[RoleController::class,'countListUser']);
 
 });
 
